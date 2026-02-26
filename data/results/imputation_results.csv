@@ -1,0 +1,81 @@
+dataset,missingness_type,missing_rate,imputation_method,mean_rmse
+Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,2623.4548714685493
+Telco,MNAR,"tenure, 10%",Mean/Mode,26.419007656376365
+Telco,MCAR,10%,Mean/Mode,600.1104537746895
+Telco,MNAR,"totalcharges, 10%",Mean/Mode,2740.228886132297
+Telco,MCAR,"totalcharges, 10%",Mean/Mode,2182.2660317793107
+German Statlog,MAR,"missing duration -> credit amount, 10%",Mean/Mode,12.11591566270082
+German Statlog,MNAR,"credit amount, 10%",Mean/Mode,1.8123680028564224
+German Statlog,MCAR,10%,Mean/Mode,2.494632520275548
+German Statlog,MNAR,"duration, 10%",Mean/Mode,13.607716810329478
+German Statlog,MCAR,"duration, 10%",Mean/Mode,12.95415034307967
+German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",Mean/Mode,1.0753253892333086
+German Credit Card,MNAR,"Amount Credit, 10%",Mean/Mode,148565.80544037258
+German Credit Card,MCAR,10%,Mean/Mode,26086.41136203633
+German Credit Card,MAR,"missing billamt1 -> pay0, 10%",Mean/Mode,76787.35831515948
+German Credit Card,MNAR,"billamt1, 10%",Mean/Mode,96470.04603516147
+German Credit Card,MCAR,"billamt1, 10%",Mean/Mode,69190.93023459395
+Telco,MAR,"missing totalCharges -> tenure, 10%",Median/Mode,3134.850171975542
+Telco,MNAR,"tenure, 10%",Median/Mode,29.478709574569542
+Telco,MCAR,10%,Median/Mode,643.3919783201748
+Telco,MNAR,"totalcharges, 10%",Median/Mode,3254.4298827549605
+Telco,MCAR,"totalcharges, 10%",Median/Mode,2360.1407061937366
+German Statlog,MAR,"missing duration -> credit amount, 10%",Median/Mode,12.831601614763452
+German Statlog,MNAR,"credit amount, 10%",Median/Mode,2.3790754506740637
+German Statlog,MCAR,10%,Median/Mode,2.659248539554193
+German Statlog,MNAR,"duration, 10%",Median/Mode,14.829699929533302
+German Statlog,MCAR,"duration, 10%",Median/Mode,13.402238618977057
+German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",Median/Mode,1.0745541711178022
+German Credit Card,MNAR,"Amount Credit, 10%",Median/Mode,165775.2494594212
+German Credit Card,MCAR,10%,Median/Mode,27444.178502336224
+German Credit Card,MAR,"missing billamt1 -> pay0, 10%",Median/Mode,85546.7706220755
+German Credit Card,MNAR,"billamt1, 10%",Median/Mode,110454.2173301726
+German Credit Card,MCAR,"billamt1, 10%",Median/Mode,74208.67643528394
+Telco,MAR,"missing totalCharges -> tenure, 10%",MICE,734.0278491636891
+Telco,MNAR,"tenure, 10%",MICE,9.58303171208618
+Telco,MCAR,10%,MICE,212.14005938409733
+Telco,MNAR,"totalcharges, 10%",MICE,712.4281179213945
+Telco,MCAR,"totalcharges, 10%",MICE,672.2261365272841
+German Statlog,MAR,"missing duration -> credit amount, 10%",MICE,10.12626436506394
+German Statlog,MNAR,"credit amount, 10%",MICE,1.656789971713764
+German Statlog,MCAR,10%,MICE,2.097516059182768
+German Statlog,MNAR,"duration, 10%",MICE,9.835690734281556
+German Statlog,MCAR,"duration, 10%",MICE,9.151852054190892
+German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",MICE,0.7791280606851874
+German Credit Card,MNAR,"Amount Credit, 10%",MICE,138076.9059778558
+German Credit Card,MCAR,10%,MICE,12763.780478858856
+German Credit Card,MAR,"missing billamt1 -> pay0, 10%",MICE,20368.21798203973
+German Credit Card,MNAR,"billamt1, 10%",MICE,25324.067262583263
+German Credit Card,MCAR,"billamt1, 10%",MICE,16586.77495992972
+Telco,MAR,"missing totalCharges -> tenure, 10%",MissForest,252.47996620324807
+Telco,MNAR,"tenure, 10%",MissForest,4.978452690712516
+Telco,MCAR,10%,MissForest,122.98393985988533
+Telco,MNAR,"totalcharges, 10%",MissForest,260.7084859926756
+Telco,MCAR,"totalcharges, 10%",MissForest,216.33857616769328
+German Statlog,MAR,"missing duration -> credit amount, 10%",MissForest,8.96560554633651
+German Statlog,MNAR,"credit amount, 10%",MissForest,1.6391184368434146
+German Statlog,MCAR,10%,MissForest,2.0244595523726616
+German Statlog,MNAR,"duration, 10%",MissForest,9.266612757636956
+German Statlog,MCAR,"duration, 10%",MissForest,8.81329034044607
+German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",MissForest,0.616043241177111
+German Credit Card,MNAR,"Amount Credit, 10%",MissForest,110184.93749685866
+German Credit Card,MCAR,10%,MissForest,11036.649812663716
+German Credit Card,MAR,"missing billamt1 -> pay0, 10%",MissForest,20266.19570111674
+German Credit Card,MNAR,"billamt1, 10%",MissForest,26737.31205173965
+German Credit Card,MCAR,"billamt1, 10%",MissForest,17742.92948132538
+Telco,MAR,"missing totalCharges -> tenure, 10%",DAE,283.96478156795257
+Telco,MNAR,"tenure, 10%",DAE,4.269177343628515
+Telco,MCAR,10%,DAE,189.690193422683
+Telco,MNAR,"totalcharges, 10%",DAE,250.81883675594307
+Telco,MCAR,"totalcharges, 10%",DAE,174.26076859765712
+German Statlog,MAR,"missing duration -> credit amount, 10%",DAE,10.769823831922132
+German Statlog,MNAR,"credit amount, 10%",DAE,1.789687375733159
+German Statlog,MCAR,10%,DAE,2.2193165058097013
+German Statlog,MNAR,"duration, 10%",DAE,11.361604143159092
+German Statlog,MCAR,"duration, 10%",DAE,10.67743357318208
+German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",DAE,0.7511895577666547
+German Credit Card,MNAR,"Amount Credit, 10%",DAE,117946.68533161916
+German Credit Card,MCAR,10%,DAE,12238.667493574229
+German Credit Card,MAR,"missing billamt1 -> pay0, 10%",DAE,21728.357824558447
+German Credit Card,MNAR,"billamt1, 10%",DAE,27355.283498191824
+German Credit Card,MCAR,"billamt1, 10%",DAE,18335.359478520044
