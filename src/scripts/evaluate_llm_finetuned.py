@@ -15,8 +15,8 @@ from src.imputation.llm import LLMImputer, LLMImputerConfig
 from src.paths import DATA_RAW, DATA_PROCESSED
 
 
-ADAPTER_PATH = DATA_PROCESSED / "llm" / "mistral_telco_totalcharges_lora_500"
-OUTPUT_CSV = DATA_PROCESSED / "llm" / "eval_mistral_telco_totalcharges_lora_500.csv"
+ADAPTER_PATH = DATA_PROCESSED / "llm" / "mistral_telco_totalcharges_lora"
+OUTPUT_CSV = DATA_PROCESSED / "llm" / "eval_mistral_telco_totalcharges_lora.csv"
 
 
 def extract_first_number(text: str):
