@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
+import argparse
 import json
-import sys
+from pathlib import Path
 
 import torch
 from datasets import Dataset
@@ -29,6 +30,13 @@ def load_jsonl(path) -> list[dict]:
     return records
 
 
+def save_jsonl(path: Path, records: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        for record in records:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
 def format_example(example, tokenizer) -> str:
     return tokenizer.apply_chat_template(
         example["messages"],
@@ -48,17 +56,21 @@ def tokenize_function(example, tokenizer, max_length: int = 512) -> dict:
     return tokenized
 
 
-def parse_train_size() -> int:
-    if len(sys.argv) > 1:
-        return int(sys.argv[1])
-    return 500
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--train_size", type=int, default=500)
+    parser.add_argument("--num_train_epochs", type=int, default=1)
+    parser.add_argument("--learning_rate", type=float, default=2e-4)
+    parser.add_argument("--batch_size", type=int, default=1)
+    parser.add_argument("--grad_accum", type=int, default=4)
+    return parser.parse_args()
 
 
 def main() -> None:
-    train_size = parse_train_size()
+    args = parse_args()
 
     input_path = DATA_PROCESSED / "llm" / "telco_totalcharges_mar_train.jsonl"
-    output_dir = DATA_PROCESSED / "llm" / f"mistral_telco_totalcharges_lora_{train_size}"
+    output_dir = DATA_PROCESSED / "llm" / f"mistral_telco_totalcharges_lora_{args.train_size}"
 
     print("=" * 80)
     print("LOADING TRAINING DATA")
@@ -67,8 +79,15 @@ def main() -> None:
     records = load_jsonl(input_path)
     print(f"Loaded examples total: {len(records)}")
 
-    records = records[:train_size]
+    if args.train_size > len(records):
+        raise ValueError(
+            f"Requested train_size={args.train_size}, but only {len(records)} examples exist."
+        )
+
+    records = records[: args.train_size]
     print(f"Using training examples: {len(records)}")
+
+    save_jsonl(output_dir / "train_subset_used.jsonl", records)
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     if tokenizer.pad_token is None:
@@ -129,10 +148,10 @@ def main() -> None:
 
     training_args = TrainingArguments(
         output_dir=str(output_dir),
-        per_device_train_batch_size=1,
-        gradient_accumulation_steps=4,
-        num_train_epochs=1,
-        learning_rate=2e-4,
+        per_device_train_batch_size=args.batch_size,
+        gradient_accumulation_steps=args.grad_accum,
+        num_train_epochs=args.num_train_epochs,
+        learning_rate=args.learning_rate,
         logging_steps=10,
         save_steps=100,
         save_total_limit=2,

@@ -8,8 +8,7 @@ import pandas as pd
 
 def format_value(value) -> str:
     """
-    Format a dataframe cell value into a stable string representation
-    for prompt construction.
+    Format a dataframe cell value into a string representation
     """
     if pd.isna(value):
         return "MISSING"
@@ -113,6 +112,70 @@ def build_training_example(
         ]
     }
 
+def build_inference_messages(
+    row: pd.Series,
+    target_column: str,
+    feature_columns: Optional[Iterable[str]] = None,
+) -> list[dict]:
+    """
+    Build inference messages in the same chat-style structure
+    that is used for training examples.
+    """
+    feature_text = row_to_feature_text(
+        row=row,
+        target_column=target_column,
+        feature_columns=feature_columns,
+    )
+
+    system_message = (
+        "You are performing a missing value imputation task for tabular data. "
+        "Given observed feature values, predict the missing target value. "
+        "Return exactly one numeric value and no explanation."
+    )
+
+    user_message = (
+        f"Observed values:\n{feature_text}\n\n"
+        f"Target column: {target_column}\n"
+        "Imputed value:"
+    )
+
+    return [
+        {"role": "system", "content": system_message},
+        {"role": "user", "content": user_message},
+    ]
+
+
+def build_retry_messages(
+    row: pd.Series,
+    target_column: str,
+    feature_columns: Optional[Iterable[str]] = None,
+) -> list[dict]:
+    """
+    Stricter retry prompt if the first generation is empty 
+    """or non-numeric.
+    feature_text = row_to_feature_text(
+        row=row,
+        target_column=target_column,
+        feature_columns=feature_columns,
+    )
+
+    system_message = (
+        "You are performing numeric imputation for tabular data. "
+        "You must answer with exactly one numeric value only. "
+        "No words. No sentence. No explanation. No unit."
+    )
+
+    user_message = (
+        f"Observed values:\n{feature_text}\n\n"
+        f"Target column: {target_column}\n"
+        "Answer with one number only:"
+    )
+
+    return [
+        {"role": "system", "content": system_message},
+        {"role": "user", "content": user_message},
+    ]
+
 
 @dataclass
 class LLMImputerConfig:
@@ -152,3 +215,17 @@ class LLMImputer:
         """
         df_obs = df[df[self.config.target_column].notna()].copy()
         return [self.build_training_example(row) for _, row in df_obs.iterrows()]
+
+    def build_inference_messages(self, row: pd.Series) -> list[dict]:
+        return build_inference_messages(
+            row=row,
+            target_column=self.config.target_column,
+            feature_columns=self.config.feature_columns,
+        )
+
+    def build_retry_messages(self, row: pd.Series) -> list[dict]:
+        return build_retry_messages(
+            row=row,
+            target_column=self.config.target_column,
+            feature_columns=self.config.feature_columns,
+        )
