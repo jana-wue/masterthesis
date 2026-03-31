@@ -152,7 +152,7 @@ def build_retry_messages(
 ) -> list[dict]:
     """
     Stricter retry prompt if the first generation is empty 
-    """or non-numeric.
+    """
     feature_text = row_to_feature_text(
         row=row,
         target_column=target_column,
