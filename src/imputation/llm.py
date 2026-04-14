@@ -177,8 +177,8 @@ def _build_numeric_scales(reference_df: pd.DataFrame, columns: list[str]) -> dic
     return scales
 
 
-def select_similar_examples( query_row: pd.Series, reference_df: pd.DataFrame, target_column: str,
-    feature_columns = None, n_examples: int = 3) -> list[pd.Series]:
+def select_similar_examples(query_row: pd.Series,reference_df: pd.DataFrame,target_column: str, feature_columns=None,
+    n_examples: int = 3, exclude_indices = None) -> list[pd.Series]:
     """
     Select similar observed rows for few-shot.
     """
@@ -200,8 +200,13 @@ def select_similar_examples( query_row: pd.Series, reference_df: pd.DataFrame, t
     numeric_columns = [col for col in columns if is_numeric_dtype(observed_df[col])]
     scales = _build_numeric_scales(observed_df, numeric_columns)
 
+    excluded = set(exclude_indices or [])
+
     scored_rows: list[tuple[float, pd.Series]] = []
     for idx, candidate in observed_df.iterrows():
+        if idx in excluded:
+            continue
+
         score = 0.0
         used = 0
 
@@ -359,7 +364,8 @@ class LLMImputer:
         df_obs = df[df[self.config.target_column].notna()]
         return [self.build_training_example(row) for _, row in df_obs.iterrows()]
 
-    def select_few_shot_examples(self, row: pd.Series, reference_df: pd.DataFrame, n_examples = None,) -> list[pd.Series]:
+    def select_few_shot_examples(self, row: pd.Series,reference_df: pd.DataFrame, n_examples=None,
+        exclude_indices = None) -> list[pd.Series]:
         k = self.config.few_shot_k if n_examples is None else n_examples
         return select_similar_examples(
             query_row=row,
@@ -367,6 +373,7 @@ class LLMImputer:
             target_column=self.config.target_column,
             feature_columns=self.config.feature_columns,
             n_examples=k,
+            exclude_indices=exclude_indices,
         )
 
     def build_inference_messages(self, row: pd.Series, few_shot_examples = None) -> list[dict]:

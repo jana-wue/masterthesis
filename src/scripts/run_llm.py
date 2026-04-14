@@ -91,13 +91,15 @@ def run_telco_zero_shot_batch_preview(n_examples: int = 10, few_shot_k: int = 2)
             few_shot_k=few_shot_k,
         )
     )
-    imputer.fit_target_stats(df_full)
-
     missing_rows = df_missing[df_missing[target_column].isna()].copy()
-    reference_df = df_full.copy()
+    observed_rows = df_missing[df_missing[target_column].notna()].copy()
+    reference_df = observed_rows
+    imputer.fit_target_stats(observed_rows)
 
     if missing_rows.empty:
         raise ValueError(f"No missing rows found for target column '{target_column}'.")
+    if few_shot_k > 0 and reference_df.empty:
+        raise ValueError("Few-shot requested but no observed reference rows are available.")
 
     missing_rows = missing_rows.head(n_examples)
 
@@ -123,10 +125,14 @@ def run_telco_zero_shot_batch_preview(n_examples: int = 10, few_shot_k: int = 2)
     results = []
 
     for idx, row in missing_rows.iterrows():
-        few_shot_examples = imputer.select_few_shot_examples(row, reference_df)
+        few_shot_examples = imputer.select_few_shot_examples(
+            row,
+            reference_df,
+            exclude_indices={idx},
+        )
         messages = imputer.build_inference_messages(row, few_shot_examples=few_shot_examples)
         prediction, raw_output = generate_answer(messages, tokenizer, model)
-        ground_truth = df_full.loc[idx, target_column]
+        ground_truth = df_full.loc[idx, target_column] if idx in df_full.index else pd.NA
 
         print(f"\nRow index    : {idx}")
         print(f"Raw output   : {raw_output}")
@@ -148,6 +154,8 @@ def run_telco_zero_shot_batch_preview(n_examples: int = 10, few_shot_k: int = 2)
     results_df["few_shot_k"] = few_shot_k
     results_df["n_examples_requested"] = n_examples
     results_df["run_timestamp_utc"] = datetime.now(timezone.utc).isoformat()
+    results_df["leakage_guard_enabled"] = True
+    results_df["reference_source"] = "df_missing_observed_rows"
 
     model_token = model_name_to_file_token(MODEL_NAME)
     output_dir = DATA_PROCESSED / "results"
@@ -155,7 +163,16 @@ def run_telco_zero_shot_batch_preview(n_examples: int = 10, few_shot_k: int = 2)
     output_csv = output_dir / f"telco_{model_token}_results.csv"
 
     file_exists = output_csv.exists()
-    results_df.to_csv(
+    results_to_write = results_df
+    if file_exists:
+        existing_columns = pd.read_csv(output_csv, nrows=0).columns.tolist()
+        if existing_columns:
+            for col in existing_columns:
+                if col not in results_to_write.columns:
+                    results_to_write[col] = pd.NA
+            results_to_write = results_to_write[existing_columns]
+
+    results_to_write.to_csv(
         output_csv,
         mode="a" if file_exists else "w",
         header=not file_exists,
