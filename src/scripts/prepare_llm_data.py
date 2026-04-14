@@ -35,6 +35,7 @@ def prepare_telco_totalcharges_mar() -> None:
             feature_columns=feature_columns,
         )
     )
+    imputer.fit_target_stats(df)
 
     train_examples = imputer.build_training_dataset(df)
 

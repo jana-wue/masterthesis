@@ -141,8 +141,13 @@ def main() -> None:
             model_name=str(ADAPTER_PATH),
             target_column=target_column,
             feature_columns=feature_columns,
+            domain_hints=[
+                "For subscription billing data, TotalCharges is often close to tenure * MonthlyCharges.",
+                "Respect plausible values from the observed target distribution.",
+            ],
         )
     )
+    imputer.fit_target_stats(df_missing)
 
     missing_rows = df_missing[df_missing[target_column].isna()].copy()
 
