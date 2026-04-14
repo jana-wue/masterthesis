@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from datetime import datetime, timezone
 
 import pandas as pd
 import torch
@@ -11,6 +12,14 @@ from src.paths import DATA_RAW, DATA_PROCESSED
 
 
 MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
+
+
+def model_name_to_file_token(model_name: str) -> str:
+    """
+    Convert model name into a filesystem-safe token.
+    """
+    token = re.sub(r"[^A-Za-z0-9._-]+", "_", model_name).strip("_")
+    return token or "unknown_model"
 
 
 def extract_first_number(text: str) -> str:
@@ -135,11 +144,29 @@ def run_telco_zero_shot_batch_preview(n_examples: int = 10, few_shot_k: int = 2)
         )
 
     results_df = pd.DataFrame(results)
+    results_df["model_name"] = MODEL_NAME
+    results_df["few_shot_k"] = few_shot_k
+    results_df["n_examples_requested"] = n_examples
+    results_df["run_timestamp_utc"] = datetime.now(timezone.utc).isoformat()
+
+    model_token = model_name_to_file_token(MODEL_NAME)
+    output_dir = DATA_PROCESSED / "results"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_csv = output_dir / f"telco_{model_token}_results.csv"
+
+    file_exists = output_csv.exists()
+    results_df.to_csv(
+        output_csv,
+        mode="a" if file_exists else "w",
+        header=not file_exists,
+        index=False,
+    )
 
     print("\n" + "=" * 80)
     print("RESULT TABLE")
     print("=" * 80)
     print(results_df)
+    print(f"\nSaved results to: {output_csv}")
 
 
 if __name__ == "__main__":
