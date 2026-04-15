@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from pathlib import Path
 
 import pandas as pd
 import torch
@@ -11,8 +12,7 @@ from src.imputation.llm_batch import (
     LLMBatchImputerConfig,
     model_name_to_file_token,
 )
-from src.paths import DATA_PROCESSED, DATA_RAW
-
+from src.paths import DATA_PROCESSED, DATA_RAW, DATA_RESULTS
 
 MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
 PROMPT_STYLE_NAME = "BatchImputation"
@@ -20,6 +20,181 @@ DATASET_NAME = "Telco Customer Churn"
 TARGET_COLUMN = "TotalCharges"
 ID_COLUMN = "customerID"
 DEFAULT_BATCH_SIZE = 20
+RESULTS_RMSE_PATH = Path("data/results/imputation_results.csv")
+RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrsme.csv")
+
+
+def _append_results_row(csv_path, required_columns, row) -> None:
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if csv_path.exists():
+        df = pd.read_csv(csv_path)
+    else:
+        df = pd.DataFrame(columns=required_columns)
+
+    for col in required_columns:
+        if col not in df.columns:
+            df[col] = pd.NA
+
+    row_normalized = {col: row.get(col, pd.NA) for col in required_columns}
+    df = pd.concat([df, pd.DataFrame([row_normalized])], ignore_index=True)
+    df.to_csv(csv_path, index=False)
+
+
+def append_to_global_results(dataset,missingness_type ,missing_rate ,imputation_method, mean_rmse,
+    mean_nrmse):
+    _append_results_row(
+        csv_path=RESULTS_RMSE_PATH,
+        required_columns=[
+            "dataset",
+            "missingness_type",
+            "missing_rate",
+            "imputation_method",
+            "mean_rmse",
+        ],
+        row={
+            "dataset": dataset,
+            "missingness_type": missingness_type,
+            "missing_rate": missing_rate,
+            "imputation_method": imputation_method,
+            "mean_rmse": mean_rmse,
+        },
+    )
+
+    _append_results_row(
+        csv_path=RESULTS_NRMSE_PATH,
+        required_columns=[
+            "dataset",
+            "missingness_type",
+            "missing_rate",
+            "imputation_method",
+            "mean_rmse",
+            "mean_nrmse",
+        ],
+        row={
+            "dataset": dataset,
+            "missingness_type": missingness_type,
+            "missing_rate": missing_rate,
+            "imputation_method": imputation_method,
+            "mean_rmse": mean_rmse,
+            "mean_nrmse": mean_nrmse,
+        },
+    )
+
+
+def resolve_telco_batch_results_csv(model_name, prompt_style_name):
+    """
+    Resolve batch prediction CSV path for Telco runs.
+    """
+    if model_name is not None:
+        model_token = model_name_to_file_token(model_name)
+        csv_path = DATA_RESULTS / f"telco_{model_token}_{prompt_style_name}_results.csv"
+        if not csv_path.exists():
+            raise FileNotFoundError(f"Prediction file not found: {csv_path}")
+        return csv_path
+
+    pattern = f"telco_*_{prompt_style_name}_results.csv"
+    candidates = sorted(
+        DATA_RESULTS.glob(pattern),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+    if not candidates:
+        raise FileNotFoundError(f"No prediction files found for pattern '{pattern}' in: {DATA_RESULTS}")
+    return candidates[0]
+
+
+def append_global_results_from_telco_batch_predictions(results_csv,model_name, prompt_style_name, latest_per_setting_only,
+    dataset,missingness_type, missing_rate):
+    """
+    Aggregate Telco batch prediction CSV into RMSE/NRMSE and append to global result files.
+    """
+    source_csv = results_csv or resolve_telco_batch_results_csv(
+        model_name=model_name, prompt_style_name=prompt_style_name
+    )
+    df = pd.read_csv(source_csv)
+
+    required_cols = {"prediction", "ground_truth"}
+    missing_cols = required_cols - set(df.columns)
+    if missing_cols:
+        missing_list = ", ".join(sorted(missing_cols))
+        raise ValueError(f"Missing required columns in {source_csv}: {missing_list}")
+
+    work = df.copy()
+    work["prediction"] = pd.to_numeric(work["prediction"], errors="coerce")
+    work["ground_truth"] = pd.to_numeric(work["ground_truth"], errors="coerce")
+    work = work.dropna(subset=["prediction", "ground_truth"]).copy()
+    if work.empty:
+        raise ValueError(
+            f"No valid numeric prediction/ground_truth rows found in: {source_csv}"
+        )
+
+    if "model_name" not in work.columns:
+        work["model_name"] = model_name if model_name is not None else MODEL_NAME
+    if "prompt_style" not in work.columns:
+        work["prompt_style"] = prompt_style_name
+    if "batch_size" not in work.columns:
+        work["batch_size"] = pd.NA
+
+    work["batch_size"] = pd.to_numeric(work["batch_size"], errors="coerce")
+
+    if latest_per_setting_only and "run_timestamp_utc" in work.columns:
+        work["_run_ts"] = pd.to_datetime(work["run_timestamp_utc"], errors="coerce", utc=True)
+        grouped_latest = []
+        for _, group in work.groupby(
+            ["model_name", "prompt_style", "batch_size"], dropna=False
+        ):
+            valid_ts = group["_run_ts"].dropna()
+            if valid_ts.empty:
+                grouped_latest.append(group)
+                continue
+            latest_ts = valid_ts.max()
+            grouped_latest.append(group[group["_run_ts"] == latest_ts])
+        work = pd.concat(grouped_latest, ignore_index=True)
+
+    summary_rows = []
+    for (model_name_value, prompt_style_value, batch_size_value), group in work.groupby(
+        ["model_name", "prompt_style", "batch_size"], dropna=False
+    ):
+        errors = group["ground_truth"] - group["prediction"]
+        mean_rmse = float(((errors ** 2).mean()) ** 0.5)
+        std_true = float(group["ground_truth"].std(ddof=0))
+        mean_nrmse = float(mean_rmse / (std_true + 1e-8))
+
+        model_short = str(model_name_value).split("/")[-1]
+        method_name = f"LLM Batch Prompt ({model_short}, {prompt_style_value})"
+        if not pd.isna(batch_size_value):
+            method_name = f"{method_name} [batch_size={int(batch_size_value)}]"
+
+        append_to_global_results(
+            dataset=dataset,
+            missingness_type=missingness_type,
+            missing_rate=missing_rate,
+            imputation_method=method_name,
+            mean_rmse=mean_rmse,
+            mean_nrmse=mean_nrmse,
+        )
+
+        summary_rows.append(
+            {
+                "source_csv": str(source_csv),
+                "model_name": model_name_value,
+                "prompt_style": prompt_style_value,
+                "batch_size": batch_size_value,
+                "n_predictions": int(len(group)),
+                "mean_rmse": mean_rmse,
+                "mean_nrmse": mean_nrmse,
+                "imputation_method": method_name,
+                "appended_to_rmse_csv": str(RESULTS_RMSE_PATH),
+                "appended_to_nrmse_csv": str(RESULTS_NRMSE_PATH),
+            }
+        )
+
+    summary_df = pd.DataFrame(summary_rows)
+    print("APPENDED GLOBAL RESULTS (BATCH)")
+    print("=" * 80)
+    print(summary_df)
+    return summary_df
 
 
 def run_telco_batch_llmsimputation(
@@ -139,9 +314,7 @@ def run_telco_batch_llmsimputation(
     results_df["reference_source"] = "df_missing_observed_rows_background_only"
 
     model_token = model_name_to_file_token(MODEL_NAME)
-    output_dir = DATA_PROCESSED / "results"
-    output_dir.mkdir(parents=True, exist_ok=True)
-    output_csv = output_dir / f"telco_{model_token}_{PROMPT_STYLE_NAME}_results.csv"
+    output_csv = DATA_RESULTS / f"telco_{model_token}_{PROMPT_STYLE_NAME}_results.csv"
     results_df.to_csv(output_csv, index=False)
 
     print("\n" + "=" * 80)
@@ -149,6 +322,16 @@ def run_telco_batch_llmsimputation(
     print("=" * 80)
     print(results_df[["row_index", "prediction", "ground_truth", "source", "batch_id"]])
     print(f"\nSaved results to: {output_csv}")
+
+    append_global_results_from_telco_batch_predictions(
+        results_csv=output_csv,
+        model_name=MODEL_NAME,
+        prompt_style_name=PROMPT_STYLE_NAME,
+        latest_per_setting_only=True,
+        dataset="Telco",
+        missingness_type="MAR",
+        missing_rate="missing totalCharges -> tenure, 10%",
+    )
 
 
 if __name__ == "__main__":
