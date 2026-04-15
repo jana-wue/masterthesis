@@ -154,6 +154,121 @@ def append_to_global_results(
     )
 
 
+def resolve_telco_results_csv(model_name) -> Path:
+    """
+    Resolve prediction CSV path for Telco runs.
+    If `model_name` is provided, use the tokenized filename for that model.
+    """
+    if model_name is not None:
+        model_token = model_name_to_file_token(model_name)
+        csv_path = DATA_RESULTS / f"telco_{model_token}_results.csv"
+        if not csv_path.exists():
+            raise FileNotFoundError(f"Prediction file not found: {csv_path}")
+        return csv_path
+
+    candidates = sorted(
+        DATA_RESULTS.glob("telco_*_results.csv"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+    if not candidates:
+        raise FileNotFoundError(f"No prediction files found in: {DATA_RESULTS}")
+    return candidates[0]
+
+
+def append_global_results_from_telco_predictions(results_csv, model_name, latest_per_setting_only, dataset,
+    missingness_type, missing_rate,) -> pd.DataFrame:
+    """
+    Aggregate Telco prediction CSV into RMSE/NRMSE and append to global result files.
+    """
+    source_csv = results_csv or resolve_telco_results_csv(model_name=model_name)
+    df = pd.read_csv(source_csv)
+
+    required_cols = {"prediction", "ground_truth"}
+    missing_cols = required_cols - set(df.columns)
+    if missing_cols:
+        missing_list = ", ".join(sorted(missing_cols))
+        raise ValueError(f"Missing required columns in {source_csv}: {missing_list}")
+
+    work = df.copy()
+    work["prediction"] = pd.to_numeric(work["prediction"], errors="coerce")
+    work["ground_truth"] = pd.to_numeric(work["ground_truth"], errors="coerce")
+    work = work.dropna(subset=["prediction", "ground_truth"]).copy()
+    if work.empty:
+        raise ValueError(
+            f"No valid numeric prediction/ground_truth rows found in: {source_csv}"
+        )
+
+    if "model_name" not in work.columns:
+        work["model_name"] = model_name if model_name is not None else MODEL_NAME
+    if "few_shot_k" not in work.columns:
+        work["few_shot_k"] = pd.NA
+
+    work["few_shot_k"] = pd.to_numeric(work["few_shot_k"], errors="coerce")
+
+    if latest_per_setting_only and "run_timestamp_utc" in work.columns:
+        work["_run_ts"] = pd.to_datetime(work["run_timestamp_utc"], errors="coerce", utc=True)
+        grouped_latest = []
+        for _, group in work.groupby(["model_name", "few_shot_k"], dropna=False):
+            valid_ts = group["_run_ts"].dropna()
+            if valid_ts.empty:
+                grouped_latest.append(group)
+                continue
+            latest_ts = valid_ts.max()
+            grouped_latest.append(group[group["_run_ts"] == latest_ts])
+        work = pd.concat(grouped_latest, ignore_index=True)
+
+    summary_rows = []
+    for (model_name_value, few_shot_k_value), group in work.groupby(
+        ["model_name", "few_shot_k"], dropna=False
+    ):
+        errors = group["ground_truth"] - group["prediction"]
+        mean_rmse = float(((errors ** 2).mean()) ** 0.5)
+        std_true = float(group["ground_truth"].std(ddof=0))
+        mean_nrmse = float(mean_rmse / (std_true + 1e-8))
+
+        model_short = str(model_name_value).split("/")[-1]
+        if pd.isna(few_shot_k_value):
+            method_name = f"LLM Prompt ({model_short})"
+            few_shot_k_clean = pd.NA
+        else:
+            few_shot_k_int = int(few_shot_k_value)
+            few_shot_k_clean = few_shot_k_int
+            if few_shot_k_int == 0:
+                method_name = f"LLM Prompt Zero-shot ({model_short})"
+            else:
+                method_name = f"LLM Prompt Few-shot k={few_shot_k_int} ({model_short})"
+
+        append_to_global_results(
+            dataset=dataset,
+            missingness_type=missingness_type,
+            missing_rate=missing_rate,
+            imputation_method=method_name,
+            mean_rmse=mean_rmse,
+            mean_nrmse=mean_nrmse,
+        )
+
+        summary_rows.append(
+            {
+                "source_csv": str(source_csv),
+                "model_name": model_name_value,
+                "few_shot_k": few_shot_k_clean,
+                "n_predictions": int(len(group)),
+                "mean_rmse": mean_rmse,
+                "mean_nrmse": mean_nrmse,
+                "imputation_method": method_name,
+                "appended_to_rmse_csv": str(RESULTS_RMSE_PATH),
+                "appended_to_nrmse_csv": str(RESULTS_NRMSE_PATH),
+            }
+        )
+
+    summary_df = pd.DataFrame(summary_rows)
+    print("APPENDED GLOBAL RESULTS")
+    print("=" * 80)
+    print(summary_df)
+    return summary_df
+
+
 def run_telco_zero_shot_batch_preview(
     n_examples: int | None = 10,
     few_shot_k: int = 2,
