@@ -1,0 +1,33 @@
+row_index,prediction,ground_truth,source,batch_id,raw_output,model_name,prompt_style,batch_size,n_examples_requested,run_timestamp_utc,leakage_guard_enabled,reference_source
+10,649.35,587.45,fallback_tenure_x_monthlycharges,1,"```csv
+row_index,TotalCharges
+10,18.8000 + 49.95 * 13
+12,100.35 * 58
+```",mistralai/Mistral-7B-Instruct-v0.3,BatchImputation,2,5,2026-04-15T19:02:34.431177+00:00,True,df_missing_observed_rows_background_only
+12,5820.299999999999,5681.1,fallback_tenure_x_monthlycharges,1,"```csv
+row_index,TotalCharges
+10,18.8000 + 49.95 * 13
+12,100.35 * 58
+```",mistralai/Mistral-7B-Instruct-v0.3,BatchImputation,2,5,2026-04-15T19:02:34.431177+00:00,True,df_missing_observed_rows_background_only
+35,1799.6,7251.7,model_batch,2,"```csv
+row_index,TotalCharges
+35,1799.6
+41,1037.4
+```
+
+Explanation:
+
+For row 35, the tenure is 72, which is at the upper end of the observed range. The MonthlyCharges is not provided, but we can estimate it using the median MonthlyCharges (70.1250) and the relationship between TotalCharges and MonthlyCharges. Since TotalCharges is often close to tenure * MonthlyCharges, we can estimate the MonthlyCharges as TotalCharges / tenure = 1799.6 / 72 = 25.05. However, this value is outside the observed range for MonthlyCharges. To stay within the observed range, we can adjust the TotalCharges to be closer to the median TotalCharges (1270.4000) and the median tenure * median MonthlyCharges (26 * 70.1250 = 1818.75). So",mistralai/Mistral-7B-Instruct-v0.3,BatchImputation,2,5,2026-04-15T19:02:34.431177+00:00,True,df_missing_observed_rows_background_only
+41,1037.4,4872.35,model_batch,2,"```csv
+row_index,TotalCharges
+35,1799.6
+41,1037.4
+```
+
+Explanation:
+
+For row 35, the tenure is 72, which is at the upper end of the observed range. The MonthlyCharges is not provided, but we can estimate it using the median MonthlyCharges (70.1250) and the relationship between TotalCharges and MonthlyCharges. Since TotalCharges is often close to tenure * MonthlyCharges, we can estimate the MonthlyCharges as TotalCharges / tenure = 1799.6 / 72 = 25.05. However, this value is outside the observed range for MonthlyCharges. To stay within the observed range, we can adjust the TotalCharges to be closer to the median TotalCharges (1270.4000) and the median tenure * median MonthlyCharges (26 * 70.1250 = 1818.75). So",mistralai/Mistral-7B-Instruct-v0.3,BatchImputation,2,5,2026-04-15T19:02:34.431177+00:00,True,df_missing_observed_rows_background_only
+54,4491.0,4456.35,fallback_tenure_x_monthlycharges,3,"```csv
+row_index,TotalCharges
+54,60 * 74.85 + 60 * 10 = 4788
+```",mistralai/Mistral-7B-Instruct-v0.3,BatchImputation,2,5,2026-04-15T19:02:34.431177+00:00,True,df_missing_observed_rows_background_only
