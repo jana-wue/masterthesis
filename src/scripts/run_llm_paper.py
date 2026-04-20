@@ -475,7 +475,29 @@ def _impute_matrix_in_batches(
                 batch_idx += 1
                 continue
 
-            output.iloc[row_start:row_end, col_start:col_end] = clean_imputed.values
+            target_index = output.index[row_start:row_end]
+            assign_failed = False
+            for col in expected_cols:
+                values = clean_imputed[col]
+                if pd.api.types.is_numeric_dtype(output[col]):
+                    coerced = pd.to_numeric(values, errors="coerce")
+                    if coerced.isna().sum() > values.isna().sum():
+                        notes.append(
+                            f"{batch_label}:numeric_coerce({col},"
+                            f"added_nan={int(coerced.isna().sum() - values.isna().sum())})"
+                        )
+                    values = coerced
+                try:
+                    output.loc[target_index, col] = values.values
+                except Exception as exc:
+                    notes.append(f"{batch_label}:assign_fail({col},{exc})")
+                    assign_failed = True
+                    break
+
+            if assign_failed:
+                batch_idx += 1
+                continue
+
             batch_idx += 1
 
     raw_output_text = "\n\n".join(raw_blocks)
