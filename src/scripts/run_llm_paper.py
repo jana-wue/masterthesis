@@ -285,16 +285,23 @@ def _build_compact_fold_matrix(fold_matrix, fold_positions, max_rows):
         budget = max(int(max_rows), len(required_positions))
         budget = min(budget, total_rows)
 
+    observed_positions = [
+        pos
+        for pos in range(total_rows)
+        if pos not in required_positions and pd.notna(fold_matrix.loc[pos, TARGET_COLUMN])
+    ]
+    observed_positions.sort(key=lambda pos: min(abs(pos - req) for req in required_positions))
+
     if budget >= total_rows:
-        selected_positions = list(range(total_rows))
-    else:
-        observed_positions = [
-            pos
-            for pos in range(total_rows)
-            if pos not in required_positions and pd.notna(fold_matrix.loc[pos, TARGET_COLUMN])
+        selected_positions = required_positions + [
+            pos for pos in range(total_rows) if pos not in required_positions
         ]
-        observed_positions.sort(key=lambda pos: min(abs(pos - req) for req in required_positions))
-        selected_positions = sorted(required_positions + observed_positions[: budget - len(required_positions)])
+    else:
+        selected_positions = required_positions + observed_positions[: budget - len(required_positions)]
+
+    # Keep evaluated rows first. This makes partial/truncated generations less likely
+    # to drop the rows we actually score.
+    selected_positions = list(dict.fromkeys(selected_positions))
 
     compact_matrix = fold_matrix.iloc[selected_positions].reset_index(drop=True)
     pos_map = {orig_pos: new_pos for new_pos, orig_pos in enumerate(selected_positions)}
@@ -405,32 +412,55 @@ def _impute_matrix_in_batches(
     model,
     max_new_tokens,
     batch_row=40,
-    batch_col=10,
+    batch_col=None,
+    min_batch_row=1,
     debug_prompts=False,
     debug_label="run",
 ):
     """
-    Paper-style batching over rows and columns.
-    Keeps current output format/parser logic from this project.
+    Paper-style batching with adaptive row splitting.
+    By default this keeps full column context in each prompt chunk.
     """
     output = matrix.copy()
     n_rows, n_cols = matrix.shape
+    if batch_row < 1:
+        raise ValueError("batch_row must be >= 1.")
+    if min_batch_row < 1:
+        raise ValueError("min_batch_row must be >= 1.")
 
     raw_blocks = []
     notes = []
     batch_idx = 0
 
+    effective_batch_col = n_cols if batch_col is None else max(1, min(int(batch_col), n_cols))
+    if effective_batch_col < n_cols:
+        notes.append(
+            f"column_batching_enabled({effective_batch_col}/{n_cols});"
+            " this may reduce imputation quality for correlated features"
+        )
+
+    pending = []
     for row_start in range(0, n_rows, batch_row):
         row_end = min(row_start + batch_row, n_rows)
-        actual_start = row_start
-        if (row_end - row_start) < batch_row and n_rows >= batch_row:
-            actual_start = row_end - batch_row
+        pending.append((row_start, row_end))
 
-        for col_start in range(0, n_cols, batch_col):
-            col_end = min(col_start + batch_col, n_cols)
-            batch_to_prompt = matrix.iloc[actual_start:row_end, col_start:col_end].copy()
+    while pending:
+        row_start, row_end = pending.pop(0)
+        rows_needed = row_end - row_start
+        if rows_needed <= 0:
+            continue
+
+        chunk_failed = False
+        chunk_nan_target = False
+        chunk_outputs = []
+        chunk_frames = []
+
+        for col_start in range(0, n_cols, effective_batch_col):
+            col_end = min(col_start + effective_batch_col, n_cols)
+            batch_to_prompt = matrix.iloc[row_start:row_end, col_start:col_end].copy()
+            expected_cols = list(batch_to_prompt.columns)
             batch_label = (
-                f"{debug_label}_batch{batch_idx}_r{actual_start}-{row_end}_c{col_start}-{col_end}"
+                f"{debug_label}_batch{batch_idx}_r{row_start}-{row_end}_c{col_start}-{col_end}"
             )
 
             imputed_batch, raw_output, parse_error = _impute_full_matrix(
@@ -442,7 +472,7 @@ def _impute_matrix_in_batches(
                 debug_label=batch_label,
             )
 
-            raw_blocks.append(
+            chunk_outputs.append(
                 "\n".join(
                     [
                         f"### {batch_label}",
@@ -453,10 +483,7 @@ def _impute_matrix_in_batches(
             if parse_error:
                 notes.append(f"{batch_label}:{parse_error}")
 
-            rows_needed = row_end - row_start
             clean_imputed = imputed_batch.iloc[-rows_needed:, :].copy()
-            expected_cols = list(batch_to_prompt.columns)
-
             if set(expected_cols).issubset(set(clean_imputed.columns)):
                 clean_imputed = clean_imputed.loc[:, expected_cols]
             elif len(clean_imputed.columns) == len(expected_cols):
@@ -465,17 +492,48 @@ def _impute_matrix_in_batches(
                 notes.append(
                     f"{batch_label}:col_mismatch(expected={len(expected_cols)},got={len(clean_imputed.columns)})"
                 )
-                batch_idx += 1
-                continue
+                chunk_failed = True
+                break
 
             if clean_imputed.empty or clean_imputed.shape[0] != rows_needed:
                 notes.append(
                     f"{batch_label}:row_mismatch(expected={rows_needed},got={clean_imputed.shape[0]})"
                 )
+                chunk_failed = True
+                break
+
+            if TARGET_COLUMN in expected_cols:
+                input_missing_mask = batch_to_prompt[TARGET_COLUMN].isna()
+                predicted_target = pd.to_numeric(clean_imputed[TARGET_COLUMN], errors="coerce")
+                unresolved = int((input_missing_mask & predicted_target.isna()).sum())
+                if unresolved > 0:
+                    notes.append(f"{batch_label}:target_nan_after_parse({unresolved})")
+                    chunk_nan_target = True
+
+            chunk_frames.append((col_start, col_end, expected_cols, clean_imputed))
+
+        raw_blocks.append("\n\n".join(chunk_outputs))
+
+        if (chunk_failed or chunk_nan_target) and rows_needed > min_batch_row:
+            split_mid = row_start + (rows_needed // 2)
+            if split_mid <= row_start or split_mid >= row_end:
+                notes.append(f"split_block_invalid({row_start},{row_end})")
+            else:
+                notes.append(
+                    f"split_rows({row_start}:{row_end}->{row_start}:{split_mid}+{split_mid}:{row_end})"
+                )
+                # Add right block first, then left block, so left runs next.
+                pending.insert(0, (split_mid, row_end))
+                pending.insert(0, (row_start, split_mid))
                 batch_idx += 1
                 continue
 
-            target_index = output.index[row_start:row_end]
+        if not chunk_frames:
+            batch_idx += 1
+            continue
+
+        target_index = output.index[row_start:row_end]
+        for _col_start, _col_end, expected_cols, clean_imputed in chunk_frames:
             assign_failed = False
             for col in expected_cols:
                 values = clean_imputed[col]
@@ -483,22 +541,24 @@ def _impute_matrix_in_batches(
                     coerced = pd.to_numeric(values, errors="coerce")
                     if coerced.isna().sum() > values.isna().sum():
                         notes.append(
-                            f"{batch_label}:numeric_coerce({col},"
+                            f"{debug_label}_batch{batch_idx}_r{row_start}-{row_end}:"
+                            f"numeric_coerce({col},"
                             f"added_nan={int(coerced.isna().sum() - values.isna().sum())})"
                         )
                     values = coerced
                 try:
                     output.loc[target_index, col] = values.values
                 except Exception as exc:
-                    notes.append(f"{batch_label}:assign_fail({col},{exc})")
+                    notes.append(
+                        f"{debug_label}_batch{batch_idx}_r{row_start}-{row_end}:"
+                        f"assign_fail({col},{exc})"
+                    )
                     assign_failed = True
                     break
-
             if assign_failed:
-                batch_idx += 1
-                continue
+                break
 
-            batch_idx += 1
+        batch_idx += 1
 
     raw_output_text = "\n\n".join(raw_blocks)
     parse_note = _summarize_notes(notes)
@@ -509,7 +569,8 @@ def run_telco_paper_prompt(
     n_rows: int | None = 40,
     max_new_tokens: int = 4096,
     batch_row: int = 40,
-    batch_col: int = 10,
+    batch_col: int | None = None,
+    min_batch_row: int = 1,
     tokenizer=None,
     model=None,
     debug_prompts: bool = False,
@@ -523,7 +584,7 @@ def run_telco_paper_prompt(
     tokenizer, model = _load_or_get_model(tokenizer=tokenizer, model=model)
 
     print("\n" + "=" * 80)
-    print("RUNNING PAPER PROMPT (NO BATCH LOOP)")
+    print("RUNNING PAPER PROMPT")
     print("=" * 80)
     print(f"Prompt rows: {len(prompt_matrix)}")
     print(f"Missing rows to evaluate: {len(missing_positions)}")
@@ -535,6 +596,7 @@ def run_telco_paper_prompt(
         max_new_tokens=max_new_tokens,
         batch_row=batch_row,
         batch_col=batch_col,
+        min_batch_row=min_batch_row,
         debug_prompts=debug_prompts,
         debug_label="single_run",
     )
@@ -585,6 +647,7 @@ def run_telco_paper_prompt(
     results_df["max_new_tokens"] = max_new_tokens
     results_df["batch_row"] = batch_row
     results_df["batch_col"] = batch_col
+    results_df["min_batch_row"] = min_batch_row
     results_df["run_timestamp_utc"] = run_timestamp
     results_df["raw_output_preview"] = raw_output[:600]
 
@@ -608,7 +671,8 @@ def run_telco_paper_prompt_folds(
     n_folds: int = 5,
     fold_prompt_rows: int | None = 25,
     batch_row: int = 40,
-    batch_col: int = 10,
+    batch_col: int | None = None,
+    min_batch_row: int = 1,
     debug_prompts: bool = False,
     tokenizer=None,
     model=None,
@@ -674,6 +738,7 @@ def run_telco_paper_prompt_folds(
             max_new_tokens=max_new_tokens,
             batch_row=batch_row,
             batch_col=batch_col,
+            min_batch_row=min_batch_row,
             debug_prompts=debug_prompts,
             debug_label=f"fold{fold_idx}_of_{effective_folds}",
         )
@@ -723,6 +788,7 @@ def run_telco_paper_prompt_folds(
                     "max_new_tokens": max_new_tokens,
                     "batch_row": batch_row,
                     "batch_col": batch_col,
+                    "min_batch_row": min_batch_row,
                     "run_timestamp_utc": run_timestamp,
                     "raw_output_preview": raw_output[:600],
                 }
@@ -747,7 +813,8 @@ def evaluate_telco_paper_prompt(
     n_folds: int = 1,
     fold_prompt_rows: int | None = 25,
     batch_row: int = 40,
-    batch_col: int = 10,
+    batch_col: int | None = None,
+    min_batch_row: int = 1,
     debug_prompts: bool = False,
 ) -> pd.DataFrame:
     if n_folds > 1:
@@ -758,6 +825,7 @@ def evaluate_telco_paper_prompt(
             fold_prompt_rows=fold_prompt_rows,
             batch_row=batch_row,
             batch_col=batch_col,
+            min_batch_row=min_batch_row,
             debug_prompts=debug_prompts,
         )
     else:
@@ -766,6 +834,7 @@ def evaluate_telco_paper_prompt(
             max_new_tokens=max_new_tokens,
             batch_row=batch_row,
             batch_col=batch_col,
+            min_batch_row=min_batch_row,
             debug_prompts=debug_prompts,
         )
 
