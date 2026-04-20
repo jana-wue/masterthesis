@@ -1,0 +1,45 @@
+### fold1_of_3_batch0_r0-20_c0-10
+gender,SeniorCitizen,Partner,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup
+Male,0,No,Yes,22,Yes,Yes,Fiber optic,No,Yes
+Female,0,No,No,10,No,No,DSL,Yes,No
+Female,0,Yes,No,28,Yes,Yes,Fiber optic,No,No
+Male,0,No,Yes,62,Yes,Yes,No,Yes,Yes
+Male,0,Yes,Yes,13,Yes,No,No,Yes,No
+Male,0,No,No,16,Yes,No,No,No,No
+Male,0,Yes,No,58,Yes,Yes,Fiber optic,No,No
+Male,0,No,No,49,Yes,Yes,Fiber optic,No,Yes
+Male,0,No,No,25,Yes,No,Fiber optic,Yes,No
+Female,0,Yes,Yes,69,Yes,Yes,Fiber optic,Yes,Yes
+Female,0,No,No,52,Yes,No,No,No,No
+Male,1,Yes,No,2,Yes,No,Fiber optic,No,No
+Female,0,Yes,Yes,27,Yes,No,DSL,Yes,Yes
+Male,0,No,No,1,Yes,No,No,No,No
+Male,1,No,No,1,Yes,No,DSL,No,No
+Female,0,Yes,Yes,72,Yes,Yes,Fiber optic,Yes,Yes
+Male,0,No,No,5,Yes,No,Fiber optic,No,No
+Female,0,No,No,46,Yes,No,Fiber optic,No,No
+Male,0,No,No,34,Yes,Yes,Fiber optic,No,Yes
+Female,0,No,No,11,Yes,Yes,Fiber optic,No,No
+
+### fold1_of_3_batch1_r0-20_c10-20
+DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges,Churn
+No,No,Yes,No,Month-to-month,Yes,"Credit card (automatic)",89.10,1949.40,No
+No,No,No,No,Month-to-month,No,"Mailed check",29.75,301.90,No
+Yes,Yes,Yes,Yes,Month-to-month,Yes,"Electronic check",104.80,3046.05,Yes
+No,No,No,No,One year,"Bank transfer (automatic)",56.15,3487.95,No
+No,No,No,No,Month-to-month,Yes,"Credit card (automatic)",49.95,NaN,No
+No internet service,No internet service,No internet service,No internet service,Two year,No,"Credit card (automatic)",18.95,326.80,No
+Yes,No,Yes,Yes,One year,"Credit card (automatic)",100.35,NaN,No
+Yes,No,Yes,Yes,Month-to-month,"Bank transfer (automatic)",103.70,5036.30,Yes
+Yes,Yes,Yes,Yes,Month-to-month,"Electronic check",105.50,2686.05,No
+Yes,Yes,Yes,Yes,Two year,"Credit card (automatic)",113.25,7895.15,No
+No internet service,No internet service,No internet service,No internet service,One year,"Mailed check",20.65,1022.95,No
+Yes,No,No,No,Month-to-month,"Credit card (automatic)",95.50,181.65,No
+Yes,Yes,No,Yes,Month-to-month,"Credit card (automatic)",66.15,1874.45,No
+No internet service,No internet service,No internet service,No internet service,Month-to-month,"Bank transfer (automatic)",20.20,20.20,No
+No,No,No,No,Month-to-month,"Bank transfer (automatic)",45.25,45.25,No
+No,No,No,No,Two year,"Bank transfer (automatic)",99.90,NaN,No
+No,No,No,No,Month-to-month,"Electronic check",69.70,316.90,Yes
+Yes,No,No,No,Month-to-month,"Credit card (automatic)",74.80,3548.30,No
+Yes,No,Yes,Yes,Month-to-month,"Electronic check",106.35,3549.25,Yes
+Yes,No,Yes,Yes,Month-to-month,"Bank transfer (automatic)",97.85,1105.40,Yes
