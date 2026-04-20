@@ -20,6 +20,7 @@ DATASET_NAME = "Telco Customer Churn"
 TARGET_COLUMN = "TotalCharges"
 ID_COLUMN = "customerID"
 DEFAULT_BATCH_SIZE = 20
+DEFAULT_BATCH_COL_SIZE = 10
 RESULTS_RMSE_PATH = Path("data/results/imputation_results.csv")
 RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrsme.csv")
 
@@ -200,6 +201,7 @@ def append_global_results_from_telco_batch_predictions(results_csv,model_name, p
 def run_telco_batch_llmsimputation(
     n_examples: int = 100,
     batch_size: int = DEFAULT_BATCH_SIZE,
+    batch_col_size: int = DEFAULT_BATCH_COL_SIZE,
 ) -> None:
     df_full = pd.read_csv(DATA_RAW / "Telco-Customer-Churn_cleaned.csv")
     df_missing = pd.read_csv(
@@ -255,59 +257,102 @@ def run_telco_batch_llmsimputation(
     print("\n" + "=" * 80)
     print("BATCH PROMPT IMPUTATION")
     print("=" * 80)
-    print(f"Rows to impute: {len(missing_rows)} | Batch size: {batch_size}")
+    print(
+        f"Rows to impute: {len(missing_rows)} | Batch rows: {batch_size} | Batch cols: {batch_col_size}"
+    )
+
+    parsed_prediction_by_index: dict[int, float] = {}
+    raw_output_by_index: dict[int, str] = {}
+
+    n_rows = len(missing_rows)
+    n_feature_cols = len(feature_columns)
+    matrix_base = missing_rows[feature_columns + [TARGET_COLUMN]].copy()
+
+    iter_batch = 0
+    for row_start in range(0, n_rows, batch_size):
+        row_end = min(row_start + batch_size, n_rows)
+        actual_start = row_start
+        if (row_end - row_start) < batch_size and n_rows >= batch_size:
+            actual_start = row_end - batch_size
+
+        rows_needed = row_end - row_start
+        eval_indices = missing_rows.iloc[row_start:row_end].index.astype(int).tolist()
+
+        for col_start in range(0, n_feature_cols, batch_col_size):
+            col_end = min(col_start + batch_col_size, n_feature_cols)
+            feature_slice = feature_columns[col_start:col_end]
+
+            block_df = matrix_base.iloc[actual_start:row_end][feature_slice + [TARGET_COLUMN]].copy()
+            block_df.insert(0, "row_index", missing_rows.iloc[actual_start:row_end].index.astype(int))
+            expected_columns = block_df.columns.tolist()
+
+            messages = imputer.build_batch_messages(
+                batch_df=block_df,
+                feature_columns=feature_slice,
+                background_knowledge=background_knowledge,
+            )
+            raw_output = imputer.generate_raw_answer(
+                messages=messages,
+                tokenizer=tokenizer,
+                model=model,
+                max_new_tokens=max(256, batch_size * 20),
+            )
+            parsed_block = imputer.parse_imputed_matrix(
+                response_text=raw_output,
+                expected_columns=expected_columns,
+                target_column=TARGET_COLUMN,
+            )
+            clean_block = parsed_block.iloc[-rows_needed:, :].copy()
+
+            iter_batch += 1
+            parsed_count = int(clean_block[TARGET_COLUMN].notna().sum()) if not clean_block.empty else 0
+            print(
+                f"\nBatch {iter_batch}: rows {row_start}..{row_end - 1}, feature cols {col_start}..{col_end - 1}"
+            )
+            print(f"Parsed predictions in eval slice: {parsed_count}/{rows_needed}")
+
+            if clean_block.empty or clean_block.shape[0] != rows_needed:
+                continue
+
+            target_values = clean_block[TARGET_COLUMN].reset_index(drop=True)
+            for pos, idx in enumerate(eval_indices):
+                if pos >= len(target_values):
+                    break
+                parsed_pred = target_values.iloc[pos]
+                if pd.notna(parsed_pred):
+                    parsed_prediction_by_index[idx] = float(parsed_pred)
+                    raw_output_by_index[idx] = raw_output
 
     all_results: list[dict] = []
 
-    for batch_id, start in enumerate(range(0, len(missing_rows), batch_size), start=1):
-        batch_rows = missing_rows.iloc[start : start + batch_size].copy()
-        batch_prompt_df = batch_rows[feature_columns + [TARGET_COLUMN]].copy()
-        batch_prompt_df.insert(0, "row_index", batch_rows.index.astype(int))
+    for idx, row in missing_rows.iterrows():
+        parsed_pred = parsed_prediction_by_index.get(int(idx), pd.NA)
+        source = "model_batch"
 
-        messages = imputer.build_batch_messages(
-            batch_df=batch_prompt_df,
-            feature_columns=feature_columns,
-            background_knowledge=background_knowledge,
-        )
-        raw_output = imputer.generate_raw_answer(
-            messages=messages,
-            tokenizer=tokenizer,
-            model=model,
-            max_new_tokens=max(256, batch_size * 20),
-        )
-        parsed = imputer.parse_batch_predictions(raw_output)
-        parsed_map = dict(zip(parsed["row_index"], parsed[TARGET_COLUMN]))
-
-        print(f"\nBatch {batch_id}: rows {start}..{start + len(batch_rows) - 1}")
-        print(f"Parsed predictions: {len(parsed_map)}/{len(batch_rows)}")
-
-        for idx, row in batch_rows.iterrows():
-            parsed_pred = parsed_map.get(int(idx))
-            source = "model_batch"
-
-            if pd.isna(parsed_pred):
-                parsed_pred, source = imputer.fallback_totalcharges(
-                    row=row,
-                    totalcharges_median=totalcharges_median,
-                )
-
-            ground_truth = df_full.loc[idx, TARGET_COLUMN] if idx in df_full.index else pd.NA
-
-            all_results.append(
-                {
-                    "row_index": int(idx),
-                    "prediction": float(parsed_pred),
-                    "ground_truth": ground_truth,
-                    "source": source,
-                    "batch_id": batch_id,
-                    "raw_output": raw_output,
-                }
+        if pd.isna(parsed_pred):
+            parsed_pred, source = imputer.fallback_totalcharges(
+                row=row,
+                totalcharges_median=totalcharges_median,
             )
+
+        ground_truth = df_full.loc[idx, TARGET_COLUMN] if idx in df_full.index else pd.NA
+
+        all_results.append(
+            {
+                "row_index": int(idx),
+                "prediction": float(parsed_pred),
+                "ground_truth": ground_truth,
+                "source": source,
+                "batch_id": pd.NA,
+                "raw_output": raw_output_by_index.get(int(idx), ""),
+            }
+        )
 
     results_df = pd.DataFrame(all_results)
     results_df["model_name"] = MODEL_NAME
     results_df["prompt_style"] = PROMPT_STYLE_NAME
     results_df["batch_size"] = batch_size
+    results_df["batch_col_size"] = batch_col_size
     results_df["n_examples_requested"] = n_examples
     results_df["run_timestamp_utc"] = datetime.now(timezone.utc).isoformat()
     results_df["leakage_guard_enabled"] = True
