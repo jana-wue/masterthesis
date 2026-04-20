@@ -210,7 +210,106 @@ def _append_prediction_rows(output_csv, rows_df):
     combined.to_csv(output_csv, index=False)
 
 
-def _impute_full_matrix(prompt_matrix, tokenizer, model, max_new_tokens):
+def _debug_dump_prompt(prompt_text, debug_prompts, debug_label):
+    if not debug_prompts:
+        return
+
+    print("\n" + "=" * 80)
+    print(f"DEBUG PROMPT [{debug_label}]")
+    print("=" * 80)
+    print(prompt_text)
+    print("=" * 80 + "\n")
+
+    debug_dir = DATA_RESULTS / "prompt_debug"
+    debug_dir.mkdir(parents=True, exist_ok=True)
+    debug_path = debug_dir / f"{debug_label}.txt"
+    debug_path.write_text(prompt_text, encoding="utf-8")
+    print(f"Saved debug prompt to: {debug_path}")
+
+
+def _normalize_or_recover_rows(parsed_df, prompt_matrix):
+    expected_columns = list(prompt_matrix.columns)
+    expected_rows = len(prompt_matrix)
+
+    try:
+        normalized = normalize_imputed_matrix(
+            df_imputed=parsed_df,
+            expected_columns=expected_columns,
+            expected_rows=expected_rows,
+        )
+        return normalized, None
+    except Exception as exc:
+        error_text = str(exc)
+        if "fewer rows than expected" not in error_text:
+            raise
+
+        # Partial-row recovery for truncated model outputs:
+        # keep parsed rows and pad the tail with original prompt rows.
+        work = parsed_df.copy()
+        if len(work.columns) == len(expected_columns) + 1:
+            first_col = str(work.columns[0]).strip().lower()
+            if first_col.startswith("unnamed") or work.columns[0] not in expected_columns:
+                work = work.iloc[:, 1:]
+
+        if set(expected_columns).issubset(set(work.columns)):
+            work = work.loc[:, expected_columns]
+        elif len(work.columns) == len(expected_columns):
+            work.columns = expected_columns
+        else:
+            raise
+
+        if len(work) > expected_rows:
+            work = work.tail(expected_rows)
+
+        if len(work) < expected_rows:
+            missing_rows = expected_rows - len(work)
+            filler = prompt_matrix.iloc[len(work): len(work) + missing_rows].copy()
+            work = pd.concat([work.reset_index(drop=True), filler.reset_index(drop=True)], ignore_index=True)
+
+        recovered_note = f"partial_rows_recovered({len(parsed_df)}->{expected_rows})"
+        return work.reset_index(drop=True), recovered_note
+
+
+def _build_compact_fold_matrix(fold_matrix, fold_positions, max_rows):
+    """
+    Build a smaller per-fold prompt matrix while keeping all evaluated rows.
+    """
+    total_rows = len(fold_matrix)
+    if total_rows == 0:
+        raise ValueError("fold_matrix is empty.")
+
+    required_positions = sorted(set(int(pos) for pos in fold_positions))
+    if max_rows is None:
+        budget = total_rows
+    else:
+        budget = max(int(max_rows), len(required_positions))
+        budget = min(budget, total_rows)
+
+    if budget >= total_rows:
+        selected_positions = list(range(total_rows))
+    else:
+        observed_positions = [
+            pos
+            for pos in range(total_rows)
+            if pos not in required_positions and pd.notna(fold_matrix.loc[pos, TARGET_COLUMN])
+        ]
+        observed_positions.sort(key=lambda pos: min(abs(pos - req) for req in required_positions))
+        selected_positions = sorted(required_positions + observed_positions[: budget - len(required_positions)])
+
+    compact_matrix = fold_matrix.iloc[selected_positions].reset_index(drop=True)
+    pos_map = {orig_pos: new_pos for new_pos, orig_pos in enumerate(selected_positions)}
+    compact_fold_positions = [pos_map[pos] for pos in required_positions if pos in pos_map]
+    return compact_matrix, pos_map, compact_fold_positions
+
+
+def _impute_full_matrix(
+    prompt_matrix,
+    tokenizer,
+    model,
+    max_new_tokens,
+    debug_prompts=False,
+    debug_label="run",
+):
     def _generate_or_raise(prompt_text: str) -> str:
         try:
             return generate_matrix_answer(
@@ -229,6 +328,11 @@ def _impute_full_matrix(prompt_matrix, tokenizer, model, max_new_tokens):
         dataset_name=DATASET_NAME_PROMPT,
         missing_data=prompt_matrix,
     )
+    _debug_dump_prompt(
+        prompt_text=primary_prompt,
+        debug_prompts=debug_prompts,
+        debug_label=f"{debug_label}_primary",
+    )
     raw_primary = _generate_or_raise(primary_prompt)
 
     first_error_text = None
@@ -237,12 +341,11 @@ def _impute_full_matrix(prompt_matrix, tokenizer, model, max_new_tokens):
             response_text=raw_primary,
             expected_shape=prompt_matrix.shape,
         )
-        imputed_matrix = normalize_imputed_matrix(
-            df_imputed=parsed_df,
-            expected_columns=list(prompt_matrix.columns),
-            expected_rows=len(prompt_matrix),
+        imputed_matrix, recovery_note = _normalize_or_recover_rows(
+            parsed_df=parsed_df,
+            prompt_matrix=prompt_matrix,
         )
-        return imputed_matrix, raw_primary, None
+        return imputed_matrix, raw_primary, recovery_note
     except Exception as first_exc:
         first_error_text = str(first_exc)
         print(f"WARNING: first parse failed, retrying with stricter prompt. ({first_error_text})")
@@ -251,6 +354,11 @@ def _impute_full_matrix(prompt_matrix, tokenizer, model, max_new_tokens):
         dataset_name=DATASET_NAME_PROMPT,
         missing_data=prompt_matrix,
     )
+    _debug_dump_prompt(
+        prompt_text=retry_prompt,
+        debug_prompts=debug_prompts,
+        debug_label=f"{debug_label}_retry",
+    )
     raw_retry = _generate_or_raise(retry_prompt)
 
     try:
@@ -258,12 +366,15 @@ def _impute_full_matrix(prompt_matrix, tokenizer, model, max_new_tokens):
             response_text=raw_retry,
             expected_shape=prompt_matrix.shape,
         )
-        imputed_matrix = normalize_imputed_matrix(
-            df_imputed=parsed_df,
-            expected_columns=list(prompt_matrix.columns),
-            expected_rows=len(prompt_matrix),
+        imputed_matrix, recovery_note = _normalize_or_recover_rows(
+            parsed_df=parsed_df,
+            prompt_matrix=prompt_matrix,
         )
-        return imputed_matrix, raw_retry, "first_parse_failed_but_retry_succeeded"
+        if recovery_note:
+            parse_note = f"first_parse_failed_but_retry_succeeded|{recovery_note}"
+        else:
+            parse_note = "first_parse_failed_but_retry_succeeded"
+        return imputed_matrix, raw_retry, parse_note
     except Exception as retry_exc:
         retry_error_text = str(retry_exc)
         parse_error = (
@@ -273,7 +384,13 @@ def _impute_full_matrix(prompt_matrix, tokenizer, model, max_new_tokens):
         return prompt_matrix.copy(), raw_retry, parse_error
 
 
-def run_telco_paper_prompt(n_rows: int | None = 40, max_new_tokens: int = 4096, tokenizer=None, model=None):
+def run_telco_paper_prompt(
+    n_rows: int | None = 40,
+    max_new_tokens: int = 4096,
+    tokenizer=None,
+    model=None,
+    debug_prompts: bool = False,
+):
     df_full, df_missing = _load_telco_mar_data()
 
     prompt_matrix, original_indices, missing_positions = _build_prompt_matrix(
@@ -293,6 +410,8 @@ def run_telco_paper_prompt(n_rows: int | None = 40, max_new_tokens: int = 4096, 
         tokenizer=tokenizer,
         model=model,
         max_new_tokens=max_new_tokens,
+        debug_prompts=debug_prompts,
+        debug_label="single_run",
     )
 
     observed_target = pd.to_numeric(df_full[TARGET_COLUMN], errors="coerce").dropna()
@@ -356,8 +475,15 @@ def run_telco_paper_prompt(n_rows: int | None = 40, max_new_tokens: int = 4096, 
     return results_df
 
 
-def run_telco_paper_prompt_folds( n_rows: int | None = 40,  max_new_tokens: int = 4096, n_folds: int = 5,
-    tokenizer=None, model=None):
+def run_telco_paper_prompt_folds(
+    n_rows: int | None = 40,
+    max_new_tokens: int = 4096,
+    n_folds: int = 5,
+    fold_prompt_rows: int | None = 25,
+    debug_prompts: bool = False,
+    tokenizer=None,
+    model=None,
+):
     df_full, df_missing = _load_telco_mar_data()
     prompt_matrix, original_indices, missing_positions = _build_prompt_matrix(
         df_missing=df_missing,
@@ -400,14 +526,25 @@ def run_telco_paper_prompt_folds( n_rows: int | None = 40,  max_new_tokens: int 
             if pd.notna(known_value):
                 fold_matrix.loc[pos, TARGET_COLUMN] = float(known_value)
 
+        compact_matrix, pos_map, compact_fold_positions = _build_compact_fold_matrix(
+            fold_matrix=fold_matrix,
+            fold_positions=fold_positions,
+            max_rows=fold_prompt_rows,
+        )
+
         print("\n" + "-" * 80)
-        print(f"Fold {fold_idx}/{effective_folds} | eval rows: {len(fold_positions)}")
+        print(
+            f"Fold {fold_idx}/{effective_folds} | eval rows: {len(fold_positions)} | "
+            f"prompt rows this fold: {len(compact_matrix)}"
+        )
 
         imputed_matrix, raw_output, parse_error = _impute_full_matrix(
-            prompt_matrix=fold_matrix,
+            prompt_matrix=compact_matrix,
             tokenizer=tokenizer,
             model=model,
             max_new_tokens=max_new_tokens,
+            debug_prompts=debug_prompts,
+            debug_label=f"fold{fold_idx}_of_{effective_folds}",
         )
 
         raw_output_txt = DATA_RESULTS / (
@@ -420,8 +557,12 @@ def run_telco_paper_prompt_folds( n_rows: int | None = 40,  max_new_tokens: int 
         for pos in fold_positions:
             original_idx = original_indices[pos]
             row_for_fallback = prompt_matrix.iloc[pos]
+            compact_pos = pos_map.get(pos)
 
-            pred_value = pd.to_numeric(imputed_matrix.loc[pos, TARGET_COLUMN], errors="coerce")
+            if compact_pos is None:
+                pred_value = pd.NA
+            else:
+                pred_value = pd.to_numeric(imputed_matrix.loc[compact_pos, TARGET_COLUMN], errors="coerce")
             source = "paper_prompt_fold"
 
             if pd.isna(pred_value):
@@ -436,6 +577,7 @@ def run_telco_paper_prompt_folds( n_rows: int | None = 40,  max_new_tokens: int 
                 {
                     "row_index": int(original_idx),
                     "prompt_row_position": int(pos),
+                    "compact_prompt_row_position": int(compact_pos) if compact_pos is not None else pd.NA,
                     "prediction": float(pred_value),
                     "ground_truth": float(ground_truth) if pd.notna(ground_truth) else pd.NA,
                     "source": source,
@@ -444,7 +586,8 @@ def run_telco_paper_prompt_folds( n_rows: int | None = 40,  max_new_tokens: int 
                     "n_folds_requested": n_folds,
                     "n_folds_effective": effective_folds,
                     "model_name": MODEL_NAME,
-                    "prompt_rows": len(prompt_matrix),
+                    "prompt_rows": len(compact_matrix),
+                    "fold_prompt_rows_cap": fold_prompt_rows if fold_prompt_rows is not None else pd.NA,
                     "n_rows_requested": n_rows if n_rows is not None else len(prompt_matrix),
                     "max_new_tokens": max_new_tokens,
                     "run_timestamp_utc": run_timestamp,
@@ -465,17 +608,26 @@ def run_telco_paper_prompt_folds( n_rows: int | None = 40,  max_new_tokens: int 
     return results_df
 
 
-def evaluate_telco_paper_prompt(n_rows: int | None = 40, max_new_tokens: int = 4096, n_folds: int = 1) -> pd.DataFrame:
+def evaluate_telco_paper_prompt(
+    n_rows: int | None = 40,
+    max_new_tokens: int = 4096,
+    n_folds: int = 1,
+    fold_prompt_rows: int | None = 25,
+    debug_prompts: bool = False,
+) -> pd.DataFrame:
     if n_folds > 1:
         results_df = run_telco_paper_prompt_folds(
             n_rows=n_rows,
             max_new_tokens=max_new_tokens,
             n_folds=n_folds,
+            fold_prompt_rows=fold_prompt_rows,
+            debug_prompts=debug_prompts,
         )
     else:
         results_df = run_telco_paper_prompt(
             n_rows=n_rows,
             max_new_tokens=max_new_tokens,
+            debug_prompts=debug_prompts,
         )
 
     work = results_df.copy()
