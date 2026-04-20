@@ -6,24 +6,93 @@ from io import StringIO
 import pandas as pd
 
 
-def clean_and_parse_llm_data(response_text: str, expected_shape: tuple[int, int]) -> pd.DataFrame:
+def _extract_code_block_content(response_text):
+    blocks = re.findall(r"```(?:csv)?\s*(.*?)\s*```", response_text, re.DOTALL)
+    if not blocks:
+        return response_text.strip()
+    # Prefer the longest block if multiple code blocks are returned.
+    return max(blocks, key=len).strip()
+
+
+def _score_candidate(df: pd.DataFrame, expected_shape):
+    expected_rows, expected_cols = expected_shape
+    rows, cols = df.shape
+    one_col_penalty = 1000 if expected_cols > 1 and cols == 1 else 0
+    return one_col_penalty + abs(cols - expected_cols) * 100 + abs(rows - expected_rows)
+
+
+def _parse_markdown_table(content) -> pd.DataFrame | None:
+    lines = [line.strip() for line in content.splitlines() if line.strip()]
+    if len(lines) < 2:
+        return None
+    if not all("|" in line for line in lines[:2]):
+        return None
+
+    cleaned = []
+    for line in lines:
+        if set(line.replace("|", "").replace("-", "").replace(":", "").strip()) == set():
+            continue
+        parts = [part.strip() for part in line.strip("|").split("|")]
+        cleaned.append(parts)
+
+    if len(cleaned) < 2:
+        return None
+
+    header = cleaned[0]
+    data_rows = cleaned[1:]
+    if not header or not data_rows:
+        return None
+
+    try:
+        return pd.DataFrame(data_rows, columns=header)
+    except Exception:
+        return None
+
+
+def clean_and_parse_llm_data(response_text, expected_shape):
     """
     Parse LLM output into a DataFrame.
     """
-    match = re.search(r"```(?:csv)?\s*(.*?)\s*```", response_text, re.DOTALL)
-    content = match.group(1).strip() if match else response_text.strip()
+    content = _extract_code_block_content(response_text)
+    if not content:
+        raise ValueError(f"Empty model output. Expected shape: {expected_shape}")
 
-    for separator in [",", r"\s+"]:
-        try:
-            df_imputed = pd.read_csv(StringIO(content), sep=separator, engine="python")
-            return df_imputed
-        except Exception:
-            continue
+    candidates: list[tuple[int, pd.DataFrame]] = []
+    separators = [",", ";", "\t", "|", r"\s+"]
+    header_modes = ["infer", None]
 
-    raise ValueError(f"Could not parse imputed matrix. Expected shape: {expected_shape}")
+    for sep in separators:
+        for header in header_modes:
+            try:
+                kwargs = {"sep": sep, "engine": "python"}
+                if header is None:
+                    kwargs["header"] = None
+                df = pd.read_csv(StringIO(content), **kwargs)
+            except Exception:
+                continue
+
+            if df.empty:
+                continue
+            candidates.append((_score_candidate(df, expected_shape), df))
+
+    markdown_df = _parse_markdown_table(content)
+    if markdown_df is not None and not markdown_df.empty:
+        candidates.append((_score_candidate(markdown_df, expected_shape), markdown_df))
+
+    if not candidates:
+        raise ValueError(f"Could not parse imputed matrix. Expected shape: {expected_shape}")
+
+    candidates.sort(key=lambda x: x[0])
+    best_df = candidates[0][1]
+    if expected_shape[1] > 1 and best_df.shape[1] == 1:
+        raise ValueError(
+            "Parser produced a single-column table. Model output was not valid tabular CSV."
+        )
+
+    return best_df
 
 
-def build_paper_prompt(dataset_name: str, missing_data: pd.DataFrame) -> str:
+def build_paper_prompt(dataset_name: str, missing_data):
     """
     Prompt copied 1:1 from ArthurMangussi/LLMsImputation (adjust_prompt).
     """
@@ -52,6 +121,23 @@ def build_paper_prompt(dataset_name: str, missing_data: pd.DataFrame) -> str:
     5. Use commas as delimiters. Every row MUST have exactly {missing_data.shape[1] - 1} commas.
     """
     return prompt
+
+
+def build_paper_retry_prompt(dataset_name, missing_data):
+    """
+    Stricter retry prompt used only when first parsing fails.
+    """
+    base = build_paper_prompt(dataset_name=dataset_name, missing_data=missing_data)
+    return (
+        f"{base}\n"
+        "\n"
+        "CRITICAL OUTPUT VALIDATION:\n"
+        "- Return exactly one ```csv code block and nothing else.\n"
+        f"- The CSV must contain exactly {missing_data.shape[1]} columns.\n"
+        f"- The CSV must contain exactly {missing_data.shape[0]} data rows.\n"
+        "- Do not return markdown tables using pipes.\n"
+        "- Do not return explanations.\n"
+    )
 
 
 def normalize_imputed_matrix(df_imputed, expected_columns, expected_rows) -> pd.DataFrame:

@@ -11,6 +11,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from src.imputation.llm_paper import (
     build_paper_prompt,
+    build_paper_retry_prompt,
     clean_and_parse_llm_data,
     normalize_imputed_matrix,
 )
@@ -210,28 +211,30 @@ def _append_prediction_rows(output_csv, rows_df):
 
 
 def _impute_full_matrix(prompt_matrix, tokenizer, model, max_new_tokens):
-    prompt_text = build_paper_prompt(
+    def _generate_or_raise(prompt_text: str) -> str:
+        try:
+            return generate_matrix_answer(
+                prompt_text=prompt_text,
+                tokenizer=tokenizer,
+                model=model,
+                max_new_tokens=max_new_tokens,
+            )
+        except torch.OutOfMemoryError as exc:
+            raise RuntimeError(
+                "CUDA OOM during generation. Try lower n_rows and/or max_new_tokens. "
+                "Recommended starting point on 16GB GPU: n_rows=120, max_new_tokens=4096."
+            ) from exc
+
+    primary_prompt = build_paper_prompt(
         dataset_name=DATASET_NAME_PROMPT,
         missing_data=prompt_matrix,
     )
+    raw_primary = _generate_or_raise(primary_prompt)
 
-    try:
-        raw_output = generate_matrix_answer(
-            prompt_text=prompt_text,
-            tokenizer=tokenizer,
-            model=model,
-            max_new_tokens=max_new_tokens,
-        )
-    except torch.OutOfMemoryError as exc:
-        raise RuntimeError(
-            "CUDA OOM during generation. Try lower n_rows and/or max_new_tokens. "
-            "Recommended starting point on 16GB GPU: n_rows=120, max_new_tokens=4096."
-        ) from exc
-
-    parse_error = None
+    first_error_text = None
     try:
         parsed_df = clean_and_parse_llm_data(
-            response_text=raw_output,
+            response_text=raw_primary,
             expected_shape=prompt_matrix.shape,
         )
         imputed_matrix = normalize_imputed_matrix(
@@ -239,12 +242,35 @@ def _impute_full_matrix(prompt_matrix, tokenizer, model, max_new_tokens):
             expected_columns=list(prompt_matrix.columns),
             expected_rows=len(prompt_matrix),
         )
-    except Exception as exc:
-        parse_error = str(exc)
-        print(f"WARNING: parsing failed, using fallback-only for missing rows. ({parse_error})")
-        imputed_matrix = prompt_matrix.copy()
+        return imputed_matrix, raw_primary, None
+    except Exception as first_exc:
+        first_error_text = str(first_exc)
+        print(f"WARNING: first parse failed, retrying with stricter prompt. ({first_error_text})")
 
-    return imputed_matrix, raw_output, parse_error
+    retry_prompt = build_paper_retry_prompt(
+        dataset_name=DATASET_NAME_PROMPT,
+        missing_data=prompt_matrix,
+    )
+    raw_retry = _generate_or_raise(retry_prompt)
+
+    try:
+        parsed_df = clean_and_parse_llm_data(
+            response_text=raw_retry,
+            expected_shape=prompt_matrix.shape,
+        )
+        imputed_matrix = normalize_imputed_matrix(
+            df_imputed=parsed_df,
+            expected_columns=list(prompt_matrix.columns),
+            expected_rows=len(prompt_matrix),
+        )
+        return imputed_matrix, raw_retry, "first_parse_failed_but_retry_succeeded"
+    except Exception as retry_exc:
+        retry_error_text = str(retry_exc)
+        parse_error = (
+            f"first_parse_failed: {first_error_text} | retry_failed: {retry_error_text}"
+        )
+        print(f"WARNING: retry parse failed, using fallback-only for missing rows. ({parse_error})")
+        return prompt_matrix.copy(), raw_retry, parse_error
 
 
 def run_telco_paper_prompt(n_rows: int | None = 40, max_new_tokens: int = 4096, tokenizer=None, model=None):
