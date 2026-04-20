@@ -384,9 +384,110 @@ def _impute_full_matrix(
         return prompt_matrix.copy(), raw_retry, parse_error
 
 
+def _summarize_notes(notes, max_items=5):
+    if not notes:
+        return None
+    unique = []
+    for note in notes:
+        if note and note not in unique:
+            unique.append(note)
+    if not unique:
+        return None
+    shown = unique[:max_items]
+    if len(unique) > max_items:
+        shown.append(f"... (+{len(unique) - max_items} more)")
+    return " | ".join(shown)
+
+
+def _impute_matrix_in_batches(
+    matrix,
+    tokenizer,
+    model,
+    max_new_tokens,
+    batch_row=40,
+    batch_col=10,
+    debug_prompts=False,
+    debug_label="run",
+):
+    """
+    Paper-style batching over rows and columns.
+    Keeps current output format/parser logic from this project.
+    """
+    output = matrix.copy()
+    n_rows, n_cols = matrix.shape
+
+    raw_blocks = []
+    notes = []
+    batch_idx = 0
+
+    for row_start in range(0, n_rows, batch_row):
+        row_end = min(row_start + batch_row, n_rows)
+        actual_start = row_start
+        if (row_end - row_start) < batch_row and n_rows >= batch_row:
+            actual_start = row_end - batch_row
+
+        for col_start in range(0, n_cols, batch_col):
+            col_end = min(col_start + batch_col, n_cols)
+            batch_to_prompt = matrix.iloc[actual_start:row_end, col_start:col_end].copy()
+            batch_label = (
+                f"{debug_label}_batch{batch_idx}_r{actual_start}-{row_end}_c{col_start}-{col_end}"
+            )
+
+            imputed_batch, raw_output, parse_error = _impute_full_matrix(
+                prompt_matrix=batch_to_prompt,
+                tokenizer=tokenizer,
+                model=model,
+                max_new_tokens=max_new_tokens,
+                debug_prompts=debug_prompts,
+                debug_label=batch_label,
+            )
+
+            raw_blocks.append(
+                "\n".join(
+                    [
+                        f"### {batch_label}",
+                        raw_output if raw_output is not None else "",
+                    ]
+                )
+            )
+            if parse_error:
+                notes.append(f"{batch_label}:{parse_error}")
+
+            rows_needed = row_end - row_start
+            clean_imputed = imputed_batch.iloc[-rows_needed:, :].copy()
+            expected_cols = list(batch_to_prompt.columns)
+
+            if set(expected_cols).issubset(set(clean_imputed.columns)):
+                clean_imputed = clean_imputed.loc[:, expected_cols]
+            elif len(clean_imputed.columns) == len(expected_cols):
+                clean_imputed.columns = expected_cols
+            else:
+                notes.append(
+                    f"{batch_label}:col_mismatch(expected={len(expected_cols)},got={len(clean_imputed.columns)})"
+                )
+                batch_idx += 1
+                continue
+
+            if clean_imputed.empty or clean_imputed.shape[0] != rows_needed:
+                notes.append(
+                    f"{batch_label}:row_mismatch(expected={rows_needed},got={clean_imputed.shape[0]})"
+                )
+                batch_idx += 1
+                continue
+
+            output.iloc[row_start:row_end, col_start:col_end] = clean_imputed.values
+            batch_idx += 1
+
+    raw_output_text = "\n\n".join(raw_blocks)
+    parse_note = _summarize_notes(notes)
+    return output, raw_output_text, parse_note
+
+
 def run_telco_paper_prompt(
     n_rows: int | None = 40,
     max_new_tokens: int = 4096,
+    batch_row: int = 40,
+    batch_col: int = 10,
     tokenizer=None,
     model=None,
     debug_prompts: bool = False,
@@ -405,11 +506,13 @@ def run_telco_paper_prompt(
     print(f"Prompt rows: {len(prompt_matrix)}")
     print(f"Missing rows to evaluate: {len(missing_positions)}")
 
-    imputed_matrix, raw_output, parse_error = _impute_full_matrix(
-        prompt_matrix=prompt_matrix,
+    imputed_matrix, raw_output, parse_error = _impute_matrix_in_batches(
+        matrix=prompt_matrix,
         tokenizer=tokenizer,
         model=model,
         max_new_tokens=max_new_tokens,
+        batch_row=batch_row,
+        batch_col=batch_col,
         debug_prompts=debug_prompts,
         debug_label="single_run",
     )
@@ -458,6 +561,8 @@ def run_telco_paper_prompt(
     results_df["prompt_rows"] = len(prompt_matrix)
     results_df["n_rows_requested"] = n_rows if n_rows is not None else len(prompt_matrix)
     results_df["max_new_tokens"] = max_new_tokens
+    results_df["batch_row"] = batch_row
+    results_df["batch_col"] = batch_col
     results_df["run_timestamp_utc"] = run_timestamp
     results_df["raw_output_preview"] = raw_output[:600]
 
@@ -480,6 +585,8 @@ def run_telco_paper_prompt_folds(
     max_new_tokens: int = 4096,
     n_folds: int = 5,
     fold_prompt_rows: int | None = 25,
+    batch_row: int = 40,
+    batch_col: int = 10,
     debug_prompts: bool = False,
     tokenizer=None,
     model=None,
@@ -526,7 +633,7 @@ def run_telco_paper_prompt_folds(
             if pd.notna(known_value):
                 fold_matrix.loc[pos, TARGET_COLUMN] = float(known_value)
 
-        compact_matrix, pos_map, compact_fold_positions = _build_compact_fold_matrix(
+        compact_matrix, pos_map, _ = _build_compact_fold_matrix(
             fold_matrix=fold_matrix,
             fold_positions=fold_positions,
             max_rows=fold_prompt_rows,
@@ -538,11 +645,13 @@ def run_telco_paper_prompt_folds(
             f"prompt rows this fold: {len(compact_matrix)}"
         )
 
-        imputed_matrix, raw_output, parse_error = _impute_full_matrix(
-            prompt_matrix=compact_matrix,
+        imputed_matrix, raw_output, parse_error = _impute_matrix_in_batches(
+            matrix=compact_matrix,
             tokenizer=tokenizer,
             model=model,
             max_new_tokens=max_new_tokens,
+            batch_row=batch_row,
+            batch_col=batch_col,
             debug_prompts=debug_prompts,
             debug_label=f"fold{fold_idx}_of_{effective_folds}",
         )
@@ -590,6 +699,8 @@ def run_telco_paper_prompt_folds(
                     "fold_prompt_rows_cap": fold_prompt_rows if fold_prompt_rows is not None else pd.NA,
                     "n_rows_requested": n_rows if n_rows is not None else len(prompt_matrix),
                     "max_new_tokens": max_new_tokens,
+                    "batch_row": batch_row,
+                    "batch_col": batch_col,
                     "run_timestamp_utc": run_timestamp,
                     "raw_output_preview": raw_output[:600],
                 }
@@ -613,6 +724,8 @@ def evaluate_telco_paper_prompt(
     max_new_tokens: int = 4096,
     n_folds: int = 1,
     fold_prompt_rows: int | None = 25,
+    batch_row: int = 40,
+    batch_col: int = 10,
     debug_prompts: bool = False,
 ) -> pd.DataFrame:
     if n_folds > 1:
@@ -621,12 +734,16 @@ def evaluate_telco_paper_prompt(
             max_new_tokens=max_new_tokens,
             n_folds=n_folds,
             fold_prompt_rows=fold_prompt_rows,
+            batch_row=batch_row,
+            batch_col=batch_col,
             debug_prompts=debug_prompts,
         )
     else:
         results_df = run_telco_paper_prompt(
             n_rows=n_rows,
             max_new_tokens=max_new_tokens,
+            batch_row=batch_row,
+            batch_col=batch_col,
             debug_prompts=debug_prompts,
         )
 
