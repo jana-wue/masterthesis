@@ -108,17 +108,17 @@ def build_paper_prompt(dataset_name: str, missing_data):
     {string_missing}
 
     Output Format:
-    Return the complete imputed matrix inside a single Markdown code block. 
-    Use CSV format (comma-separated values) with the original headers.
-    Expected Columns ({missing_data.shape[1]}): 
+    Return the complete imputed matrix as plain CSV text (no markdown code block).
+    Use comma-separated values with the original headers.
+    Expected Columns ({missing_data.shape[1]}):
     [{headers_str}]
 
     Strict Rules:
-    1. Start directly with the code block: ```csv
-    2. End exactly with: ```
-    3. Ensure the exact same number of rows as the input.
-    4. No explanations, no introductory text, no "Here is the matrix".
-    5. Use commas as delimiters. Every row MUST have exactly {missing_data.shape[1] - 1} commas.
+    1. First line must be exactly the CSV header with these columns.
+    2. Return exactly {missing_data.shape[0]} data rows after the header.
+    3. Every data row must have exactly {missing_data.shape[1] - 1} commas.
+    4. No explanations, no introductory text, no markdown.
+    5. Do not add an index column.
     """
     return prompt
 
@@ -132,7 +132,7 @@ def build_paper_retry_prompt(dataset_name, missing_data):
         f"{base}\n"
         "\n"
         "CRITICAL OUTPUT VALIDATION:\n"
-        "- Return exactly one ```csv code block and nothing else.\n"
+        "- Return plain CSV only (no markdown code block).\n"
         f"- The CSV must contain exactly {missing_data.shape[1]} columns.\n"
         f"- The CSV must contain exactly {missing_data.shape[0]} data rows.\n"
         "- Do not return markdown tables using pipes.\n"
