@@ -85,3 +85,4 @@ Telco,MAR,"missing totalCharges -> tenure, 10%","LLM Batch Prompt (Mistral-7B-In
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=40 (Mistral-7B-Instruct-v0.3),94.29998232590792
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=40 folds=3 (Mistral-7B-Instruct-v0.3),2139.967274671897
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=80 folds=3 (Mistral-7B-Instruct-v0.3),559.0812319588015
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=160 folds=5 (Mistral-7B-Instruct-v0.3),1199.885644420959

@@ -1,0 +1,24 @@
+
+    You are an expert data analyst. I am providing a subset of the Telco-Customer-Churn Dataset.
+    Task: Use your knowledge of this specific dataset's statistical properties (feature ranges, class distributions, and correlations) to perform data imputation.
+    Constraint: DO NOT execute Python code. DO NOT provide any conversational text. Do NOT return any NaN or ? value.
+
+    The matrix below contains missing values. Impute them to be as consistent as possible with the original dataset.
+    Matrix:
+       gender  SeniorCitizen Partner Dependents  tenure PhoneService MultipleLines InternetService OnlineSecurity OnlineBackup DeviceProtection TechSupport StreamingTV StreamingMovies        Contract PaperlessBilling            PaymentMethod  MonthlyCharges  TotalCharges Churn
+0  Female              1     Yes        Yes      60          Yes            No             DSL            Yes          Yes              Yes         Yes          No             Yes        One year              Yes  Credit card (automatic)           74.85           NaN    No
+1    Male              1      No         No      18          Yes           Yes     Fiber optic             No           No               No          No         Yes             Yes  Month-to-month              Yes         Electronic check           95.45           NaN   Yes
+
+    Output Format:
+    Return the complete imputed matrix as plain CSV text (no markdown code block).
+    Use comma-separated values with the original headers.
+    Expected Columns (20):
+    [gender, SeniorCitizen, Partner, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, Contract, PaperlessBilling, PaymentMethod, MonthlyCharges, TotalCharges, Churn]
+
+    Strict Rules:
+    1. First line must be exactly the CSV header with these columns.
+    2. Return exactly 2 data rows after the header.
+    3. Every data row must have exactly 19 commas.
+    4. No explanations, no introductory text, no markdown.
+    5. Do not add an index column.
+    

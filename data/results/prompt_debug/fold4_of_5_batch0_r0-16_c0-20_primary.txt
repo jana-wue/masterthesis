@@ -1,0 +1,38 @@
+
+    You are an expert data analyst. I am providing a subset of the Telco-Customer-Churn Dataset.
+    Task: Use your knowledge of this specific dataset's statistical properties (feature ranges, class distributions, and correlations) to perform data imputation.
+    Constraint: DO NOT execute Python code. DO NOT provide any conversational text. Do NOT return any NaN or ? value.
+
+    The matrix below contains missing values. Impute them to be as consistent as possible with the original dataset.
+    Matrix:
+        gender  SeniorCitizen Partner Dependents  tenure PhoneService     MultipleLines InternetService       OnlineSecurity         OnlineBackup     DeviceProtection          TechSupport          StreamingTV      StreamingMovies        Contract PaperlessBilling              PaymentMethod  MonthlyCharges  TotalCharges Churn
+0   Female              0     Yes        Yes      56          Yes               Yes     Fiber optic                   No                   No                  Yes                   No                  Yes                  Yes        One year              Yes    Credit card (automatic)           99.80           NaN    No
+1   Female              0      No         No       6          Yes                No              No  No internet service  No internet service  No internet service  No internet service  No internet service  No internet service  Month-to-month               No               Mailed check           20.70           NaN    No
+2     Male              1     Yes         No      71          Yes               Yes              No  No internet service  No internet service  No internet service  No internet service  No internet service  No internet service        Two year               No  Bank transfer (automatic)           23.95           NaN    No
+3     Male              0     Yes        Yes      27          Yes               Yes     Fiber optic                   No                  Yes                   No                  Yes                   No                   No  Month-to-month              Yes    Credit card (automatic)           85.20       2151.60    No
+4     Male              0      No         No       3          Yes               Yes     Fiber optic                   No                   No                   No                   No                   No                   No  Month-to-month              Yes           Electronic check           74.40        229.55   Yes
+5     Male              0      No         No      64          Yes               Yes     Fiber optic                  Yes                  Yes                   No                   No                   No                   No        One year              Yes    Credit card (automatic)           84.30       5289.05    No
+6   Female              0     Yes        Yes      65          Yes               Yes     Fiber optic                  Yes                  Yes                   No                  Yes                  Yes                   No        Two year              Yes    Credit card (automatic)           99.05       6416.70    No
+7   Female              0      No         No      41          Yes                No              No  No internet service  No internet service  No internet service  No internet service  No internet service  No internet service        Two year               No               Mailed check           20.65        835.15    No
+8   Female              0     Yes        Yes       7          Yes                No             DSL                  Yes                   No                   No                   No                   No                   No  Month-to-month               No               Mailed check           50.70        350.35    No
+9   Female              0     Yes         No      61          Yes               Yes     Fiber optic                   No                  Yes                   No                   No                  Yes                  Yes        Two year              Yes  Bank transfer (automatic)          101.05       5971.25    No
+10    Male              0      No         No       3          Yes                No              No  No internet service  No internet service  No internet service  No internet service  No internet service  No internet service        One year               No               Mailed check           19.60         61.35    No
+11  Female              0     Yes        Yes      10          Yes               Yes     Fiber optic                  Yes                   No                   No                   No                  Yes                  Yes  Month-to-month              Yes           Electronic check          100.25       1064.65   Yes
+12  Female              0     Yes        Yes       4          Yes                No              No  No internet service  No internet service  No internet service  No internet service  No internet service  No internet service  Month-to-month               No               Mailed check           20.85         62.90    No
+13  Female              0      No         No       8          Yes               Yes             DSL                  Yes                   No                   No                  Yes                   No                  Yes  Month-to-month               No           Electronic check           71.15        563.65   Yes
+14    Male              0      No         No       1          Yes                No             DSL                   No                   No                   No                   No                   No                   No  Month-to-month              Yes           Electronic check           45.65         45.65   Yes
+15  Female              0      No         No      36           No  No phone service             DSL                  Yes                   No                   No                   No                   No                   No        Two year               No  Bank transfer (automatic)           31.05       1126.35    No
+
+    Output Format:
+    Return the complete imputed matrix as plain CSV text (no markdown code block).
+    Use comma-separated values with the original headers.
+    Expected Columns (20):
+    [gender, SeniorCitizen, Partner, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, Contract, PaperlessBilling, PaymentMethod, MonthlyCharges, TotalCharges, Churn]
+
+    Strict Rules:
+    1. First line must be exactly the CSV header with these columns.
+    2. Return exactly 16 data rows after the header.
+    3. Every data row must have exactly 19 commas.
+    4. No explanations, no introductory text, no markdown.
+    5. Do not add an index column.
+    
