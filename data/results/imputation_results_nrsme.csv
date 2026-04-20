@@ -81,3 +81,5 @@ German Credit Card,MNAR,"billamt1, 10%",DAE,27355.283498191824,0.307679633808787
 German Credit Card,MCAR,"billamt1, 10%",DAE,18335.359478520044,0.2651148677161785
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Prompt Zero-shot (Mistral-7B-Instruct-v0.3),2152.1828433175488,0.9513879314347656
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Prompt Few-shot k=2 (Mistral-7B-Instruct-v0.3),1031.8974899671528,0.4561577198149442
+Telco,MAR,"missing totalCharges -> tenure, 10%","LLM Batch Prompt (Mistral-7B-Instruct-v0.3, BatchImputation) [batch_size=40]",80.63246564074626,0.0356441623585211
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=40 (Mistral-7B-Instruct-v0.3),94.29998232590793,0.03315085685106883
