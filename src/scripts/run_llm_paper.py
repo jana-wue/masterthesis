@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from datetime import datetime, timezone
 from pathlib import Path
+import gc
 
 import pandas as pd
 import torch
@@ -214,12 +215,18 @@ def _impute_full_matrix(prompt_matrix, tokenizer, model, max_new_tokens):
         missing_data=prompt_matrix,
     )
 
-    raw_output = generate_matrix_answer(
-        prompt_text=prompt_text,
-        tokenizer=tokenizer,
-        model=model,
-        max_new_tokens=max_new_tokens,
-    )
+    try:
+        raw_output = generate_matrix_answer(
+            prompt_text=prompt_text,
+            tokenizer=tokenizer,
+            model=model,
+            max_new_tokens=max_new_tokens,
+        )
+    except torch.OutOfMemoryError as exc:
+        raise RuntimeError(
+            "CUDA OOM during generation. Try lower n_rows and/or max_new_tokens. "
+            "Recommended starting point on 16GB GPU: n_rows=120, max_new_tokens=4096."
+        ) from exc
 
     parse_error = None
     try:
@@ -351,6 +358,10 @@ def run_telco_paper_prompt_folds( n_rows: int | None = 40,  max_new_tokens: int 
 
     all_fold_results = []
     for fold_idx, fold_positions in enumerate(fold_splits, start=1):
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
         fold_set = set(fold_positions)
         fold_matrix = prompt_matrix.copy()
 
