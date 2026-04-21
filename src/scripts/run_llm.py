@@ -18,19 +18,19 @@ RESULTS_RMSE_PATH = Path("data/results/imputation_results.csv")
 RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrsme.csv")
 
 
-def model_name_to_file_token(model_name: str) -> str:
+def model_name_to_file_token(model_name):
     token = re.sub(r"[^A-Za-z0-9._-]+", "_", model_name).strip("_")
     return token or "unknown_model"
 
 
-def extract_first_number(text: str) -> str:
+def extract_first_number(text):
     match = re.search(r"[-+]?\d*\.?\d+", text)
     if match:
         return match.group(0)
     return text.strip()
 
 
-def apply_chat_template(messages, tokenizer) -> str:
+def apply_chat_template(messages, tokenizer):
     if hasattr(tokenizer, "apply_chat_template"):
         return tokenizer.apply_chat_template(
             messages,
@@ -40,7 +40,7 @@ def apply_chat_template(messages, tokenizer) -> str:
     return "\n\n".join(message["content"] for message in messages)
 
 
-def generate_answer(messages, tokenizer, model) -> tuple[str, str]:
+def generate_answer(messages, tokenizer, model):
     prompt_text = apply_chat_template(messages, tokenizer)
     inputs = tokenizer(prompt_text, return_tensors="pt").to(model.device)
     input_length = inputs["input_ids"].shape[1]
@@ -61,7 +61,7 @@ def generate_answer(messages, tokenizer, model) -> tuple[str, str]:
     return answer, raw_generated
 
 
-def _load_telco_mar_data() -> tuple[pd.DataFrame, pd.DataFrame]:
+def _load_telco_mar_data():
     df_full = pd.read_csv(DATA_RAW / "Telco-Customer-Churn_cleaned.csv")
     df_missing = pd.read_csv(
         DATA_PROCESSED / "MAR" / "telco_customer_churn_mar_totalcharges_tenure_10pct.csv"
@@ -69,7 +69,7 @@ def _load_telco_mar_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     return df_full, df_missing
 
 
-def _build_telco_imputer(df_missing: pd.DataFrame, few_shot_k: int) -> LLMImputer:
+def _build_telco_imputer(df_missing, few_shot_k):
     target_column = "TotalCharges"
     feature_columns = [col for col in df_missing.columns if col not in [target_column, "customerID"]]
 
@@ -90,7 +90,7 @@ def _build_telco_imputer(df_missing: pd.DataFrame, few_shot_k: int) -> LLMImpute
     return imputer
 
 
-def _append_results_row(csv_path: Path, required_columns: list[str], row: dict) -> None:
+def _append_results_row(csv_path, required_columns, row) -> None:
     csv_path.parent.mkdir(parents=True, exist_ok=True)
 
     if csv_path.exists():
@@ -107,14 +107,8 @@ def _append_results_row(csv_path: Path, required_columns: list[str], row: dict) 
     df.to_csv(csv_path, index=False)
 
 
-def append_to_global_results(
-    dataset: str,
-    missingness_type: str,
-    missing_rate: str,
-    imputation_method: str,
-    mean_rmse: float,
-    mean_nrmse: float,
-) -> None:
+def append_to_global_results(dataset,missingness_type, missing_rate, imputation_method,
+    mean_rmse, mean_nrmse):
     _append_results_row(
         csv_path=RESULTS_RMSE_PATH,
         required_columns=[
@@ -154,7 +148,7 @@ def append_to_global_results(
     )
 
 
-def resolve_telco_results_csv(model_name) -> Path:
+def resolve_telco_results_csv(model_name):
     """
     Resolve prediction CSV path for Telco runs.
     If `model_name` is provided, use the tokenized filename for that model.
@@ -269,12 +263,8 @@ def append_global_results_from_telco_predictions(results_csv, model_name, latest
     return summary_df
 
 
-def run_telco_zero_shot_batch_preview(
-    n_examples: int | None = 10,
-    few_shot_k: int = 2,
-    tokenizer=None,
-    model=None,
-) -> pd.DataFrame:
+def run_telco_zero_shot_batch_preview(n_examples: int | None = 10, few_shot_k: int = 2, tokenizer=None,
+    model=None) -> pd.DataFrame:
     target_column = "TotalCharges"
     df_full, df_missing = _load_telco_mar_data()
     imputer = _build_telco_imputer(df_missing=df_missing, few_shot_k=few_shot_k)
