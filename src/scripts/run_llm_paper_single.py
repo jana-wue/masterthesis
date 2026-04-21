@@ -18,7 +18,8 @@ from src.imputation.llm_paper_single import (
 from src.paths import DATA_RAW, DATA_PROCESSED, DATA_RESULTS
 
 
-DEFAULT_MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
+# Set this to your local model path/name (same style as other run_*.py scripts).
+MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
 DATASET_NAME_PROMPT = "Telco-Customer-Churn"
 TARGET_COLUMN = "TotalCharges"
 RESULTS_RMSE_PATH = Path("data/results/imputation_results.csv")
@@ -254,7 +255,6 @@ def parse_args():
             "Outputs one numeric value only."
         )
     )
-    parser.add_argument("--model-name", type=str, default=DEFAULT_MODEL_NAME)
     parser.add_argument(
         "--row-index",
         type=int,
@@ -287,7 +287,7 @@ def main() -> None:
     observed_target = pd.to_numeric(df_full[TARGET_COLUMN], errors="coerce").dropna()
     totalcharges_median = float(observed_target.median())
 
-    tokenizer, model = _load_or_get_model(model_name=args.model_name)
+    tokenizer, model = _load_or_get_model(model_name=MODEL_NAME)
 
     prediction, source, raw_output = impute_single_row_with_paper_prompt(
         row=row,
@@ -320,7 +320,7 @@ def main() -> None:
     )
 
     if not args.no_save_results:
-        model_token = model_name_to_file_token(args.model_name)
+        model_token = model_name_to_file_token(MODEL_NAME)
         single_results_csv = DATA_RESULTS / f"telco_{model_token}_paper_single_results.csv"
 
         row_df = pd.DataFrame(
@@ -333,7 +333,7 @@ def main() -> None:
                     "sq_error": sq_error,
                     "source": source,
                     "raw_output": raw_output,
-                    "model_name": args.model_name,
+                    "model_name": MODEL_NAME,
                     "target_column": TARGET_COLUMN,
                     "max_new_tokens": args.max_new_tokens,
                     "run_timestamp_utc": run_timestamp,
@@ -346,7 +346,7 @@ def main() -> None:
             mean_rmse = float((sq_error) ** 0.5)
             std_true_full = float(observed_target.std(ddof=0))
             mean_nrmse = float(mean_rmse / (std_true_full + 1e-8))
-            model_short = args.model_name.split("/")[-1]
+            model_short = MODEL_NAME.split("/")[-1]
             method_name = f"LLM Paper Single Prompt ({model_short})"
 
             append_to_global_results(
@@ -363,10 +363,11 @@ def main() -> None:
 
     if args.debug:
         print(f"row_index={row_index}", file=sys.stderr)
+        print(f"model_name={MODEL_NAME}", file=sys.stderr)
         print(f"source={source}", file=sys.stderr)
         print(f"raw_output={raw_output}", file=sys.stderr)
         if not args.no_save_results:
-            model_token = model_name_to_file_token(args.model_name)
+            model_token = model_name_to_file_token(MODEL_NAME)
             print(
                 f"saved_single_results={DATA_RESULTS / f'telco_{model_token}_paper_single_results.csv'}",
                 file=sys.stderr,
