@@ -188,18 +188,18 @@ def fallback_totalcharges(row, totalcharges_median):
     return float(totalcharges_median), "fallback_median"
 
 
-def _resolve_row_index(df_missing, row_index: int | None):
+def _resolve_target_indices(df_missing, row_index: int | None) -> list[int]:
     missing_indices = df_missing.index[df_missing[TARGET_COLUMN].isna()].tolist()
     if not missing_indices:
         raise ValueError(f"No missing rows found for target column '{TARGET_COLUMN}'.")
 
     if row_index is None:
-        return int(missing_indices[0])
+        return [int(idx) for idx in missing_indices]
 
     if row_index not in df_missing.index:
         raise ValueError(f"row_index={row_index} is not present in df_missing.")
 
-    return int(row_index)
+    return [int(row_index)]
 
 
 def impute_single_row_with_paper_prompt(row, dataset_name, target_column, feature_columns, target_stats: dict[str, float] | None,
@@ -259,7 +259,7 @@ def parse_args():
         "--row-index",
         type=int,
         default=None,
-        help="Row index to impute. Defaults to first row with missing TotalCharges.",
+        help="Row index to impute. If omitted, all rows with missing TotalCharges are imputed.",
     )
     parser.add_argument("--max-new-tokens", type=int, default=32)
     parser.add_argument(
@@ -279,9 +279,8 @@ def main() -> None:
     args = parse_args()
 
     df_full, df_missing = _load_telco_mar_data()
-    row_index = _resolve_row_index(df_missing=df_missing, row_index=args.row_index)
+    target_indices = _resolve_target_indices(df_missing=df_missing, row_index=args.row_index)
 
-    row = df_missing.loc[row_index]
     feature_columns = [col for col in df_missing.columns if col not in [TARGET_COLUMN, "customerID"]]
     target_stats = summarize_target_distribution(df_full, TARGET_COLUMN)
     observed_target = pd.to_numeric(df_full[TARGET_COLUMN], errors="coerce").dropna()
@@ -289,65 +288,74 @@ def main() -> None:
 
     tokenizer, model = _load_or_get_model(model_name=MODEL_NAME)
 
-    prediction, source, raw_output = impute_single_row_with_paper_prompt(
-        row=row,
-        dataset_name=DATASET_NAME_PROMPT,
-        target_column=TARGET_COLUMN,
-        feature_columns=feature_columns,
-        target_stats=target_stats,
-        domain_hints=[
-            "For subscription billing data, TotalCharges is often close to tenure * MonthlyCharges.",
-            "Respect plausible values from the observed target distribution.",
-        ],
-        tokenizer=tokenizer,
-        model=model,
-        max_new_tokens=args.max_new_tokens,
-        fallback_median=totalcharges_median,
-    )
-
     run_timestamp = datetime.now(timezone.utc).isoformat()
-    ground_truth = pd.to_numeric(df_full.loc[row_index, TARGET_COLUMN], errors="coerce")
-    ground_truth_value = float(ground_truth) if pd.notna(ground_truth) else pd.NA
-    abs_error = (
-        float(abs(prediction - ground_truth_value))
-        if pd.notna(ground_truth_value)
-        else pd.NA
-    )
-    sq_error = (
-        float((prediction - ground_truth_value) ** 2)
-        if pd.notna(ground_truth_value)
-        else pd.NA
-    )
+    result_rows = []
+    for row_index in target_indices:
+        row = df_missing.loc[row_index]
+
+        prediction, source, raw_output = impute_single_row_with_paper_prompt(
+            row=row,
+            dataset_name=DATASET_NAME_PROMPT,
+            target_column=TARGET_COLUMN,
+            feature_columns=feature_columns,
+            target_stats=target_stats,
+            domain_hints=[
+                "For subscription billing data, TotalCharges is often close to tenure * MonthlyCharges.",
+                "Respect plausible values from the observed target distribution.",
+            ],
+            tokenizer=tokenizer,
+            model=model,
+            max_new_tokens=args.max_new_tokens,
+            fallback_median=totalcharges_median,
+        )
+
+        ground_truth = pd.to_numeric(df_full.loc[row_index, TARGET_COLUMN], errors="coerce")
+        ground_truth_value = float(ground_truth) if pd.notna(ground_truth) else pd.NA
+        abs_error = (
+            float(abs(prediction - ground_truth_value))
+            if pd.notna(ground_truth_value)
+            else pd.NA
+        )
+        sq_error = (
+            float((prediction - ground_truth_value) ** 2)
+            if pd.notna(ground_truth_value)
+            else pd.NA
+        )
+
+        result_rows.append(
+            {
+                "row_index": int(row_index),
+                "prediction": float(prediction),
+                "ground_truth": ground_truth_value,
+                "abs_error": abs_error,
+                "sq_error": sq_error,
+                "source": source,
+                "raw_output": raw_output,
+                "model_name": MODEL_NAME,
+                "target_column": TARGET_COLUMN,
+                "max_new_tokens": args.max_new_tokens,
+                "run_timestamp_utc": run_timestamp,
+            }
+        )
 
     if not args.no_save_results:
         model_token = model_name_to_file_token(MODEL_NAME)
         single_results_csv = DATA_RESULTS / f"telco_{model_token}_paper_single_results.csv"
 
-        row_df = pd.DataFrame(
-            [
-                {
-                    "row_index": int(row_index),
-                    "prediction": float(prediction),
-                    "ground_truth": ground_truth_value,
-                    "abs_error": abs_error,
-                    "sq_error": sq_error,
-                    "source": source,
-                    "raw_output": raw_output,
-                    "model_name": MODEL_NAME,
-                    "target_column": TARGET_COLUMN,
-                    "max_new_tokens": args.max_new_tokens,
-                    "run_timestamp_utc": run_timestamp,
-                }
-            ]
-        )
+        row_df = pd.DataFrame(result_rows)
         _append_prediction_rows(output_csv=single_results_csv, rows_df=row_df)
 
-        if pd.notna(ground_truth_value):
-            mean_rmse = float((sq_error) ** 0.5)
+        valid_eval = row_df.dropna(subset=["ground_truth", "prediction"]).copy()
+        if not valid_eval.empty:
+            errors = valid_eval["ground_truth"] - valid_eval["prediction"]
+            mean_rmse = float(((errors ** 2).mean()) ** 0.5)
             std_true_full = float(observed_target.std(ddof=0))
             mean_nrmse = float(mean_rmse / (std_true_full + 1e-8))
             model_short = MODEL_NAME.split("/")[-1]
-            method_name = f"LLM Paper Single Prompt ({model_short})"
+            if len(target_indices) == 1:
+                method_name = f"LLM Paper Single Prompt ({model_short})"
+            else:
+                method_name = f"LLM Paper Single Prompt All Missing ({model_short})"
 
             append_to_global_results(
                 dataset="Telco",
@@ -358,14 +366,17 @@ def main() -> None:
                 mean_nrmse=mean_nrmse,
             )
 
-    # Keep stdout as pure single-value output for easy piping/use in local workflows.
-    print(prediction)
+    # Keep stdout as value-only output for easy piping/use in local workflows.
+    for row in result_rows:
+        print(row["prediction"])
 
     if args.debug:
-        print(f"row_index={row_index}", file=sys.stderr)
+        print(f"n_rows_imputed={len(result_rows)}", file=sys.stderr)
         print(f"model_name={MODEL_NAME}", file=sys.stderr)
-        print(f"source={source}", file=sys.stderr)
-        print(f"raw_output={raw_output}", file=sys.stderr)
+        for row in result_rows:
+            print(f"row_index={row['row_index']}", file=sys.stderr)
+            print(f"source={row['source']}", file=sys.stderr)
+            print(f"raw_output={row['raw_output']}", file=sys.stderr)
         if not args.no_save_results:
             model_token = model_name_to_file_token(MODEL_NAME)
             print(
