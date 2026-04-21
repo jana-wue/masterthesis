@@ -44,11 +44,12 @@ def _format_target_stats(target_stats: dict[str, float] | None):
     if not target_stats:
         return "Target distribution summary: unavailable."
 
-    ordered_keys = ["min", "q1", "median", "q3", "max", "mean"]
-    lines = ["Target distribution summary (observed rows):"]
-    for key in ordered_keys:
-        if key in target_stats:
-            lines.append(f"- {key}: {format_prompt_value(target_stats[key])}")
+    lines = [
+        "Target distribution guidance (observed rows):",
+        f"- plausible minimum: {format_prompt_value(target_stats.get('min'))}",
+        f"- typical center (not a default): {format_prompt_value(target_stats.get('median'))}",
+        f"- plausible maximum: {format_prompt_value(target_stats.get('max'))}",
+    ]
     return "\n".join(lines)
 
 
@@ -78,6 +79,11 @@ def build_paper_single_prompt(dataset_name, row, target_column, feature_columns,
         "",
         "Observed feature values:",
         feature_text,
+        "",
+        "Critical anti-collapse rules:",
+        "- Do not use a fixed default value across records.",
+        "- Do not copy summary anchors (minimum / median / maximum) unless the features strongly justify it.",
+        "- Two different records should usually produce different imputations.",
     ]
 
     if domain_hints:
@@ -96,6 +102,7 @@ def build_paper_single_prompt(dataset_name, row, target_column, feature_columns,
             "2. No explanations, no introductory text, no markdown.",
             "3. No units and no thousands separators.",
             "4. Do not echo the input features.",
+            "5. The value must be record-specific, not a reused default anchor.",
             "Imputed value:",
         ]
     )
@@ -121,6 +128,8 @@ def build_paper_single_retry_prompt(dataset_name, row, target_column, feature_co
         "- Do not output a sentence.\n"
         "- Do not output markdown.\n"
         "- Do not output multiple candidates.\n"
+        "- Recompute from this record's features; do not reuse a default number.\n"
+        "- Do not return the median or any summary anchor unless strictly implied by the features.\n"
     )
 
 

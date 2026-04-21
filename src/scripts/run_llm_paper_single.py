@@ -17,8 +17,6 @@ from src.imputation.llm_paper_single import (
 )
 from src.paths import DATA_RAW, DATA_PROCESSED, DATA_RESULTS
 
-
-# Set this to your local model path/name (same style as other run_*.py scripts).
 MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
 DATASET_NAME_PROMPT = "Telco-Customer-Churn"
 TARGET_COLUMN = "TotalCharges"
