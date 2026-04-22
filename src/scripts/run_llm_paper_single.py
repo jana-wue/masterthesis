@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -259,7 +260,19 @@ def parse_args():
         default=None,
         help="Row index to impute. If omitted, all rows with missing TotalCharges are imputed.",
     )
+    parser.add_argument(
+        "--max-rows",
+        type=int,
+        default=None,
+        help="Process only the first N selected rows (for test runs).",
+    )
     parser.add_argument("--max-new-tokens", type=int, default=32)
+    parser.add_argument(
+        "--progress-every",
+        type=int,
+        default=10,
+        help="Print progress every N rows to stderr (0 disables progress prints).",
+    )
     parser.add_argument(
         "--no-save-results",
         action="store_true",
@@ -278,6 +291,12 @@ def main() -> None:
 
     df_full, df_missing = _load_telco_mar_data()
     target_indices = _resolve_target_indices(df_missing=df_missing, row_index=args.row_index)
+    if args.max_rows is not None:
+        if args.max_rows < 1:
+            raise ValueError("--max-rows must be >= 1.")
+        target_indices = target_indices[: args.max_rows]
+    if not target_indices:
+        raise ValueError("No target rows selected after applying filters.")
 
     feature_columns = [col for col in df_missing.columns if col not in [TARGET_COLUMN, "customerID"]]
     target_stats = summarize_target_distribution(df_full, TARGET_COLUMN)
@@ -288,7 +307,9 @@ def main() -> None:
 
     run_timestamp = datetime.now(timezone.utc).isoformat()
     result_rows = []
-    for row_index in target_indices:
+    total_rows = len(target_indices)
+    start_time = time.perf_counter()
+    for i, row_index in enumerate(target_indices, start=1):
         row = df_missing.loc[row_index]
 
         prediction, source, raw_output = impute_single_row_with_paper_prompt(
@@ -335,6 +356,20 @@ def main() -> None:
                 "run_timestamp_utc": run_timestamp,
             }
         )
+
+        if args.progress_every > 0 and (
+            i == 1 or i % args.progress_every == 0 or i == total_rows
+        ):
+            elapsed = time.perf_counter() - start_time
+            rate = i / elapsed if elapsed > 0 else 0.0
+            remaining = total_rows - i
+            eta_seconds = (remaining / rate) if rate > 0 else float("inf")
+            eta_text = f"{eta_seconds:.1f}s" if eta_seconds != float("inf") else "n/a"
+            print(
+                f"[progress] {i}/{total_rows} rows | elapsed={elapsed:.1f}s | eta={eta_text}",
+                file=sys.stderr,
+                flush=True,
+            )
 
     if not args.no_save_results:
         model_token = model_name_to_file_token(MODEL_NAME)
