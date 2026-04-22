@@ -11,9 +11,9 @@ from peft import LoraConfig, get_peft_model
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
-    DataCollatorForLanguageModeling,
     Trainer,
     TrainingArguments,
+    default_data_collator,
 )
 
 from src.paths import DATA_PROCESSED
@@ -45,6 +45,18 @@ def format_example(example, tokenizer) -> str:
     )
 
 
+def format_prompt_only(example, tokenizer) -> str:
+    messages = example.get("messages", [])
+    if not messages or messages[-1].get("role") != "assistant":
+        raise ValueError("Expected training example ending with an assistant message.")
+
+    return tokenizer.apply_chat_template(
+        messages[:-1],
+        tokenize=False,
+        add_generation_prompt=True,
+    )
+
+
 def tokenize_function(example, tokenizer, max_length: int = 512) -> dict:
     tokenized = tokenizer(
         example["text"],
@@ -52,7 +64,26 @@ def tokenize_function(example, tokenizer, max_length: int = 512) -> dict:
         max_length=max_length,
         padding="max_length",
     )
-    tokenized["labels"] = tokenized["input_ids"].copy()
+
+    prompt_tokenized = tokenizer(
+        example["prompt_text"],
+        truncation=True,
+        max_length=max_length,
+        padding=False,
+    )
+
+    labels = tokenized["input_ids"].copy()
+    prompt_len = min(len(prompt_tokenized["input_ids"]), len(labels))
+    labels[:prompt_len] = [-100] * prompt_len
+
+    pad_token_id = tokenizer.pad_token_id
+    labels = [
+        (-100 if token_id == pad_token_id else label)
+        for token_id, label in zip(tokenized["input_ids"], labels)
+    ]
+
+    tokenized["labels"] = labels
+    tokenized["loss_token_count"] = sum(1 for label in labels if label != -100)
     return tokenized
 
 
@@ -94,7 +125,13 @@ def main() -> None:
         tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"
 
-    formatted_records = [{"text": format_example(r, tokenizer)} for r in records]
+    formatted_records = [
+        {
+            "text": format_example(r, tokenizer),
+            "prompt_text": format_prompt_only(r, tokenizer),
+        }
+        for r in records
+    ]
     dataset = Dataset.from_list(formatted_records)
 
     print("\n" + "=" * 80)
@@ -108,8 +145,12 @@ def main() -> None:
 
     tokenized_dataset = dataset.map(
         lambda x: tokenize_function(x, tokenizer, max_length=512),
-        remove_columns=["text"],
+        remove_columns=["text", "prompt_text"],
     )
+    tokenized_dataset = tokenized_dataset.filter(
+        lambda x: x["loss_token_count"] > 0
+    )
+    tokenized_dataset = tokenized_dataset.remove_columns(["loss_token_count"])
 
     print("\n" + "=" * 80)
     print("LOADING MODEL")
@@ -141,10 +182,7 @@ def main() -> None:
     model = get_peft_model(model, peft_config)
     model.print_trainable_parameters()
 
-    data_collator = DataCollatorForLanguageModeling(
-        tokenizer=tokenizer,
-        mlm=False,
-    )
+    data_collator = default_data_collator
 
     training_args = TrainingArguments(
         output_dir=str(output_dir),
