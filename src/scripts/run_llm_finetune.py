@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
+import gc
 import inspect
 import json
 import math
@@ -317,7 +318,16 @@ def run_post_train_evaluation(args, adapter_path: Path) -> dict:
     tokenizer.padding_side = "left"
 
     model_kwargs = {}
-    if torch.cuda.is_available():
+
+    eval_device = getattr(args, "eval_device", "auto")
+    if eval_device == "cpu":
+        model_kwargs["torch_dtype"] = torch.float32
+    elif eval_device == "cuda":
+        if not torch.cuda.is_available():
+            raise RuntimeError("Requested --eval_device cuda, but CUDA is not available.")
+        model_kwargs["torch_dtype"] = torch.float16
+        model_kwargs["device_map"] = "auto"
+    elif torch.cuda.is_available():
         model_kwargs["torch_dtype"] = torch.float16
         model_kwargs["device_map"] = "auto"
     else:
@@ -433,6 +443,13 @@ def parse_args():
     parser.add_argument("--lora_alpha", type=int, default=8)
     parser.add_argument("--lora_dropout", type=float, default=0.0)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--eval_only", action="store_true")
+    parser.add_argument(
+        "--adapter_path",
+        type=Path,
+        default=None,
+        help="Path to a saved LoRA adapter directory (used with --eval_only).",
+    )
     parser.add_argument("--skip_eval", action="store_true")
     parser.add_argument("--skip_append_global_results", action="store_true")
     parser.add_argument(
@@ -448,6 +465,13 @@ def parse_args():
     parser.add_argument("--eval_target_column", type=str, default="TotalCharges")
     parser.add_argument("--eval_id_column", type=str, default="customerID")
     parser.add_argument("--eval_max_new_tokens", type=int, default=16)
+    parser.add_argument(
+        "--eval_device",
+        type=str,
+        choices=["auto", "cpu", "cuda"],
+        default="auto",
+        help="Device for post-train eval model loading. 'auto' prefers CUDA if available.",
+    )
     parser.add_argument(
         "--eval_domain_hints",
         nargs="*",
@@ -487,6 +511,16 @@ def main() -> None:
 
     input_path = Path(args.input_jsonl)
     output_dir = Path(args.output_dir)
+
+    if args.eval_only:
+        adapter_path = Path(args.adapter_path) if args.adapter_path is not None else output_dir
+        if not adapter_path.exists():
+            raise FileNotFoundError(f"Adapter path does not exist: {adapter_path}")
+        print("=" * 80)
+        print("RUNNING EVALUATION ONLY")
+        print("=" * 80)
+        run_post_train_evaluation(args=args, adapter_path=adapter_path)
+        return
 
     print("=" * 80)
     print("LOADING TRAINING DATA")
@@ -625,6 +659,19 @@ def main() -> None:
     print(f"Saved run config to: {config_path}")
 
     if not args.skip_eval:
+        # Free training objects before loading adapter
+        del trainer
+        del model
+        del tokenized_dataset
+        del dataset
+        del formatted_records
+        del records
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            if hasattr(torch.cuda, "ipc_collect"):
+                torch.cuda.ipc_collect()
+
         print("\n" + "=" * 80)
         print("RUNNING POST-TRAIN EVALUATION")
         print("=" * 80)
