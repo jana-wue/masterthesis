@@ -22,7 +22,7 @@ from transformers import (
     default_data_collator,
 )
 
-from src.imputation.llm import LLMImputer, LLMImputerConfig
+from src.imputation.llm import LLMImputer, LLMImputerConfig, format_value
 from src.paths import DATA_PROCESSED
 from src.paths import DATA_RAW, DATA_RESULTS
 
@@ -32,6 +32,11 @@ DEFAULT_INPUT_JSONL = DATA_PROCESSED / "llm" / "telco_totalcharges_mar_train.jso
 DEFAULT_OUTPUT_DIR = DATA_PROCESSED / "llm" / "mistral_telco_totalcharges_lora"
 RESULTS_RMSE_PATH = Path("data/results/imputation_results.csv")
 RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrsme.csv")
+LEGACY_SYSTEM_MESSAGE = (
+    "You are performing a missing value imputation task for tabular data. "
+    "Given observed feature values, predict the missing target value. "
+    "Return only the imputed value and no explanation."
+)
 
 
 def load_jsonl(path) -> list[dict]:
@@ -49,7 +54,46 @@ def save_jsonl(path: Path, records: list[dict]) -> None:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
-def format_example(example, tokenizer) -> str:
+def load_first_jsonl_record(path):
+    if not path.exists():
+        return None
+    with open(path, "r", encoding="utf-8") as f:
+        first_line = f.readline().strip()
+    if not first_line:
+        return None
+    return json.loads(first_line)
+
+
+def detect_prompt_style_from_record(record):
+    if not isinstance(record, dict):
+        return None
+    messages = record.get("messages")
+    if not isinstance(messages, list) or not messages:
+        return None
+    system_content = str(messages[0].get("content", "")).strip().lower()
+    if system_content.startswith("you are performing a missing value imputation task for tabular data."):
+        return "legacy"
+    if "expert in missing-value imputation for tabular data" in system_content:
+        return "current"
+    return None
+
+
+def resolve_eval_prompt_style(args, adapter_path):
+    if args.eval_prompt_style != "auto":
+        return args.eval_prompt_style
+
+    candidate_records = [
+        load_first_jsonl_record(adapter_path / "train_subset_used.jsonl"),
+        load_first_jsonl_record(Path(args.input_jsonl)),
+    ]
+    for record in candidate_records:
+        detected = detect_prompt_style_from_record(record)
+        if detected is not None:
+            return detected
+    return "current"
+
+
+def format_example(example, tokenizer):
     return tokenizer.apply_chat_template(
         example["messages"],
         tokenize=False,
@@ -57,7 +101,7 @@ def format_example(example, tokenizer) -> str:
     )
 
 
-def format_prompt_only(example, tokenizer) -> str:
+def format_prompt_only(example, tokenizer):
     messages = example.get("messages", [])
     if not messages or messages[-1].get("role") != "assistant":
         raise ValueError("Expected training example ending with an assistant message.")
@@ -69,7 +113,7 @@ def format_prompt_only(example, tokenizer) -> str:
     )
 
 
-def tokenize_function(example, tokenizer, max_length: int = 512) -> dict:
+def tokenize_function(example, tokenizer, max_length: int = 512):
     full_ids = tokenizer(
         example["text"],
         add_special_tokens=False,
@@ -116,12 +160,12 @@ def tokenize_function(example, tokenizer, max_length: int = 512) -> dict:
     }
 
 
-def model_name_to_file_token(model_name: str) -> str:
+def model_name_to_file_token(model_name):
     token = re.sub(r"[^A-Za-z0-9._-]+", "_", model_name).strip("_")
     return token or "unknown_model"
 
 
-def _append_results_row(csv_path: Path, required_columns: list[str], row: dict) -> None:
+def _append_results_row(csv_path: Path, required_columns, row):
     csv_path.parent.mkdir(parents=True, exist_ok=True)
 
     if csv_path.exists():
@@ -138,14 +182,8 @@ def _append_results_row(csv_path: Path, required_columns: list[str], row: dict) 
     df.to_csv(csv_path, index=False)
 
 
-def append_to_global_results(
-    dataset: str,
-    missingness_type: str,
-    missing_rate: str,
-    imputation_method: str,
-    mean_rmse: float,
-    mean_nrmse: float,
-) -> None:
+def append_to_global_results(dataset, missingness_type, missing_rate, imputation_method,
+    mean_rmse, mean_nrmse):
     _append_results_row(
         csv_path=RESULTS_RMSE_PATH,
         required_columns=[
@@ -185,7 +223,7 @@ def append_to_global_results(
     )
 
 
-def _append_prediction_rows(output_csv: Path, rows_df: pd.DataFrame) -> None:
+def _append_prediction_rows(output_csv, rows_df):
     output_csv.parent.mkdir(parents=True, exist_ok=True)
     if output_csv.exists():
         existing_df = pd.read_csv(output_csv)
@@ -195,7 +233,7 @@ def _append_prediction_rows(output_csv: Path, rows_df: pd.DataFrame) -> None:
     combined.to_csv(output_csv, index=False)
 
 
-def extract_first_number(text: str):
+def extract_first_number(text):
     if text is None:
         return None
     text = text.strip()
@@ -213,7 +251,7 @@ def extract_first_number(text: str):
     return None
 
 
-def apply_chat_template(messages, tokenizer) -> str:
+def apply_chat_template(messages, tokenizer):
     return tokenizer.apply_chat_template(
         messages,
         tokenize=False,
@@ -221,7 +259,7 @@ def apply_chat_template(messages, tokenizer) -> str:
     )
 
 
-def generate_raw_answer(prompt_text: str, tokenizer, model, max_new_tokens: int = 16) -> str:
+def generate_raw_answer(prompt_text, tokenizer, model, max_new_tokens: int = 16):
     model_device = model.device if hasattr(model, "device") else next(model.parameters()).device
     inputs = tokenizer(prompt_text, return_tensors="pt").to(model_device)
     input_length = inputs["input_ids"].shape[1]
@@ -241,7 +279,21 @@ def generate_raw_answer(prompt_text: str, tokenizer, model, max_new_tokens: int 
     return raw_generated_text
 
 
-def fallback_totalcharges(row: pd.Series, totalcharges_median: float) -> tuple[float, str]:
+def build_legacy_inference_messages(row, target_column, feature_columns):
+    lines = ["Observed values:"]
+    for col in feature_columns:
+        if col == target_column:
+            continue
+        lines.append(f"{col}: {format_value(row[col])}")
+    lines.extend(["", f"Target column: {target_column}", "Imputed value:"])
+    user_message = "\n".join(lines)
+    return [
+        {"role": "system", "content": LEGACY_SYSTEM_MESSAGE},
+        {"role": "user", "content": user_message},
+    ]
+
+
+def fallback_totalcharges(row, totalcharges_median):
     tenure = row.get("tenure")
     monthly = row.get("MonthlyCharges")
     if pd.notna(tenure) and pd.notna(monthly):
@@ -252,8 +304,16 @@ def fallback_totalcharges(row: pd.Series, totalcharges_median: float) -> tuple[f
     return float(totalcharges_median), "fallback_median"
 
 
-def predict_numeric(row, imputer, tokenizer, model, totalcharges_median: float, max_new_tokens: int):
-    messages = imputer.build_inference_messages(row)
+def predict_numeric(row, imputer, tokenizer, model, totalcharges_median, max_new_tokens,
+    prompt_style, target_column, feature_columns):
+    if prompt_style == "legacy":
+        messages = build_legacy_inference_messages(
+            row=row,
+            target_column=target_column,
+            feature_columns=feature_columns,
+        )
+    else:
+        messages = imputer.build_inference_messages(row)
     prompt_text = apply_chat_template(messages, tokenizer)
     raw_output_1 = generate_raw_answer(
         prompt_text=prompt_text,
@@ -265,7 +325,14 @@ def predict_numeric(row, imputer, tokenizer, model, totalcharges_median: float, 
     if pred_1 is not None:
         return pred_1, raw_output_1, "model_first_try"
 
-    retry_messages = imputer.build_retry_messages(row)
+    if prompt_style == "legacy":
+        retry_messages = build_legacy_inference_messages(
+            row=row,
+            target_column=target_column,
+            feature_columns=feature_columns,
+        )
+    else:
+        retry_messages = imputer.build_retry_messages(row)
     retry_prompt_text = apply_chat_template(retry_messages, tokenizer)
     raw_output_2 = generate_raw_answer(
         prompt_text=retry_prompt_text,
@@ -282,7 +349,7 @@ def predict_numeric(row, imputer, tokenizer, model, totalcharges_median: float, 
     return fallback_value, combined_raw, fallback_source
 
 
-def run_post_train_evaluation(args, adapter_path: Path) -> dict:
+def run_post_train_evaluation(args, adapter_path):
     df_full = pd.read_csv(args.eval_full_csv)
     df_missing = pd.read_csv(args.eval_missing_csv)
     target_column = args.eval_target_column
@@ -307,6 +374,8 @@ def run_post_train_evaluation(args, adapter_path: Path) -> dict:
         )
     )
     imputer.fit_target_stats(df_missing)
+    prompt_style = resolve_eval_prompt_style(args=args, adapter_path=adapter_path)
+    print(f"Evaluation prompt style: {prompt_style}")
 
     missing_rows = df_missing[df_missing[target_column].isna()].copy()
     if missing_rows.empty:
@@ -344,6 +413,9 @@ def run_post_train_evaluation(args, adapter_path: Path) -> dict:
             model=model,
             totalcharges_median=target_median,
             max_new_tokens=args.eval_max_new_tokens,
+            prompt_style=prompt_style,
+            target_column=target_column,
+            feature_columns=feature_columns,
         )
         ground_truth = pd.to_numeric(df_full.loc[idx, target_column], errors="coerce")
         ground_truth_value = float(ground_truth) if pd.notna(ground_truth) else pd.NA
@@ -368,6 +440,7 @@ def run_post_train_evaluation(args, adapter_path: Path) -> dict:
                 "raw_output": raw_output,
                 "model_name": args.model_name,
                 "adapter_path": str(adapter_path),
+                "prompt_style": prompt_style,
             }
         )
 
@@ -413,6 +486,7 @@ def run_post_train_evaluation(args, adapter_path: Path) -> dict:
         "mean_rmse": mean_rmse,
         "mean_nrmse": mean_nrmse,
         "method_name": method_name,
+        "prompt_style": prompt_style,
         "detailed_csv": str(detailed_csv),
         "appended_to_rmse_csv": str(RESULTS_RMSE_PATH) if not args.skip_append_global_results else None,
         "appended_to_nrmse_csv": str(RESULTS_NRMSE_PATH) if not args.skip_append_global_results else None,
@@ -465,6 +539,13 @@ def parse_args():
     parser.add_argument("--eval_target_column", type=str, default="TotalCharges")
     parser.add_argument("--eval_id_column", type=str, default="customerID")
     parser.add_argument("--eval_max_new_tokens", type=int, default=16)
+    parser.add_argument(
+        "--eval_prompt_style",
+        type=str,
+        choices=["auto", "legacy", "current"],
+        default="auto",
+        help="Prompt format for eval. 'auto' detects from training JSONL.",
+    )
     parser.add_argument(
         "--eval_device",
         type=str,
