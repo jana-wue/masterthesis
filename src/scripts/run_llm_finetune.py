@@ -10,6 +10,7 @@ import random
 import re
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import torch
 from datasets import Dataset
@@ -31,6 +32,8 @@ from src.paths import DATA_RAW, DATA_RESULTS
 DEFAULT_MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
 DEFAULT_INPUT_JSONL = DATA_PROCESSED / "llm" / "telco_totalcharges_mar_train.jsonl"
 DEFAULT_OUTPUT_DIR = DATA_PROCESSED / "llm" / "mistral_telco_totalcharges_lora"
+DEFAULT_CV_FOLDS = 5
+DEFAULT_CV_STRATIFY_BINS = 10
 RESULTS_RMSE_PATH = Path("data/results/imputation_results.csv")
 RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrsme.csv")
 LEGACY_SYSTEM_MESSAGE = (
@@ -280,6 +283,513 @@ def generate_raw_answer(prompt_text, tokenizer, model, max_new_tokens: int = 16)
     return raw_generated_text
 
 
+def cleanup_memory():
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        if hasattr(torch.cuda, "ipc_collect"):
+            torch.cuda.ipc_collect()
+
+
+def load_tokenizer(model_name_or_path, padding_side):
+    tokenizer = AutoTokenizer.from_pretrained(str(model_name_or_path))
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = padding_side
+    return tokenizer
+
+
+def prepare_formatted_records(records, tokenizer):
+    return [
+        {
+            "text": format_example(record, tokenizer),
+            "prompt_text": format_prompt_only(record, tokenizer),
+        }
+        for record in records
+    ]
+
+
+def prepare_tokenized_dataset(records, tokenizer, max_length):
+    formatted_records = prepare_formatted_records(records=records, tokenizer=tokenizer)
+    dataset = Dataset.from_list(formatted_records)
+    tokenized_dataset = dataset.map(
+        lambda x: tokenize_function(x, tokenizer, max_length=max_length),
+        remove_columns=["text", "prompt_text"],
+    )
+    tokenized_dataset = tokenized_dataset.filter(
+        lambda x: x["loss_token_count"] > 0
+    )
+    tokenized_dataset = tokenized_dataset.remove_columns(["loss_token_count"])
+    return dataset, tokenized_dataset
+
+
+def build_train_model_kwargs():
+    model_kwargs = {}
+    if torch.cuda.is_available():
+        model_kwargs["torch_dtype"] = torch.float16
+        model_kwargs["device_map"] = "auto"
+    else:
+        model_kwargs["torch_dtype"] = torch.float32
+    return model_kwargs
+
+
+def build_eval_model_kwargs(eval_device):
+    model_kwargs = {}
+    if eval_device == "cpu":
+        model_kwargs["torch_dtype"] = torch.float32
+    elif eval_device == "cuda":
+        if not torch.cuda.is_available():
+            raise RuntimeError("Requested --eval_device cuda, but CUDA is not available.")
+        model_kwargs["torch_dtype"] = torch.float16
+        model_kwargs["device_map"] = "auto"
+    elif torch.cuda.is_available():
+        model_kwargs["torch_dtype"] = torch.float16
+        model_kwargs["device_map"] = "auto"
+    else:
+        model_kwargs["torch_dtype"] = torch.float32
+    return model_kwargs
+
+
+def save_run_config(output_dir, args, input_path, n_examples_used, extra = None):
+    config = {
+        "model_name": args.model_name,
+        "input_jsonl": str(input_path),
+        "train_size": args.train_size,
+        "num_train_epochs": args.num_train_epochs,
+        "learning_rate": args.learning_rate,
+        "batch_size": args.batch_size,
+        "grad_accum": args.grad_accum,
+        "max_length": args.max_length,
+        "lora_r": args.lora_r,
+        "lora_alpha": args.lora_alpha,
+        "lora_dropout": args.lora_dropout,
+        "seed": args.seed,
+        "n_examples_used": n_examples_used,
+    }
+    if extra:
+        config.update(extra)
+
+    config_path = output_dir / "run_config.json"
+    with open(config_path, "w", encoding="utf-8") as f:
+        json.dump(config, f, indent=2)
+    return config_path
+
+
+def train_lora_adapter(args, records, output_dir: Path, input_path: Path, run_config_extra = None):
+    if not records:
+        raise ValueError("No training records provided for fine-tuning.")
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    save_jsonl(output_dir / "train_subset_used.jsonl", records)
+
+    tokenizer = load_tokenizer(args.model_name, padding_side="right")
+    dataset, tokenized_dataset = prepare_tokenized_dataset(
+        records=records,
+        tokenizer=tokenizer,
+        max_length=args.max_length,
+    )
+
+    print("\n" + "=" * 80)
+    print("FIRST FORMATTED EXAMPLE")
+    print("=" * 80)
+    print(dataset[0]["text"])
+
+    print("\n" + "=" * 80)
+    print("TOKENIZING DATA")
+    print("=" * 80)
+
+    print("\n" + "=" * 80)
+    print("LOADING MODEL")
+    print("=" * 80)
+
+    model = AutoModelForCausalLM.from_pretrained(
+        args.model_name,
+        **build_train_model_kwargs(),
+    )
+    model = get_peft_model(model, build_lora_config(args))
+    model.print_trainable_parameters()
+
+    training_args = TrainingArguments(
+        output_dir=str(output_dir),
+        per_device_train_batch_size=args.batch_size,
+        gradient_accumulation_steps=args.grad_accum,
+        num_train_epochs=args.num_train_epochs,
+        learning_rate=args.learning_rate,
+        logging_steps=10,
+        save_steps=200,
+        save_total_limit=2,
+        seed=args.seed,
+        fp16=torch.cuda.is_available(),
+        report_to="none",
+        remove_unused_columns=False,
+    )
+
+    trainer = Trainer(
+        model=model,
+        args=training_args,
+        train_dataset=tokenized_dataset,
+        data_collator=default_data_collator,
+    )
+
+    print("\n" + "=" * 80)
+    print("START TRAINING")
+    print("=" * 80)
+    trainer.train()
+
+    print("\n" + "=" * 80)
+    print("SAVING MODEL")
+    print("=" * 80)
+    model.save_pretrained(str(output_dir))
+    tokenizer.save_pretrained(str(output_dir))
+
+    config_path = save_run_config(
+        output_dir=output_dir,
+        args=args,
+        input_path=input_path,
+        n_examples_used=len(records),
+        extra=run_config_extra,
+    )
+    print(f"Saved adapter/tokenizer to: {output_dir}")
+    print(f"Saved run config to: {config_path}")
+
+    del trainer
+    del model
+    del tokenized_dataset
+    del dataset
+    del tokenizer
+    cleanup_memory()
+    return config_path
+
+
+def extract_assistant_target_value(record):
+    messages = record.get("messages", [])
+    if not messages or messages[-1].get("role") != "assistant":
+        return None
+    return extract_first_number(str(messages[-1].get("content", "")))
+
+
+def build_stratification_labels(target_values, n_splits, requested_bins):
+    series = pd.Series(target_values, dtype="float64")
+    if series.nunique(dropna=True) < 2:
+        return None, 0
+
+    max_bins_by_size = len(series) // n_splits
+    max_bins = min(int(max_bins_by_size), int(series.nunique()), int(max(requested_bins, 2)))
+    if max_bins < 2:
+        return None, 0
+
+    ranked = series.rank(method="first")
+    for n_bins in range(max_bins, 1, -1):
+        try:
+            labels = pd.qcut(
+                ranked,
+                q=n_bins,
+                labels=False,
+                duplicates="drop",
+            )
+        except ValueError:
+            continue
+
+        labels_series = pd.Series(labels, dtype="Int64")
+        if labels_series.isna().any():
+            continue
+        label_counts = labels_series.value_counts()
+        if label_counts.empty:
+            continue
+        if int(label_counts.min()) < n_splits:
+            continue
+        return labels_series.astype(int).tolist(), n_bins
+
+    return None, 0
+
+
+def build_cv_splits(records, n_splits, seed, requested_bins):
+    try:
+        from sklearn.model_selection import StratifiedKFold
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "Stratified CV requires scikit-learn. Install dependencies first."
+        ) from exc
+
+    if n_splits < 2:
+        raise ValueError("--cv_folds must be >= 2.")
+    if len(records) < n_splits:
+        raise ValueError(
+            f"Not enough records for cv_folds={n_splits}. "
+            f"Need at least {n_splits}, got {len(records)}."
+        )
+
+    targets = []
+    for i, record in enumerate(records):
+        target_value = extract_assistant_target_value(record)
+        if target_value is None:
+            raise ValueError(
+                f"Could not parse numeric assistant target in training record index {i}."
+            )
+        targets.append(float(target_value))
+
+    labels, n_bins_used = build_stratification_labels(
+        target_values=targets,
+        n_splits=n_splits,
+        requested_bins=requested_bins,
+    )
+    if labels is None:
+        raise ValueError(
+            "Unable to build stratification bins for regression targets. "
+            "Try fewer folds or more training examples."
+        )
+
+    splitter = StratifiedKFold(
+        n_splits=n_splits,
+        shuffle=True,
+        random_state=seed,
+    )
+    placeholder_x = np.zeros(len(records))
+
+    folds = []
+    for fold_id, (train_idx, test_idx) in enumerate(
+        splitter.split(placeholder_x, labels), start=1
+    ):
+        folds.append(
+            {
+                "fold_id": fold_id,
+                "train_indices": train_idx.tolist(),
+                "test_indices": test_idx.tolist(),
+                "n_bins_used": n_bins_used,
+            }
+        )
+    return folds
+
+
+def evaluate_adapter_on_jsonl_records(args, adapter_path, test_records, fold_id, n_folds, train_target_median):
+    if not test_records:
+        raise ValueError(f"Fold {fold_id} has no test records.")
+
+    tokenizer = load_tokenizer(adapter_path, padding_side="left")
+    model = AutoPeftModelForCausalLM.from_pretrained(
+        str(adapter_path),
+        **build_eval_model_kwargs(getattr(args, "eval_device", "auto")),
+    )
+    model.eval()
+
+    rows = []
+    iterator = tqdm(
+        enumerate(test_records),
+        total=len(test_records),
+        desc=f"Fold eval {fold_id}/{n_folds}",
+        unit="row",
+    )
+    for record_idx, record in iterator:
+        prompt_text = format_prompt_only(record, tokenizer)
+        raw_output_1 = generate_raw_answer(
+            prompt_text=prompt_text,
+            tokenizer=tokenizer,
+            model=model,
+            max_new_tokens=args.eval_max_new_tokens,
+        )
+        prediction = extract_first_number(raw_output_1)
+        source = "model_first_try"
+        raw_output = raw_output_1
+
+        if prediction is None:
+            retry_messages = list(record.get("messages", [])[:-1]) + [
+                {
+                    "role": "user",
+                    "content": (
+                        "Return exactly one number. "
+                        "No words, no units, no explanation."
+                    ),
+                }
+            ]
+            retry_prompt_text = apply_chat_template(retry_messages, tokenizer)
+            raw_output_2 = generate_raw_answer(
+                prompt_text=retry_prompt_text,
+                tokenizer=tokenizer,
+                model=model,
+                max_new_tokens=args.eval_max_new_tokens,
+            )
+            prediction = extract_first_number(raw_output_2)
+            raw_output = raw_output_2
+            source = "model_retry"
+
+            if prediction is None:
+                prediction = float(train_target_median)
+                source = "fallback_train_median"
+                raw_output = f"first_try={raw_output_1!r} | retry={raw_output_2!r}"
+
+        ground_truth = extract_assistant_target_value(record)
+        ground_truth_value = float(ground_truth) if ground_truth is not None else pd.NA
+        abs_error = (
+            float(abs(float(prediction) - ground_truth_value))
+            if pd.notna(ground_truth_value)
+            else pd.NA
+        )
+        sq_error = (
+            float((float(prediction) - ground_truth_value) ** 2)
+            if pd.notna(ground_truth_value)
+            else pd.NA
+        )
+
+        rows.append(
+            {
+                "fold_id": int(fold_id),
+                "record_in_fold_test": int(record_idx),
+                "prediction": float(prediction),
+                "ground_truth": ground_truth_value,
+                "abs_error": abs_error,
+                "sq_error": sq_error,
+                "source": source,
+                "raw_output": raw_output,
+                "model_name": args.model_name,
+                "adapter_path": str(adapter_path),
+            }
+        )
+
+    del model
+    del tokenizer
+    cleanup_memory()
+    return pd.DataFrame(rows)
+
+
+def run_stratified_cv_finetune(args, records, input_path: Path, output_dir: Path):
+    fold_specs = build_cv_splits(
+        records=records,
+        n_splits=args.cv_folds,
+        seed=args.seed,
+        requested_bins=args.cv_stratify_bins,
+    )
+    effective_folds = len(fold_specs)
+    run_timestamp = datetime.now(timezone.utc).isoformat()
+    model_token = model_name_to_file_token(args.model_name)
+    adapter_token = model_name_to_file_token(output_dir.name)
+    detailed_csv = DATA_RESULTS / f"telco_{model_token}_{adapter_token}_finetuned_cv_eval.csv"
+
+    print("\n" + "=" * 80)
+    print("RUNNING STRATIFIED CROSS-VALIDATION")
+    print("=" * 80)
+    print(f"Requested folds: {args.cv_folds} | Effective folds: {effective_folds}")
+    print(f"Stratification bins used: {fold_specs[0]['n_bins_used']}")
+
+    all_fold_df = []
+    for fold_spec in fold_specs:
+        fold_id = int(fold_spec["fold_id"])
+        train_indices = fold_spec["train_indices"]
+        test_indices = fold_spec["test_indices"]
+        train_records = [records[i] for i in train_indices]
+        test_records = [records[i] for i in test_indices]
+
+        train_targets = [extract_assistant_target_value(r) for r in train_records]
+        train_targets = [float(v) for v in train_targets if v is not None]
+        if not train_targets:
+            raise ValueError(f"Fold {fold_id}: no numeric train targets.")
+        train_target_median = float(pd.Series(train_targets).median())
+
+        fold_output_dir = output_dir / f"fold_{fold_id:02d}"
+        print("\n" + "-" * 80)
+        print(
+            f"Fold {fold_id}/{effective_folds} | train={len(train_records)} | test={len(test_records)}"
+        )
+        train_lora_adapter(
+            args=args,
+            records=train_records,
+            output_dir=fold_output_dir,
+            input_path=input_path,
+            run_config_extra={
+                "cv_mode": True,
+                "cv_fold_id": fold_id,
+                "cv_folds_requested": args.cv_folds,
+                "cv_folds_effective": effective_folds,
+                "cv_train_size": len(train_records),
+                "cv_test_size": len(test_records),
+                "cv_stratify_bins_used": int(fold_spec["n_bins_used"]),
+                "cv_train_indices": train_indices,
+                "cv_test_indices": test_indices,
+            },
+        )
+
+        fold_eval_df = evaluate_adapter_on_jsonl_records(
+            args=args,
+            adapter_path=fold_output_dir,
+            test_records=test_records,
+            fold_id=fold_id,
+            n_folds=effective_folds,
+            train_target_median=train_target_median,
+        )
+        fold_eval_df["run_timestamp_utc"] = run_timestamp
+        fold_eval_df["cv_folds_requested"] = args.cv_folds
+        fold_eval_df["cv_folds_effective"] = effective_folds
+        fold_eval_df["cv_stratify_bins_used"] = int(fold_spec["n_bins_used"])
+        fold_eval_df["cv_train_size"] = int(len(train_records))
+        fold_eval_df["cv_test_size"] = int(len(test_records))
+        all_fold_df.append(fold_eval_df)
+        _append_prediction_rows(detailed_csv, fold_eval_df)
+
+    results_df = pd.concat(all_fold_df, ignore_index=True)
+    valid_eval = results_df.dropna(subset=["prediction", "ground_truth"]).copy()
+    if valid_eval.empty:
+        raise ValueError("No valid numeric prediction/ground_truth rows in CV evaluation.")
+
+    errors = valid_eval["ground_truth"] - valid_eval["prediction"]
+    mean_rmse = float(((errors ** 2).mean()) ** 0.5)
+    std_true = float(valid_eval["ground_truth"].std(ddof=0))
+    mean_nrmse = float(mean_rmse / (std_true + 1e-8))
+
+    model_short = args.model_name.split("/")[-1]
+    method_name = (
+        args.global_method_name
+        if args.global_method_name
+        else f"LLM Finetuned Stratified {effective_folds}-fold ({model_short})"
+    )
+
+    if not args.skip_append_global_results:
+        append_to_global_results(
+            dataset=args.global_dataset,
+            missingness_type=args.global_missingness_type,
+            missing_rate=args.global_missing_rate,
+            imputation_method=method_name,
+            mean_rmse=mean_rmse,
+            mean_nrmse=mean_nrmse,
+        )
+
+    summary = {
+        "run_timestamp_utc": run_timestamp,
+        "mode": "stratified_cv",
+        "cv_folds_requested": args.cv_folds,
+        "cv_folds_effective": effective_folds,
+        "cv_stratify_bins_used": int(fold_specs[0]["n_bins_used"]),
+        "output_dir": str(output_dir),
+        "n_predictions": int(len(valid_eval)),
+        "mean_rmse": mean_rmse,
+        "mean_nrmse": mean_nrmse,
+        "method_name": method_name,
+        "detailed_csv": str(detailed_csv),
+        "appended_to_rmse_csv": str(RESULTS_RMSE_PATH) if not args.skip_append_global_results else None,
+        "appended_to_nrmse_csv": str(RESULTS_NRMSE_PATH) if not args.skip_append_global_results else None,
+    }
+    summary_path = output_dir / "post_train_cv_eval_summary.json"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    with open(summary_path, "w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=2)
+
+    split_manifest = {
+        "run_timestamp_utc": run_timestamp,
+        "cv_folds_requested": args.cv_folds,
+        "cv_folds_effective": effective_folds,
+        "cv_stratify_bins_used": int(fold_specs[0]["n_bins_used"]),
+        "folds": fold_specs,
+    }
+    split_manifest_path = output_dir / "cv_split_manifest.json"
+    with open(split_manifest_path, "w", encoding="utf-8") as f:
+        json.dump(split_manifest, f, indent=2)
+
+    print(f"Saved CV detailed eval to: {detailed_csv}")
+    print(f"Saved CV eval summary to: {summary_path}")
+    print(f"Saved CV split manifest to: {split_manifest_path}")
+    if not args.skip_append_global_results:
+        print(f"Appended to global result files: {RESULTS_RMSE_PATH}, {RESULTS_NRMSE_PATH}")
+    return summary
+
+
 def build_legacy_inference_messages(row, target_column, feature_columns):
     lines = ["Observed values:"]
     for col in feature_columns:
@@ -387,22 +897,10 @@ def run_post_train_evaluation(args, adapter_path):
         tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "left"
 
-    model_kwargs = {}
-
-    eval_device = getattr(args, "eval_device", "auto")
-    if eval_device == "cpu":
-        model_kwargs["torch_dtype"] = torch.float32
-    elif eval_device == "cuda":
-        if not torch.cuda.is_available():
-            raise RuntimeError("Requested --eval_device cuda, but CUDA is not available.")
-        model_kwargs["torch_dtype"] = torch.float16
-        model_kwargs["device_map"] = "auto"
-    elif torch.cuda.is_available():
-        model_kwargs["torch_dtype"] = torch.float16
-        model_kwargs["device_map"] = "auto"
-    else:
-        model_kwargs["torch_dtype"] = torch.float32
-    model = AutoPeftModelForCausalLM.from_pretrained(str(adapter_path), **model_kwargs)
+    model = AutoPeftModelForCausalLM.from_pretrained(
+        str(adapter_path),
+        **build_eval_model_kwargs(getattr(args, "eval_device", "auto")),
+    )
     model.eval()
 
     results = []
@@ -538,6 +1036,18 @@ def parse_args():
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--eval_only", action="store_true")
     parser.add_argument(
+        "--eval_protocol",
+        type=str,
+        choices=["missing_rows", "stratified_cv"],
+        default="missing_rows",
+        help=(
+            "missing_rows: existing post-train eval on real missing rows"
+            "stratified_cv: 5-fold-style train/test splits over JSONL examples"
+        ),
+    )
+    parser.add_argument("--cv_folds", type=int, default=DEFAULT_CV_FOLDS)
+    parser.add_argument("--cv_stratify_bins", type=int, default=DEFAULT_CV_STRATIFY_BINS)
+    parser.add_argument(
         "--adapter_path",
         type=Path,
         default=None,
@@ -613,6 +1123,8 @@ def main() -> None:
     output_dir = Path(args.output_dir)
 
     if args.eval_only:
+        if args.eval_protocol != "missing_rows":
+            raise ValueError("--eval_only currently supports only --eval_protocol missing_rows")
         adapter_path = Path(args.adapter_path) if args.adapter_path is not None else output_dir
         if not adapter_path.exists():
             raise FileNotFoundError(f"Adapter path does not exist: {adapter_path}")
@@ -642,136 +1154,27 @@ def main() -> None:
     print(f"Using training examples: {len(records)}")
 
     save_jsonl(output_dir / "train_subset_used.jsonl", records)
-
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name)
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"
-
-    formatted_records = [
-        {
-            "text": format_example(r, tokenizer),
-            "prompt_text": format_prompt_only(r, tokenizer),
-        }
-        for r in records
-    ]
-    dataset = Dataset.from_list(formatted_records)
-
-    print("\n" + "=" * 80)
-    print("FIRST FORMATTED EXAMPLE")
-    print("=" * 80)
-    print(dataset[0]["text"])
-
-    print("\n" + "=" * 80)
-    print("TOKENIZING DATA")
-    print("=" * 80)
-
-    tokenized_dataset = dataset.map(
-        lambda x: tokenize_function(x, tokenizer, max_length=args.max_length),
-        remove_columns=["text", "prompt_text"],
-    )
-    tokenized_dataset = tokenized_dataset.filter(
-        lambda x: x["loss_token_count"] > 0
-    )
-    tokenized_dataset = tokenized_dataset.remove_columns(["loss_token_count"])
-
-    print("\n" + "=" * 80)
-    print("LOADING MODEL")
-    print("=" * 80)
-
-    model_kwargs = {}
-    if torch.cuda.is_available():
-        model_kwargs["torch_dtype"] = torch.float16
-        model_kwargs["device_map"] = "auto"
-    else:
-        model_kwargs["torch_dtype"] = torch.float32
-
-    model = AutoModelForCausalLM.from_pretrained(
-        args.model_name,
-        **model_kwargs,
-    )
-
-    peft_config = build_lora_config(args)
-
-    model = get_peft_model(model, peft_config)
-    model.print_trainable_parameters()
-
-    data_collator = default_data_collator
-
-    training_args = TrainingArguments(
-        output_dir=str(output_dir),
-        per_device_train_batch_size=args.batch_size,
-        gradient_accumulation_steps=args.grad_accum,
-        num_train_epochs=args.num_train_epochs,
-        learning_rate=args.learning_rate,
-        logging_steps=10,
-        save_steps=200,
-        save_total_limit=2,
-        seed=args.seed,
-        fp16=torch.cuda.is_available(),
-        report_to="none",
-        remove_unused_columns=False,
-    )
-
-    trainer = Trainer(
-        model=model,
-        args=training_args,
-        train_dataset=tokenized_dataset,
-        data_collator=data_collator,
-    )
-
-    print("\n" + "=" * 80)
-    print("START TRAINING")
-    print("=" * 80)
-
-    trainer.train()
-
-    print("\n" + "=" * 80)
-    print("SAVING MODEL")
-    print("=" * 80)
-
-    model.save_pretrained(str(output_dir))
-    tokenizer.save_pretrained(str(output_dir))
-
-    config_path = output_dir / "run_config.json"
-    with open(config_path, "w", encoding="utf-8") as f:
-        json.dump(
-            {
-                "model_name": args.model_name,
-                "input_jsonl": str(input_path),
-                "train_size": args.train_size,
-                "num_train_epochs": args.num_train_epochs,
-                "learning_rate": args.learning_rate,
-                "batch_size": args.batch_size,
-                "grad_accum": args.grad_accum,
-                "max_length": args.max_length,
-                "lora_r": args.lora_r,
-                "lora_alpha": args.lora_alpha,
-                "lora_dropout": args.lora_dropout,
-                "seed": args.seed,
-                "n_examples_used": len(records),
-            },
-            f,
-            indent=2,
+    if args.eval_protocol == "stratified_cv":
+        if args.skip_eval:
+            raise ValueError("--skip_eval is not supported with --eval_protocol stratified_cv")
+        run_stratified_cv_finetune(
+            args=args,
+            records=records,
+            input_path=input_path,
+            output_dir=output_dir,
         )
+        return
 
-    print(f"Saved adapter/tokenizer to: {output_dir}")
-    print(f"Saved run config to: {config_path}")
+    train_lora_adapter(
+        args=args,
+        records=records,
+        output_dir=output_dir,
+        input_path=input_path,
+        run_config_extra={"eval_protocol": "missing_rows"},
+    )
 
     if not args.skip_eval:
-        # Free training objects before loading adapter
-        del trainer
-        del model
-        del tokenized_dataset
-        del dataset
-        del formatted_records
-        del records
-        gc.collect()
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            if hasattr(torch.cuda, "ipc_collect"):
-                torch.cuda.ipc_collect()
-
+        cleanup_memory()
         print("\n" + "=" * 80)
         print("RUNNING POST-TRAIN EVALUATION")
         print("=" * 80)
