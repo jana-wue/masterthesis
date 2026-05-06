@@ -14,6 +14,7 @@ import pandas as pd
 import torch
 from datasets import Dataset
 from peft import AutoPeftModelForCausalLM, LoraConfig, get_peft_model
+from tqdm.auto import tqdm
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
@@ -405,7 +406,15 @@ def run_post_train_evaluation(args, adapter_path):
     model.eval()
 
     results = []
-    for idx, row in missing_rows.iterrows():
+    running_abs_error_sum = 0.0
+    running_abs_error_n = 0
+    eval_iterator = tqdm(
+        missing_rows.iterrows(),
+        total=len(missing_rows),
+        desc=f"Post-train eval ({target_column})",
+        unit="row",
+    )
+    for idx, row in eval_iterator:
         prediction, raw_output, source = predict_numeric(
             row=row,
             imputer=imputer,
@@ -429,6 +438,16 @@ def run_post_train_evaluation(args, adapter_path):
             if pd.notna(ground_truth_value)
             else pd.NA
         )
+        if pd.notna(abs_error):
+            running_abs_error_sum += float(abs_error)
+            running_abs_error_n += 1
+
+        if running_abs_error_n > 0 and running_abs_error_n % 10 == 0:
+            eval_iterator.set_postfix(
+                running_mae=f"{(running_abs_error_sum / running_abs_error_n):.2f}",
+                source=source,
+                refresh=False,
+            )
         results.append(
             {
                 "row_index": int(idx),
