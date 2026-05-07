@@ -92,4 +92,5 @@ Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt All Miss
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt All Missing (Mistral-7B-Instruct-v0.3),2537.681706064101,1.11959335912491
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),92.66504520957824,0.040882656399239
 Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),559.4586856585631,0.2468261593529633
-Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),98.69812815200817,0.04354437696933786
+Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),98.69812815200817,0.0435443769693378
+German Statlog,MAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),9.962429422585638,0.8265666917012575
