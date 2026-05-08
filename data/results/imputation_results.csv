@@ -94,3 +94,5 @@ Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Mistral-7B-Instru
 Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),559.4586856585631
 Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),98.69812815200817
 German Statlog,MAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),9.962429422585638
+German Statlog,MNAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),11.29778739399888
+German Statlog,MCAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),10.00299955013495
