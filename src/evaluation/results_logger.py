@@ -102,10 +102,8 @@ def _build_detail_rows_from_context(ctx, run_timestamp_utc, dataset, missingness
         for row_index, ground_truth, prediction in zip(idxs, true_vals, pred_vals):
             if pd.isna(ground_truth) or pd.isna(prediction):
                 abs_error = pd.NA
-                sq_error = pd.NA
             else:
                 abs_error = float(abs(float(prediction) - float(ground_truth)))
-                sq_error = float((float(prediction) - float(ground_truth)) ** 2)
 
             rows.append(
                 {
@@ -120,7 +118,6 @@ def _build_detail_rows_from_context(ctx, run_timestamp_utc, dataset, missingness
                     "prediction": float(prediction) if pd.notna(prediction) else pd.NA,
                     "ground_truth": float(ground_truth) if pd.notna(ground_truth) else pd.NA,
                     "abs_error": abs_error,
-                    "sq_error": sq_error,
                     "source": "tabular_imputer",
                 }
             )

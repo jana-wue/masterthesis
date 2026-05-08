@@ -103,3 +103,13 @@ Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685
 Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685
 SmokeDataset,MCAR,5%,MeanSmoke,1033333333.3333334
 SmokeDataset,MCAR,5%,MeanSmoke,1033333333.3333334
+Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685
+Telco,MNAR,"tenure, 10%",Mean/Mode,1.222596238108231
+Telco,MCAR,10%,Mean/Mode,1.0011068193152424
+Telco,MNAR,"totalcharges, 10%",Mean/Mode,1.1403228499324076
+Telco,MCAR,"totalcharges, 10%",Mean/Mode,1.00000227422749
+Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685
+Telco,MNAR,"tenure, 10%",Mean/Mode,1.222596238108231
+Telco,MCAR,10%,Mean/Mode,1.0011068193152424
+Telco,MNAR,"totalcharges, 10%",Mean/Mode,1.1403228499324076
+Telco,MCAR,"totalcharges, 10%",Mean/Mode,1.0000022742274899

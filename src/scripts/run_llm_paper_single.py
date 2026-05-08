@@ -335,11 +335,6 @@ def main() -> None:
             if pd.notna(ground_truth_value)
             else pd.NA
         )
-        sq_error = (
-            float((prediction - ground_truth_value) ** 2)
-            if pd.notna(ground_truth_value)
-            else pd.NA
-        )
 
         result_rows.append(
             {
@@ -347,7 +342,6 @@ def main() -> None:
                 "prediction": float(prediction),
                 "ground_truth": ground_truth_value,
                 "abs_error": abs_error,
-                "sq_error": sq_error,
                 "source": source,
                 "raw_output": raw_output,
                 "model_name": MODEL_NAME,

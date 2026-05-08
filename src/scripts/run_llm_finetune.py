@@ -624,11 +624,6 @@ def evaluate_adapter_on_jsonl_records(args, adapter_path, test_records, fold_id,
             if pd.notna(ground_truth_value)
             else pd.NA
         )
-        sq_error = (
-            float((float(prediction) - ground_truth_value) ** 2)
-            if pd.notna(ground_truth_value)
-            else pd.NA
-        )
 
         rows.append(
             {
@@ -637,7 +632,6 @@ def evaluate_adapter_on_jsonl_records(args, adapter_path, test_records, fold_id,
                 "prediction": float(prediction),
                 "ground_truth": ground_truth_value,
                 "abs_error": abs_error,
-                "sq_error": sq_error,
                 "source": source,
                 "raw_output": raw_output,
                 "model_name": args.model_name,
@@ -931,11 +925,6 @@ def run_post_train_evaluation(args, adapter_path):
             if pd.notna(ground_truth_value)
             else pd.NA
         )
-        sq_error = (
-            float((prediction - ground_truth_value) ** 2)
-            if pd.notna(ground_truth_value)
-            else pd.NA
-        )
         if pd.notna(abs_error):
             running_abs_error_sum += float(abs_error)
             running_abs_error_n += 1
@@ -952,7 +941,6 @@ def run_post_train_evaluation(args, adapter_path):
                 "prediction": float(prediction),
                 "ground_truth": ground_truth_value,
                 "abs_error": abs_error,
-                "sq_error": sq_error,
                 "source": source,
                 "raw_output": raw_output,
                 "model_name": args.model_name,

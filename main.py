@@ -1,4 +1,4 @@
-from src.scripts.run_dae import create_onehot_schema, apply_onehot_schema, run_dae
+from src.scripts.run_dae import run_dae
 from src.scripts.run_missforest import run_missforest
 from src.scripts.run_medianmode import run_medianmode
 from src.scripts.run_meanmode import run_meanmode
@@ -10,4 +10,3 @@ if __name__ == "__main__":
     run_mice()
     run_missforest()
     run_dae()
-

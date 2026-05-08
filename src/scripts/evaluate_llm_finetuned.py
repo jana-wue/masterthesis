@@ -184,7 +184,6 @@ def main() -> None:
         ground_truth = float(df_full.loc[idx, target_column])
 
         abs_error = abs(prediction - ground_truth)
-        sq_error = (prediction - ground_truth) ** 2
 
         print(f"\nRow index    : {idx}")
         print(f"Raw output   : {raw_output}")
@@ -201,12 +200,11 @@ def main() -> None:
                 "source": source,
                 "ground_truth": ground_truth,
                 "abs_error": abs_error,
-                "sq_error": sq_error,
             }
         )
 
     results_df = pd.DataFrame(results)
-    rmse = (results_df["sq_error"].mean()) ** 0.5
+    rmse = float((((results_df["prediction"] - results_df["ground_truth"]) ** 2).mean()) ** 0.5)
 
     print("\n" + "=" * 80)
     print("RESULT SUMMARY")
