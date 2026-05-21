@@ -13,14 +13,27 @@ set -euo pipefail
 cd ~/work/masterthesis
 export PYTHONPATH=~/work/masterthesis
 export HF_TOKEN="${HF_TOKEN:?HF_TOKEN not set}"
+PYTHON_BIN="${PYTHON_BIN:-$HOME/.venvs/masterthesis-llm/bin/python}"
 
-python src/scripts/prepare_llm_data.py \
+if [ ! -x "$PYTHON_BIN" ]; then
+  echo "ERROR: Python binary not found: $PYTHON_BIN"
+  echo "Create venv first, e.g.:"
+  echo "  python3 -m venv ~/.venvs/masterthesis-llm"
+  echo "  ~/.venvs/masterthesis-llm/bin/pip install -r requirements.txt"
+  echo "  ~/.venvs/masterthesis-llm/bin/pip install transformers datasets peft accelerate tqdm safetensors sentencepiece"
+  exit 1
+fi
+
+echo "Using Python: $PYTHON_BIN"
+"$PYTHON_BIN" -c "import pandas,datasets,transformers,peft; print('Dependency check OK')"
+
+"$PYTHON_BIN" src/scripts/prepare_llm_data.py \
   --mechanisms MNAR \
   --include_glob 'german_credit_mnar_billamt1_10pct.csv' \
   --target_mode explicit \
   --target_columns BILL_AMT1
 
-python src/scripts/run_llm_finetune.py \
+"$PYTHON_BIN" src/scripts/run_llm_finetune.py \
   --model_name mistralai/Mistral-7B-Instruct-v0.3 \
   --input_jsonl data/processed/llm/MNAR/german_credit_mnar_billamt1_10pct__target_BILL_AMT1_train.jsonl \
   --output_dir data/processed/llm/mistral_credit_billamt1_mnar_lora \

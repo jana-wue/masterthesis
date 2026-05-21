@@ -1,64 +1,180 @@
-from src.data.remove_data import *
-from src.data.helper_dataprocessing import *
+from __future__ import annotations
+
+import numpy as np
+import pandas as pd
+
+from src.data.remove_data import mar, mcar, mcar_single_feature, mnar
+from src.paths import DATA_PROCESSED, DATA_RAW
 
 
-def run_generate_missingness():
-    # MCAR generell 10%
-    df_credit_card = pd.read_csv(DATA_RAW / "default_of_credit_card_clients.csv")
-    df_credit_card_mcar = mcar(df_credit_card, 0.1)
-    df_credit_card_mcar.to_csv("german_credit_mcar_10pct.csv", index=False)
+def _pct_token(rate: float) -> str:
+    return f"{int(round(rate * 100))}pct"
 
+
+def _save(df, relative_output_path):
+    output_path = DATA_PROCESSED / relative_output_path
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(output_path, index=False)
+    print(f"[saved] {output_path}")
+
+
+def mcar_global_excluding(df, missing_frac, exclude_cols, random_state):
+    """
+    MCAR over all eligible columns except excluded ones (e.g. IDs or labels).
+    """
+    rng = np.random.default_rng(random_state)
+    out = df.copy()
+    excluded = set(exclude_cols)
+    eligible_cols = [col for col in out.columns if col not in excluded]
+    if not eligible_cols:
+        return out
+
+    for col in eligible_cols:
+        out[col] = out[col].astype("object")
+
+    mask = rng.random((len(out), len(eligible_cols))) < float(missing_frac)
+    for j, col in enumerate(eligible_cols):
+        out.loc[mask[:, j], col] = np.nan
+
+    return out
+
+
+def run_generate_missingness(rates, random_state):
+    """
+    Generate missingness files for all datasets.
+
+    Creates for each rate:
+    - MAR_TARGET
+    - MNAR_TARGET
+    - MCAR_TARGET
+    - MCAR_GLOBAL (with excluded columns)
+
+    Also writes legacy 10%-only files used by older experiments.
+    """
+    df_credit = pd.read_csv(DATA_RAW / "default_of_credit_card_clients.csv")
     df_telco = pd.read_csv(DATA_RAW / "Telco-Customer-Churn_cleaned.csv")
-    df_telco_mcar = mcar(df_telco, 0.1)
-    df_telco_mcar.to_csv("telco_customer_churn_mcar_10pct.csv", index=False)
-
     df_statlog = pd.read_csv(DATA_RAW / "german_statlog_numeric.csv")
-    df_statlog_mcar = mcar(df_statlog, 0.1)
-    df_statlog_mcar.to_csv("german_statlog_numeric_mcar_10pct.csv", index=False)
 
-    # MCAR Features 10%
-    df_credit_card_mcar = mcar_single_feature(df_credit_card, 0.1, "BILL_AMT1")
-    df_credit_card_mcar.to_csv("german_credit_mcar_billamt1_10pct.csv", index=False)
+    for rate in rates:
+        token = _pct_token(rate)
 
-    df_telco_mcar = mcar_single_feature(df_telco, 0.1, "TotalCharges")
-    df_telco_mcar.to_csv("telco_customer_churn_mcar_totalcharges_10pct.csv", index=False)
+        # Telco
+        _save(
+            mar(
+                df_telco,
+                feature_dep="tenure",
+                missing_feature="TotalCharges",
+                missing_frac=rate,
+                random_state=random_state,
+            ),
+            f"MAR/telco_customer_churn_mar_totalcharges_tenure_{token}.csv",
+        )
+        _save(
+            mnar(
+                df_telco,
+                feature="TotalCharges",
+                missing_frac=rate,
+                random_state=random_state,
+            ),
+            f"MNAR/telco_customer_churn_mnar_totalcharges_{token}.csv",
+        )
+        _save(
+            mcar_single_feature(
+                df_telco,
+                missing_frac=rate,
+                feature="TotalCharges",
+                random_state=random_state,
+            ),
+            f"MCAR/telco_customer_churn_mcar_totalcharges_{token}.csv",
+        )
+        _save(
+            mcar_global_excluding(
+                df_telco,
+                missing_frac=rate,
+                exclude_cols=["customerID", "Churn"],
+                random_state=random_state,
+            ),
+            f"MCAR/telco_customer_churn_mcar_{token}.csv",
+        )
 
-    df_statlog_mcar = mcar_single_feature(df_statlog, 0.1, "X2")
-    df_statlog_mcar.to_csv("german_statlog_numeric_mcar_duration_10pct.csv", index=False)
+        # German Statlog
+        _save(
+            mar(
+                df_statlog,
+                feature_dep="X5",
+                missing_feature="X2",
+                missing_frac=rate,
+                random_state=random_state,
+            ),
+            f"MAR/german_statlog_numeric_mar_duration_creditamount_{token}.csv",
+        )
+        _save(
+            mnar(
+                df_statlog,
+                feature="X2",
+                missing_frac=rate,
+                random_state=random_state,
+            ),
+            f"MNAR/german_statlog_numeric_mnar_duration_{token}.csv",
+        )
+        _save(
+            mcar_single_feature(
+                df_statlog,
+                missing_frac=rate,
+                feature="X2",
+                random_state=random_state,
+            ),
+            f"MCAR/german_statlog_numeric_mcar_duration_{token}.csv",
+        )
+        _save(
+            mcar_global_excluding(
+                df_statlog,
+                missing_frac=rate,
+                exclude_cols=["class"],
+                random_state=random_state,
+            ),
+            f"MCAR/german_statlog_numeric_mcar_{token}.csv",
+        )
 
-    # MNAR
-    # Statlog: Credit Amount
-    df_statlog_mnar = mnar(df_statlog, feature="X5", missing_frac=0.1, random_state=42)
-    df_statlog_mnar.to_csv("german_statlog_numeric_mnar_creditamount_10pct.csv", index=False)
-    df_statlog_mnar = mnar(df_statlog, feature="X2", missing_frac=0.1, random_state=42)
-    df_statlog_mnar.to_csv("german_statlog_numeric_mnar_duration_10pct.csv", index=False)
+        # German Credit Card
+        _save(
+            mar(
+                df_credit,
+                feature_dep="PAY_0",
+                missing_feature="BILL_AMT1",
+                missing_frac=rate,
+                random_state=random_state,
+            ),
+            f"MAR/german_credit_mar_billamt1_pay0_{token}.csv",
+        )
+        _save(
+            mnar(
+                df_credit,
+                feature="BILL_AMT1",
+                missing_frac=rate,
+                random_state=random_state,
+            ),
+            f"MNAR/german_credit_mnar_billamt1_{token}.csv",
+        )
+        _save(
+            mcar_single_feature(
+                df_credit,
+                missing_frac=rate,
+                feature="BILL_AMT1",
+                random_state=random_state,
+            ),
+            f"MCAR/german_credit_mcar_billamt1_{token}.csv",
+        )
+        _save(
+            mcar_global_excluding(
+                df_credit,
+                missing_frac=rate,
+                exclude_cols=["ID", "default payment next month"],
+                random_state=random_state,
+            ),
+            f"MCAR/german_credit_mcar_{token}.csv",
+        )
 
-    # Telco: Tenure
-    df_telco_mnar = mnar(df_telco, feature="tenure", missing_frac=0.1, random_state=42)
-    df_telco_mnar.to_csv("telco_customer_churn_mnar_tenure_10pct.csv", index=False)
-    df_telco_mnar = mnar(df_telco, feature="TotalCharges", missing_frac=0.1, random_state=42)
-    df_telco_mnar.to_csv("telco_customer_churn_mnar_totalcharges_10pct.csv", index=False)
 
-    # Credit Card: Amount of Credit
-    df_credit_card_mnar = mnar(df_credit_card, feature="LIMIT_BAL", missing_frac=0.1, random_state=42)
-    df_credit_card_mnar.to_csv("german_credit_mnar_amountcredit_10pct.csv", index=False)
-    df_credit_card_mnar = mnar(df_credit_card, feature="BILL_AMT1", missing_frac=0.1, random_state=42)
-    df_credit_card_mnar.to_csv("german_credit_mnar_billamt1_10pct.csv", index=False)
-
-    # MAR
-    # Statlog: Missing Duration -> Credit Amount
-    df_statlog_mar = mar(df_statlog, feature_dep="X5", missing_feature="X2", missing_frac=0.1, random_state=42)
-    df_statlog_mar.to_csv("german_statlog_numeric_mar_duration_creditamount_10pct.csv", index=False)
-
-    # Telco: Missing Total Charges -> Tenure
-    df_telco_mar = mar(df_telco, feature_dep="tenure", missing_feature="TotalCharges", missing_frac=0.1, random_state=42)
-    df_telco_mar.to_csv("telco_customer_churn_mar_totalcharges_tenure_10pct.csv", index=False)
-
-    # Credit Card: Missing PAY_0 -> Limit
-    df_credit_card_mar = mar(df_credit_card, feature_dep="LIMIT_BAL", missing_feature="PAY_0", missing_frac=0.1, random_state=42)
-    df_credit_card_mar.to_csv("german_credit_mar_pay0_limitbal_10pct.csv", index=False)
-    df_credit_card_mar = mar(df_credit_card, feature_dep="PAY_0", missing_feature="BILL_AMT1", missing_frac=0.1,
-                             random_state=42)
-    df_credit_card_mar.to_csv("german_credit_mar_billamt1_pay0_10pct.csv", index=False)
-
-    # TODO: Missingness mit derselben Zielvariable (TotalCharges, Duration, BillAmount) erklären
+if __name__ == "__main__":
+    run_generate_missingness()

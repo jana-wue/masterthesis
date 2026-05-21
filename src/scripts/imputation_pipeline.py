@@ -139,7 +139,14 @@ DATASET_CONFIGS = [
 IMPUTATION_METHODS = {
     "meanmode": {"runner_name": "Mean/Mode", "factory": MeanModeImputer},
     "medianmode": {"runner_name": "Median/Mode", "factory": MedianModeImputer},
-    "mice": {"runner_name": "MICE", "factory": MICEImputer},
+    "mice": {
+        "runner_name": "MICE",
+        "factory": lambda: MICEImputer(sample_posterior=False, n_imputations=1),
+    },
+    "mice_post_mean": {
+        "runner_name": "MICE posterior mean (m=5)",
+        "factory": lambda: MICEImputer(sample_posterior=True, n_imputations=5),
+    },
     "missforest": {"runner_name": "MissForest", "factory": MissForestImputer},
     "dae": {"runner_name": "DAE", "factory": _build_dae_imputer},
 }
