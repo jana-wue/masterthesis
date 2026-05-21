@@ -16,7 +16,7 @@ def _build_parser():
         "--method",
         nargs="+",
         default=["all"],
-        help="Method key(s): meanmode, medianmode, mice, missforest, dae or all.",
+        help="Method key(s): meanmode, medianmode, mice, mice_post_mean, missforest, dae or all.",
     )
     parser.add_argument(
         "--dataset",

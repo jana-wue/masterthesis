@@ -14,9 +14,15 @@ class MICEImputer(BaseImputer):
     Numeric features are imputed via regression.
     """
 
-    def __init__(self, random_state: int = 42):
-        super().__init__("MICE")
+    def __init__(self, random_state = 42, max_iter = 10, n_imputations = 1, sample_posterior = False):
+        if sample_posterior and n_imputations > 1:
+            super().__init__(f"MICE posterior mean (m={n_imputations})")
+        else:
+            super().__init__("MICE")
         self.random_state = random_state
+        self.max_iter = max_iter
+        self.n_imputations = n_imputations
+        self.sample_posterior = sample_posterior
         self.numeric_cols_ = None
         self.categorical_cols_ = None
         self.encoder_ = None
@@ -38,7 +44,8 @@ class MICEImputer(BaseImputer):
 
         self.imputer_ = IterativeImputer(
             random_state=self.random_state,
-            max_iter=10
+            max_iter=self.max_iter,
+            sample_posterior=self.sample_posterior,
         )
 
         self.imputer_.fit(X)
@@ -56,8 +63,32 @@ class MICEImputer(BaseImputer):
                 X_out[self.categorical_cols_]
             )
 
-        X_imputed = self.imputer_.transform(X_out)
-        X_imputed = pd.DataFrame(X_imputed, columns=X.columns)
+        if self.sample_posterior and self.n_imputations > 1:
+            draws = []
+            for i in range(self.n_imputations):
+                imputer_i = IterativeImputer(
+                    random_state=self.random_state + i,
+                    max_iter=self.max_iter,
+                    sample_posterior=True,
+                )
+                Xi = imputer_i.fit_transform(X_out)
+                draws.append(Xi)
+
+            X_imputed = np.mean(np.stack(draws, axis=0), axis=0)
+        else:
+            X_imputed = self.imputer_.transform(X_out)
+
+        X_imputed = pd.DataFrame(X_imputed, columns=X.columns, index=X.index)
+
+        # convert encoded categoricals back to labels
+        if self.categorical_cols_:
+            encoded = X_imputed[self.categorical_cols_].to_numpy(dtype=float, copy=True)
+            for j, categories in enumerate(self.encoder_.categories_):
+                encoded[:, j] = np.clip(np.rint(encoded[:, j]), 0, len(categories) - 1)
+            X_imputed[self.categorical_cols_] = self.encoder_.inverse_transform(encoded)
+
+        for col in self.numeric_cols_:
+            X_imputed[col] = pd.to_numeric(X_imputed[col], errors="coerce")
 
         return X_imputed
 
