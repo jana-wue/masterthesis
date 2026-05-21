@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/beegfs/home/users/j/jana.wue/work/masterthesis/src/scripts/prepare_llm_data.py", line 8, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'
+slurmstepd-gpu026: error: pam_close_session: Cannot make/remove an entry for the specified session

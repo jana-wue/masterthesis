@@ -1,0 +1,2 @@
+/var/tmp/slurmd_spool/job1668998/slurm_script: line 15: HF_TOKEN: HF_TOKEN not set
+slurmstepd-gpu026: error: pam_close_session: Cannot make/remove an entry for the specified session
