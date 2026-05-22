@@ -113,4 +113,5 @@ Telco,MNAR,"tenure, 10%",Mean/Mode,1.222596238108231,
 Telco,MCAR,10%,Mean/Mode,1.0011068193152424,
 Telco,MNAR,"totalcharges, 10%",Mean/Mode,1.1403228499324076,
 Telco,MCAR,"totalcharges, 10%",Mean/Mode,1.00000227422749,
-German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.29780960799345946,21929.10127810379
+German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.2978096079934594,21929.10127810379
+German Credit Card,MCAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.27087572622697614,19945.83477085713
