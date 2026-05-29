@@ -1,0 +1,80 @@
+Dependency check OK
+================================================================================
+LLM TRAINING DATA PREP
+================================================================================
+Input file   : /beegfs/home/users/j/jana.wue/work/masterthesis/data/processed/MCAR/german_statlog_numeric_mcar_duration_10pct.csv
+Mechanism    : MCAR
+Target column: X2
+Examples     : 900
+Output file  : /beegfs/home/users/j/jana.wue/work/masterthesis/data/processed/llm/MCAR/german_statlog_numeric_mcar_duration_10pct__target_X2_train.jsonl
+
+================================================================================
+PREP SUMMARY
+================================================================================
+Input files processed: 1
+Rows in manifest     : 1
+Status counts        : {'prepared': 1}
+Manifest written     : /beegfs/home/users/j/jana.wue/work/masterthesis/data/processed/llm/prepare_manifest.csv
+================================================================================
+LOADING TRAINING DATA
+================================================================================
+Loaded examples total: 900
+Using training examples: 900
+
+================================================================================
+FIRST FORMATTED EXAMPLE
+================================================================================
+<s>[INST] Impute the missing target value for this record.
+
+Target column: X2
+Target distribution summary (observed rows):
+- min: 4
+- q1: 12
+- median: 18
+- q3: 24
+- max: 72
+- mean: 20.836667
+
+Observed feature values:
+X1: 4
+X3: 1
+X4: 65
+X5: 1
+X6: 5
+X7: 3
+X8: 4
+X9: 4
+X10: 39
+X11: 1
+X12: 2
+X13: 2
+X14: 2
+X15: 1
+X16: 1
+X17: 0
+X18: 1
+X19: 0
+X20: 0
+X21: 1
+X22: 0
+X23: 0
+X24: 0
+class: 2
+
+Here are the output constraints:
+- Return exactly one number.
+- No words, no units, no commas, no explanation, no markdown.
+Imputed value:[/INST] 18</s>
+
+================================================================================
+TOKENIZING DATA
+================================================================================
+
+================================================================================
+LOADING MODEL
+================================================================================
+trainable params: 671,088,640 || all params: 7,919,112,192 || trainable%: 8.4743
+
+================================================================================
+START TRAINING
+================================================================================
