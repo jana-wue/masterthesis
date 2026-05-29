@@ -1,2 +1,0 @@
-/var/tmp/slurmd_spool/job1652602/slurm_script: line 17: python: command not found
-slurmstepd-gpu026: error: pam_close_session: Cannot make/remove an entry for the specified session

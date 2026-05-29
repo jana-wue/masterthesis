@@ -1,78 +1,0 @@
-nohup: ignoring input
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-================================================================================
-LOADING TRAINING DATA
-================================================================================
-Loaded examples total: 6328
-Using training examples: 6328
-
-================================================================================
-RUNNING STRATIFIED CROSS-VALIDATION
-================================================================================
-Requested folds: 5 | Effective folds: 5
-Stratification bins used: 10
-
---------------------------------------------------------------------------------
-Fold 1/5 | train=5062 | test=1266
-Map:   0%|          | 0/5062 [00:00<?, ? examples/s]Map:   3%|▎         | 145/5062 [00:00<00:03, 1440.13 examples/s]Map:   6%|▌         | 295/5062 [00:00<00:03, 1470.25 examples/s]Map:   9%|▉         | 447/5062 [00:00<00:03, 1487.21 examples/s]Map:  12%|█▏        | 598/5062 [00:00<00:02, 1490.61 examples/s]Map:  16%|█▌        | 821/5062 [00:00<00:02, 1484.24 examples/s]Map:  19%|█▉        | 970/5062 [00:00<00:02, 1482.50 examples/s]Map:  23%|██▎       | 1148/5062 [00:01<00:05, 762.16 examples/s]Map:  26%|██▌       | 1297/5062 [00:01<00:04, 887.63 examples/s]Map:  29%|██▊       | 1447/5062 [00:01<00:03, 1006.84 examples/s]Map:  32%|███▏      | 1597/5062 [00:01<00:03, 1113.30 examples/s]Map:  35%|███▍      | 1747/5062 [00:01<00:02, 1204.14 examples/s]Map:  37%|███▋      | 1897/5062 [00:01<00:02, 1276.33 examples/s]Map:  41%|████      | 2074/5062 [00:01<00:02, 1083.61 examples/s]Map:  44%|████▍     | 2225/5062 [00:01<00:02, 1177.88 examples/s]Map:  47%|████▋     | 2370/5062 [00:02<00:02, 1242.53 examples/s]Map:  50%|████▉     | 2518/5062 [00:02<00:01, 1300.91 examples/s]Map:  53%|█████▎    | 2668/5062 [00:02<00:01, 1351.45 examples/s]Map:  56%|█████▌    | 2817/5062 [00:02<00:01, 1388.95 examples/s]Map:  59%|█████▊    | 2965/5062 [00:02<00:01, 1411.67 examples/s]Map:  62%|██████▏   | 3150/5062 [00:02<00:01, 1123.50 examples/s]Map:  65%|██████▌   | 3301/5062 [00:02<00:01, 1210.02 examples/s]Map:  68%|██████▊   | 3451/5062 [00:02<00:01, 1280.66 examples/s]Map:  71%|███████   | 3602/5062 [00:02<00:01, 1338.21 examples/s]Map:  74%|███████▍  | 3753/5062 [00:03<00:00, 1381.14 examples/s]Map:  77%|███████▋  | 3903/5062 [00:03<00:00, 1412.08 examples/s]Map:  80%|████████  | 4074/5062 [00:03<00:00, 1152.32 examples/s]Map:  83%|████████▎ | 4224/5062 [00:03<00:00, 1233.59 examples/s]Map:  86%|████████▋ | 4374/5062 [00:03<00:00, 1300.03 examples/s]Map:  89%|████████▉ | 4525/5062 [00:03<00:00, 1354.57 examples/s]Map:  92%|█████████▏| 4677/5062 [00:03<00:00, 1397.67 examples/s]Map:  95%|█████████▌| 4827/5062 [00:03<00:00, 1424.46 examples/s]Map:  98%|█████████▊| 4974/5062 [00:03<00:00, 1435.66 examples/s]Map: 100%|██████████| 5062/5062 [00:04<00:00, 1220.98 examples/s]
-Filter:   0%|          | 0/5062 [00:00<?, ? examples/s]Filter:  20%|█▉        | 1000/5062 [00:00<00:02, 1575.97 examples/s]Filter:  40%|███▉      | 2000/5062 [00:01<00:01, 1575.70 examples/s]Filter:  59%|█████▉    | 3000/5062 [00:01<00:01, 1582.12 examples/s]Filter:  79%|███████▉  | 4000/5062 [00:02<00:00, 1591.28 examples/s]Filter:  99%|█████████▉| 5000/5062 [00:03<00:00, 1586.10 examples/s]Filter: 100%|██████████| 5062/5062 [00:03<00:00, 1584.52 examples/s]
-`torch_dtype` is deprecated! Use `dtype` instead!
-
-================================================================================
-FIRST FORMATTED EXAMPLE
-================================================================================
-<s>[INST] Observed values:
-gender: Male
-SeniorCitizen: 0
-Partner: Yes
-Dependents: No
-tenure: 68
-PhoneService: Yes
-MultipleLines: Yes
-InternetService: No
-OnlineSecurity: No internet service
-OnlineBackup: No internet service
-DeviceProtection: No internet service
-TechSupport: No internet service
-StreamingTV: No internet service
-StreamingMovies: No internet service
-Contract: Two year
-PaperlessBilling: No
-PaymentMethod: Bank transfer (automatic)
-MonthlyCharges: 25.25
-Churn: No
-
-Target column: TotalCharges
-Imputed value:[/INST] 1728.2</s>
-
-================================================================================
-TOKENIZING DATA
-================================================================================
-
-================================================================================
-LOADING MODEL
-================================================================================
-Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights:   0%|          | 1/291 [00:00<01:05,  4.42it/s]Loading weights:   4%|▍         | 13/291 [00:00<00:07, 37.91it/s]Loading weights:   8%|▊         | 22/291 [00:00<00:05, 45.43it/s]Loading weights:  11%|█         | 31/291 [00:00<00:05, 46.44it/s]Loading weights:  14%|█▎        | 40/291 [00:00<00:04, 50.39it/s]Loading weights:  16%|█▌        | 46/291 [00:01<00:04, 51.45it/s]Loading weights:  18%|█▊        | 52/291 [00:01<00:04, 48.59it/s]Loading weights:  20%|█▉        | 58/291 [00:01<00:04, 48.95it/s]Loading weights:  23%|██▎       | 67/291 [00:01<00:04, 52.39it/s]Loading weights:  26%|██▌       | 76/291 [00:01<00:04, 48.02it/s]Loading weights:  29%|██▉       | 85/291 [00:01<00:03, 56.14it/s]Loading weights:  32%|███▏      | 92/291 [00:01<00:03, 58.65it/s]Loading weights:  34%|███▍      | 99/291 [00:02<00:03, 54.78it/s]Loading weights:  36%|███▌      | 105/291 [00:02<00:03, 48.73it/s]Loading weights:  38%|███▊      | 112/291 [00:02<00:03, 46.46it/s]Loading weights:  42%|████▏     | 121/291 [00:02<00:03, 47.29it/s]Loading weights:  45%|████▍     | 130/291 [00:02<00:03, 48.05it/s]Loading weights:  48%|████▊     | 139/291 [00:02<00:02, 51.13it/s]Loading weights:  50%|████▉     | 145/291 [00:02<00:02, 49.42it/s]Loading weights:  52%|█████▏    | 150/291 [00:03<00:02, 48.73it/s]Loading weights:  54%|█████▍    | 158/291 [00:03<00:02, 46.13it/s]Loading weights:  57%|█████▋    | 166/291 [00:03<00:02, 46.39it/s]Loading weights:  60%|██████    | 176/291 [00:03<00:02, 57.44it/s]Loading weights:  63%|██████▎   | 184/291 [00:03<00:01, 55.22it/s]Loading weights:  66%|██████▋   | 193/291 [00:03<00:01, 51.16it/s]Loading weights:  69%|██████▉   | 202/291 [00:04<00:01, 54.23it/s]Loading weights:  71%|███████▏  | 208/291 [00:04<00:01, 53.90it/s]Loading weights:  75%|███████▍  | 217/291 [00:04<00:01, 61.02it/s]Loading weights:  77%|███████▋  | 224/291 [00:04<00:01, 45.19it/s]Loading weights:  82%|████████▏ | 238/291 [00:04<00:01, 51.36it/s]Loading weights:  85%|████████▍ | 247/291 [00:04<00:00, 52.83it/s]Loading weights:  87%|████████▋ | 253/291 [00:05<00:00, 50.89it/s]Loading weights:  91%|█████████ | 265/291 [00:05<00:00, 49.66it/s]Loading weights:  94%|█████████▍| 274/291 [00:05<00:00, 51.47it/s]Loading weights:  97%|█████████▋| 283/291 [00:05<00:00, 51.51it/s]Loading weights: 100%|██████████| 291/291 [00:05<00:00, 51.25it/s]
-Traceback (most recent call last):
-  File "/home/users/j/jana.wue/work/masterthesis/src/scripts/run_llm_finetune.py", line 1185, in <module>
-    main()
-  File "/home/users/j/jana.wue/work/masterthesis/src/scripts/run_llm_finetune.py", line 1160, in main
-    run_stratified_cv_finetune(
-  File "/home/users/j/jana.wue/work/masterthesis/src/scripts/run_llm_finetune.py", line 692, in run_stratified_cv_finetune
-    train_lora_adapter(
-  File "/home/users/j/jana.wue/work/masterthesis/src/scripts/run_llm_finetune.py", line 409, in train_lora_adapter
-    model = get_peft_model(model, build_lora_config(args))
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/users/j/jana.wue/.local/lib/python3.11/site-packages/peft/mapping_func.py", line 122, in get_peft_model
-    return MODEL_TYPE_TO_PEFT_MODEL_MAPPING[peft_config.task_type](
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/users/j/jana.wue/.local/lib/python3.11/site-packages/peft/peft_model.py", line 1885, in __init__
-    super().__init__(model, peft_config, adapter_name, **kwargs)
-  File "/home/users/j/jana.wue/.local/lib/python3.11/site-packages/peft/peft_model.py", line 132, in __init__
-    self.base_model._cast_adapter_dtype(
-  File "/home/users/j/jana.wue/.local/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 542, in _cast_adapter_dtype
-    cast_adapter_dtype(self.model, adapter_name=adapter_name, autocast_adapter_dtype=autocast_adapter_dtype)
-  File "/home/users/j/jana.wue/.local/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 2016, in cast_adapter_dtype
-    param.data = param.data.to(torch.float32)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 14.00 MiB. GPU 0 has a total capacity of 15.89 GiB of which 13.12 MiB is free. Including non-PyTorch memory, this process has 15.87 GiB memory in use. Of the allocated memory 15.57 GiB is allocated by PyTorch, and 29.49 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
