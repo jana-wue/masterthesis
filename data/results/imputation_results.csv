@@ -130,3 +130,6 @@ German Statlog,MNAR,"X2, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),10.57355191030
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),101.58655145283528
 Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),195.9605143073819
 Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),150.71808761847174
+German Statlog,MAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),10.789346597454362
+German Statlog,MCAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),9.972963451251587
+German Statlog,MNAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),11.77115117564973
