@@ -93,7 +93,6 @@ Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt All Miss
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.040882656399239,
 Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.2468261593529633,
 Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.0435443769693378,
-German Statlog,MAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.8265666917012575,
 German Statlog,MNAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.9373591875723576,
 German Statlog,MCAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.8299327297114549,
 Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
@@ -101,8 +100,6 @@ Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
 Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
 Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
 Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
-SmokeDataset,MCAR,5%,MeanSmoke,1033333333.3333334,
-SmokeDataset,MCAR,5%,MeanSmoke,1033333333.3333334,
 Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
 Telco,MNAR,"tenure, 10%",Mean/Mode,1.222596238108231,
 Telco,MCAR,10%,Mean/Mode,1.0011068193152424,
@@ -115,7 +112,6 @@ Telco,MNAR,"totalcharges, 10%",Mean/Mode,1.1403228499324076,
 Telco,MCAR,"totalcharges, 10%",Mean/Mode,1.00000227422749,
 German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.2978096079934594,21929.10127810379
 German Credit Card,MCAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.2708757262269761,19945.83477085713
-German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.4217226679196255,31053.39400696806
 German Statlog,MAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.8947131656382454,10.783784122468328
 German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.3871734906518503,28509.37800800525
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.0408015384236685,92.4811823803104

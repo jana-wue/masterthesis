@@ -93,7 +93,6 @@ Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt All Miss
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),92.66504520957824
 Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),559.4586856585631
 Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),98.69812815200817
-German Statlog,MAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),9.962429422585638
 German Statlog,MNAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),11.29778739399888
 German Statlog,MCAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),10.00299955013495
 Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,2623.4548714685493
@@ -101,8 +100,6 @@ Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,2623.4548714685493
 Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,2623.4548714685493
 Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,2623.4548714685493
 Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,2623.4548714685493
-SmokeDataset,MCAR,5%,MeanSmoke,10.333333333333334
-SmokeDataset,MCAR,5%,MeanSmoke,10.333333333333334
 Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,2623.4548714685493
 Telco,MNAR,"tenure, 10%",Mean/Mode,26.419007656376365
 Telco,MCAR,10%,Mean/Mode,600.1104537746895
@@ -115,7 +112,6 @@ Telco,MNAR,"totalcharges, 10%",Mean/Mode,2740.228886132297
 Telco,MCAR,"totalcharges, 10%",Mean/Mode,2182.2660317793107
 German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),21929.10127810379
 German Credit Card,MCAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),19945.83477085713
-German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),31053.39400696806
 German Statlog,MAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),10.783784122468328
 German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),28509.37800800525
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),92.4811823803104

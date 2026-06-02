@@ -10,7 +10,7 @@
 - [ ] Classical: all runs completed.
   - [x] Mean/Mode
   - [x] MICE
-  - [ ] MissForest
+  - [x] MissForest
   - [ ] DAE
 - [ ] LLM finetuned: all runs completed (Mistral + Llama + Qwen).
 - [ ] No missing seed/method/model combinations relative to `scenario_manifest.csv`.
