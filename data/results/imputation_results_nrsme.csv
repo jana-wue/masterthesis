@@ -120,4 +120,13 @@ German Statlog,MAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.89471316
 German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.3871734906518503,28509.37800800525
 Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.0408015384236685,92.4811823803104
 Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.0326289721295294,73.95716041536848
-Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.042657747764545506,96.68848536989812
+Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.0426577477645455,96.68848536989812
+German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.2913861828614764,21456.114723973988
+German Credit Card,MCAR,"billamt1, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.2372454357258309,17469.48066200023
+German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.3461586373486326,25489.26432512977
+German Statlog,MAR,"X2, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.8793474776584499,10.598584811190596
+German Statlog,MCAR,"X2, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.8640670471333456,10.414413089560064
+German Statlog,MNAR,"X2, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.8772705382707096,10.573551910309044
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.0448187131235608,101.58655145283528
+Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.0864553225666453,195.9605143073819
+Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.06649493102086651,150.71808761847174

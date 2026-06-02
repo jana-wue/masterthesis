@@ -1,0 +1,89 @@
+Dependency check OK
+================================================================================
+LLM TRAINING DATA PREP
+================================================================================
+Input file   : /beegfs/home/users/j/jana.wue/work/masterthesis/data/processed/MAR/german_statlog_numeric_mar_duration_creditamount_10pct.csv
+Mechanism    : MAR
+Target column: X2
+Examples     : 900
+Output file  : /beegfs/home/users/j/jana.wue/work/masterthesis/data/processed/llm/MAR/german_statlog_numeric_mar_duration_creditamount_10pct__target_X2_train.jsonl
+
+================================================================================
+PREP SUMMARY
+================================================================================
+Input files processed: 1
+Rows in manifest     : 1
+Status counts        : {'prepared': 1}
+Manifest written     : /beegfs/home/users/j/jana.wue/work/masterthesis/data/processed/llm/prepare_manifest.csv
+================================================================================
+LOADING TRAINING DATA
+================================================================================
+Loaded examples total: 900
+Using training examples: 900
+
+================================================================================
+FIRST FORMATTED EXAMPLE
+================================================================================
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+Today Date: 26 Jul 2024
+
+You are an expert in missing-value imputation for tabular data. Your task is to estimate one numeric target value from observed feature values. Use statistical consistency and feature relationships. Think silently and return only the final numeric answer.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Impute the missing target value for this record.
+
+Target column: X2
+Target distribution summary (observed rows):
+- min: 4
+- q1: 12
+- median: 18
+- q3: 24
+- max: 60
+- mean: 20.708889
+
+Observed feature values:
+X1: 2
+X3: 2
+X4: 23
+X5: 1
+X6: 4
+X7: 3
+X8: 4
+X9: 3
+X10: 24
+X11: 3
+X12: 1
+X13: 1
+X14: 1
+X15: 1
+X16: 0
+X17: 0
+X18: 1
+X19: 0
+X20: 1
+X21: 0
+X22: 0
+X23: 0
+X24: 1
+class: 1
+
+Here are the output constraints:
+- Return exactly one number.
+- No words, no units, no commas, no explanation, no markdown.
+Imputed value:<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+36<|eot_id|>
+
+================================================================================
+TOKENIZING DATA
+================================================================================
+
+================================================================================
+LOADING MODEL
+================================================================================
+trainable params: 671,088,640 || all params: 8,701,349,888 || trainable%: 7.7125
+
+================================================================================
+START TRAINING
+================================================================================
