@@ -7,11 +7,11 @@
 - [x] `MNAR_TARGET` is applied on target column only.
 
 ## B) Run Completeness
-- [ ] Classical: all runs completed.
+- [x] Classical: all runs completed.
   - [x] Mean/Mode
   - [x] MICE
   - [x] MissForest
-  - [ ] DAE
+  - [x] DAE
 - [ ] LLM finetuned: all runs completed (Mistral + Llama + Qwen).
 - [ ] No missing seed/method/model combinations relative to `scenario_manifest.csv`.
 

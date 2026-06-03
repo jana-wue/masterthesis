@@ -30,6 +30,7 @@ def _build_dae_imputer(seed: int):
         corruption_rate=0.2,
         dropout=0.0,
         verbose=False,
+        device="cpu",
         seed=seed,
     )
 

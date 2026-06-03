@@ -8,20 +8,6 @@ from src.imputation.machine_learning import MICEImputer, MissForestImputer
 from src.imputation.statistical import MeanModeImputer, MedianModeImputer
 
 
-def _build_dae_imputer():
-    from src.imputation.deep_learning import DenoisingAutoencoder
-
-    return DenoisingAutoencoder(
-        hidden_dims=(128, 64),
-        epochs=200,
-        batch_size=256,
-        lr=1e-3,
-        corruption_rate=0.2,
-        dropout=0.0,
-        verbose=True,
-    )
-
-
 DATASET_CONFIGS = [
     {
         "dataset_key": "telco",
@@ -148,7 +134,6 @@ IMPUTATION_METHODS = {
         "factory": lambda: MICEImputer(sample_posterior=True, n_imputations=5),
     },
     "missforest": {"runner_name": "MissForest", "factory": MissForestImputer},
-    "dae": {"runner_name": "DAE", "factory": _build_dae_imputer},
 }
 
 
