@@ -129,3 +129,6 @@ Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.0
 German Statlog,MAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.8951746752110463,10.789346597454362
 German Statlog,MCAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.827440683059727,9.972963451251587
 German Statlog,MNAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.9766334166156576,11.77115117564973
+German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.4117038418127559,30315.66142048254
+German Credit Card,MCAR,"billamt1, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.4766182850316941,35095.61264284564
+German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.6264700305742569,46129.890975382405
