@@ -11,8 +11,8 @@
 set -euo pipefail
 cd ~/work/masterthesis
 export PYTHONPATH=~/work/masterthesis
-export HF_TOKEN='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'
-PYTHON_BIN="$HOME/.venvs/masterthesis-llm/bin/python"
+export HF_TOKEN="${HF_TOKEN:?HF_TOKEN not set}"
+PYTHON_BIN="${PYTHON_BIN:-$HOME/.venvs/masterthesis-llm/bin/python}"
 MECH="${MECH:?MECH not set}"
 
 case "$MECH" in

@@ -12,17 +12,17 @@
   - [x] MICE
   - [x] MissForest
   - [x] DAE
-- [ ] LLM finetuned: all runs completed (Mistral + Llama + Qwen).
+- [x] LLM finetuned: all runs completed (Mistral + Llama + Qwen).
 - [ ] No missing seed/method/model combinations relative to `scenario_manifest.csv`.
 
 ## C) Metric Completeness
-- [ ] Every run has RMSE and NRMSE.
+- [x] Every run has RMSE and NRMSE.
 - [ ] NRMSE uses benchmark definition (std of evaluated ground truth cells).
 - [ ] LLM runs include fallback rate.
 
 ## D) Result Hygiene
 - [ ] No duplicate primary keys (`dataset_key, scenario_family, rate_pct, seed, method, model_key`).
-- [ ] No smoke/test rows in final benchmark tables.
+- [x] No smoke/test rows in final benchmark tables.
 - [ ] Final tables are generated from clean benchmark result files only.
 
 ## E) Final Outputs for Thesis
