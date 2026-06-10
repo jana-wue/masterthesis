@@ -1,28 +1,28 @@
 dataset,missingness_type,missing_rate_label,target_column,model_key,model_label,hf_model_name,rmse,nrmse,detail_eval_file
-German Credit Card,MAR,"billamt1 -> pay0, 10%",BILL_AMT1,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,30315.66142048254,0.4117038418127559,credit_llama31_billamt1_mar_finetuned_eval.csv
-German Credit Card,MAR,"billamt1 -> pay0, 10%",BILL_AMT1,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,21929.10127810379,0.2978096079934594,credit_mistral_billamt1_mar_finetuned_eval.csv
-German Credit Card,MAR,"billamt1 -> pay0, 10%",BILL_AMT1,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,21456.114723973988,0.2913861828614764,credit_qwen25_billamt1_mar_finetuned_eval.csv
-German Credit Card,MCAR,"billamt1, 10%",BILL_AMT1,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,35095.61264284564,0.4766182850316941,credit_llama31_billamt1_mcar_finetuned_eval.csv
-German Credit Card,MCAR,"billamt1, 10%",BILL_AMT1,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,19945.83477085713,0.2708757262269761,credit_mistral_billamt1_mcar_finetuned_eval.csv
-German Credit Card,MCAR,"billamt1, 10%",BILL_AMT1,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,17469.48066200023,0.2372454357258309,credit_qwen25_billamt1_mcar_finetuned_eval.csv
-German Credit Card,MNAR,"billamt1, 10%",BILL_AMT1,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,46129.890975382405,0.6264700305742569,credit_llama31_billamt1_mnar_finetuned_eval.csv
-German Credit Card,MNAR,"billamt1, 10%",BILL_AMT1,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,28509.37800800525,0.3871734906518503,credit_mistral_billamt1_mnar_finetuned_eval.csv
-German Credit Card,MNAR,"billamt1, 10%",BILL_AMT1,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,25489.26432512977,0.3461586373486326,credit_qwen25_billamt1_mnar_finetuned_eval.csv
-German Statlog,MAR,"X2, 10%",X2,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,10.789346597454362,0.8951746752110463,statlog_llama31_x2_mar_finetuned_eval.csv
-German Statlog,MAR,"X2, 10%",X2,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,10.783784122468328,0.8947131656382454,statlog_mistral_x2_mar_finetuned_eval.csv
-German Statlog,MAR,"X2, 10%",X2,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,10.598584811190596,0.8793474776584499,statlog_qwen25_x2_mar_finetuned_eval.csv
-German Statlog,MCAR,"X2, 10%",X2,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,9.972963451251587,0.827440683059727,statlog_llama31_x2_mcar_finetuned_eval.csv
-German Statlog,MCAR,"X2, 10%",X2,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,10.00299955013495,0.8299327297114549,statlog_mistral_x2_mcar_finetuned_eval.csv
-German Statlog,MCAR,"X2, 10%",X2,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,10.414413089560064,0.8640670471333456,statlog_qwen25_x2_mcar_finetuned_eval.csv
-German Statlog,MNAR,"X2, 10%",X2,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,11.77115117564973,0.9766334166156576,statlog_llama31_x2_mnar_finetuned_eval.csv
-German Statlog,MNAR,"X2, 10%",X2,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,11.29778739399888,0.9373591875723576,statlog_mistral_x2_mnar_finetuned_eval.csv
-German Statlog,MNAR,"X2, 10%",X2,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,10.573551910309044,0.8772705382707096,statlog_qwen25_x2_mnar_finetuned_eval.csv
-Telco,MAR,"missing totalCharges -> tenure, 10%",TotalCharges,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,101.58655145283528,0.0448187131235608,telco_llama31_totalcharges_mar_finetuned_eval.csv
-Telco,MAR,"missing totalCharges -> tenure, 10%",TotalCharges,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,92.66504520957824,0.040882656399239,telco_mistral_totalcharges_mar_finetuned_eval.csv
-Telco,MAR,"missing totalCharges -> tenure, 10%",TotalCharges,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,92.4811823803104,0.0408015384236685,telco_qwen25_totalcharges_mar_finetuned_eval.csv
-Telco,MCAR,"missing TotalCharges, 10%",TotalCharges,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,195.9605143073819,0.0864553225666453,telco_llama31_totalcharges_mcar_finetuned_eval.csv
-Telco,MCAR,"missing TotalCharges, 10%",TotalCharges,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,559.4586856585631,0.2468261593529633,telco_mistral_totalcharges_mcar_finetuned_eval.csv
-Telco,MCAR,"missing TotalCharges, 10%",TotalCharges,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,73.95716041536848,0.0326289721295294,telco_qwen25_totalcharges_mcar_finetuned_eval.csv
-Telco,MNAR,"missing TotalCharges, 10%",TotalCharges,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,150.71808761847174,0.0664949310208665,telco_llama31_totalcharges_mnar_finetuned_eval.csv
-Telco,MNAR,"missing TotalCharges, 10%",TotalCharges,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,98.69812815200817,0.0435443769693378,telco_mistral_totalcharges_mnar_finetuned_eval.csv
-Telco,MNAR,"missing TotalCharges, 10%",TotalCharges,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,96.68848536989812,0.0426577477645455,telco_qwen25_totalcharges_mnar_finetuned_eval.csv
+German Credit Card,MAR,"billamt1 -> pay0, 10%",BILL_AMT1,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,30315.66142048254,0.3979482219308415,credit_llama31_billamt1_mar_finetuned_eval.csv
+German Credit Card,MCAR,"billamt1, 10%",BILL_AMT1,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,35095.61264284564,0.5074549377734522,credit_llama31_billamt1_mcar_finetuned_eval.csv
+German Credit Card,MNAR,"billamt1, 10%",BILL_AMT1,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,46129.890975382405,0.51884777446679,credit_llama31_billamt1_mnar_finetuned_eval.csv
+German Credit Card,MAR,"billamt1 -> pay0, 10%",BILL_AMT1,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,21929.10127810379,0.2878593589340807,credit_mistral_billamt1_mar_finetuned_eval.csv
+German Credit Card,MCAR,"billamt1, 10%",BILL_AMT1,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,19945.83477085713,0.28840107296283907,credit_mistral_billamt1_mcar_finetuned_eval.csv
+German Credit Card,MNAR,"billamt1, 10%",BILL_AMT1,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,28509.37800800525,0.3206603574844748,credit_mistral_billamt1_mnar_finetuned_eval.csv
+German Credit Card,MAR,"billamt1 -> pay0, 10%",BILL_AMT1,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,21456.114723973988,0.2816505497115982,credit_qwen25_billamt1_mar_finetuned_eval.csv
+German Credit Card,MCAR,"billamt1, 10%",BILL_AMT1,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,17469.48066200023,0.2525949414955435,credit_qwen25_billamt1_mcar_finetuned_eval.csv
+German Credit Card,MNAR,"billamt1, 10%",BILL_AMT1,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,25489.26432512977,0.28669150930677423,credit_qwen25_billamt1_mnar_finetuned_eval.csv
+German Statlog,MAR,"X2, 10%",X2,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,10.789346597454362,0.9021637454335334,statlog_llama31_x2_mar_finetuned_eval.csv
+German Statlog,MCAR,"X2, 10%",X2,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,9.972963451251589,0.7708775872751725,statlog_llama31_x2_mcar_finetuned_eval.csv
+German Statlog,MNAR,"X2, 10%",X2,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,11.77115117564973,0.9910792346201907,statlog_llama31_x2_mnar_finetuned_eval.csv
+German Statlog,MAR,"X2, 10%",X2,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,10.783784122468328,0.901698632627864,statlog_mistral_x2_mar_finetuned_eval.csv
+German Statlog,MCAR,"X2, 10%",X2,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,10.00299955013495,0.7731992798745231,statlog_mistral_x2_mcar_finetuned_eval.csv
+German Statlog,MNAR,"X2, 10%",X2,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,11.29778739399888,0.9512240830368921,statlog_mistral_x2_mnar_finetuned_eval.csv
+German Statlog,MAR,"X2, 10%",X2,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,10.598584811190596,0.886212977143087,statlog_qwen25_x2_mar_finetuned_eval.csv
+German Statlog,MCAR,"X2, 10%",X2,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,10.414413089560064,0.80500020626863,statlog_qwen25_x2_mcar_finetuned_eval.csv
+German Statlog,MNAR,"X2, 10%",X2,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,10.573551910309043,0.8902466358739566,statlog_qwen25_x2_mnar_finetuned_eval.csv
+Telco,MAR,"missing totalCharges -> tenure, 10%",TotalCharges,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,101.58655145283527,0.04358082552739057,telco_llama31_totalcharges_mar_finetuned_eval.csv
+Telco,MCAR,"missing TotalCharges, 10%",TotalCharges,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,195.9605143073819,0.08979700784069562,telco_llama31_totalcharges_mcar_finetuned_eval.csv
+Telco,MNAR,"missing TotalCharges, 10%",TotalCharges,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,150.7180876184717,0.06272004505873251,telco_llama31_totalcharges_mnar_finetuned_eval.csv
+Telco,MAR,"missing totalCharges -> tenure, 10%",TotalCharges,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,92.66504520957827,0.03975348222782572,telco_mistral_totalcharges_mar_finetuned_eval.csv
+Telco,MCAR,"missing TotalCharges, 10%",TotalCharges,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,559.458685658563,0.2563665244510678,telco_mistral_totalcharges_mcar_finetuned_eval.csv
+Telco,MNAR,"missing TotalCharges, 10%",TotalCharges,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,98.69812815200818,0.041072383167286355,telco_mistral_totalcharges_mnar_finetuned_eval.csv
+Telco,MAR,"missing totalCharges -> tenure, 10%",TotalCharges,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,92.48118238031037,0.039674604721219774,telco_qwen25_totalcharges_mar_finetuned_eval.csv
+Telco,MCAR,"missing TotalCharges, 10%",TotalCharges,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,73.95716041536848,0.0338901524991775,telco_qwen25_totalcharges_mcar_finetuned_eval.csv
+Telco,MNAR,"missing TotalCharges, 10%",TotalCharges,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,96.6884853698981,0.04023608748547695,telco_qwen25_totalcharges_mnar_finetuned_eval.csv

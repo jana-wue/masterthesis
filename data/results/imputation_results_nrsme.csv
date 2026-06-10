@@ -1,134 +1,134 @@
-dataset,missingness_type,missing_rate,imputation_method,mean_nrmse,mean_rmse
-Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
-Telco,MNAR,"tenure, 10%",Mean/Mode,1.222596238108231,
-Telco,MCAR,10%,Mean/Mode,1.0011068193152424,
-Telco,MNAR,"totalcharges, 10%",Mean/Mode,1.1403228499324076,
-Telco,MCAR,"totalcharges, 10%",Mean/Mode,1.00000227422749,
-German Statlog,MAR,"missing duration -> credit amount, 10%",Mean/Mode,1.01308635837113,
-German Statlog,MNAR,"credit amount, 10%",Mean/Mode,1.0634526788087777,
-German Statlog,MCAR,10%,Mean/Mode,1.0067035747798811,
-German Statlog,MNAR,"duration, 10%",Mean/Mode,1.145709995570186,
-German Statlog,MCAR,"duration, 10%",Mean/Mode,1.0013136226243635,
-German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",Mean/Mode,1.0191296969990835,
-German Credit Card,MNAR,"Amount Credit, 10%",Mean/Mode,1.1602153565608218,
-German Credit Card,MCAR,10%,Mean/Mode,1.0001695961778092,
-German Credit Card,MAR,"missing billamt1 -> pay0, 10%",Mean/Mode,1.0079738087996415,
-German Credit Card,MNAR,"billamt1, 10%",Mean/Mode,1.0850506608559651,
-German Credit Card,MCAR,"billamt1, 10%",Mean/Mode,1.0004463963628996,
-Telco,MAR,"missing totalCharges -> tenure, 10%",Median/Mode,1.344856739849135,
-Telco,MNAR,"tenure, 10%",Median/Mode,1.3641905062794906,
-Telco,MCAR,10%,Median/Mode,1.0457838334433087,
-Telco,MNAR,"totalcharges, 10%",Median/Mode,1.354303203498585,
-Telco,MCAR,"totalcharges, 10%",Median/Mode,1.0815116210951905,
-German Statlog,MAR,"missing duration -> credit amount, 10%",Median/Mode,1.0729292703802156,
-German Statlog,MNAR,"credit amount, 10%",Median/Mode,1.3959825803148236,
-German Statlog,MCAR,10%,Median/Mode,1.1078249142175691,
-German Statlog,MNAR,"duration, 10%",Median/Mode,1.2485956077271865,
-German Statlog,MCAR,"duration, 10%",Median/Mode,1.035949386677697,
-German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",Median/Mode,1.0183987821594955,
-German Credit Card,MNAR,"Amount Credit, 10%",Median/Mode,1.2946114322229814,
-German Credit Card,MCAR,10%,Median/Mode,1.0578578427515533,
-German Credit Card,MAR,"missing billamt1 -> pay0, 10%",Median/Mode,1.1229570349396858,
-German Credit Card,MNAR,"billamt1, 10%",Median/Mode,1.2423381809598155,
-German Credit Card,MCAR,"billamt1, 10%",Median/Mode,1.0729990573449606,
-Telco,MAR,"missing totalCharges -> tenure, 10%",MICE,0.3289207223829619,
-Telco,MNAR,"tenure, 10%",MICE,0.4879714878219217,
-Telco,MCAR,10%,MICE,0.6313597648596225,
-Telco,MNAR,"totalcharges, 10%",MICE,0.3079917707384091,
-Telco,MCAR,"totalcharges, 10%",MICE,0.3249283394629289,
-German Statlog,MAR,"missing duration -> credit amount, 10%",MICE,0.8467193545336329,
-German Statlog,MNAR,"credit amount, 10%",MICE,0.9721633414767924,
-German Statlog,MCAR,10%,MICE,0.865593715703683,
-German Statlog,MNAR,"duration, 10%",MICE,0.8281219652549922,
-German Statlog,MCAR,"duration, 10%",MICE,0.7074083511003565,
-German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",MICE,0.7384114170090527,
-German Credit Card,MNAR,"Amount Credit, 10%",MICE,1.0783029528703325,
-German Credit Card,MCAR,10%,MICE,0.6660562395962785,
-German Credit Card,MAR,"missing billamt1 -> pay0, 10%",MICE,0.2673699253144478,
-German Credit Card,MNAR,"billamt1, 10%",MICE,0.2848334488076404,
-German Credit Card,MCAR,"billamt1, 10%",MICE,0.2398317117529855,
-Telco,MAR,"missing totalCharges -> tenure, 10%",MissForest,0.0453629858944906,
-Telco,MNAR,"tenure, 10%",MissForest,0.0758950437578459,
-Telco,MCAR,10%,MissForest,0.5457384062936226,
-Telco,MNAR,"totalcharges, 10%",MissForest,0.0454877305637051,
-Telco,MCAR,"totalcharges, 10%",MissForest,0.041159461015072,
-German Statlog,MAR,"missing duration -> credit amount, 10%",MissForest,0.7496695195305889,
-German Statlog,MNAR,"credit amount, 10%",MissForest,0.9617941222746677,
-German Statlog,MCAR,10%,MissForest,0.8445107901166612,
-German Statlog,MNAR,"duration, 10%",MissForest,0.7802080987931586,
-German Statlog,MCAR,"duration, 10%",MissForest,0.6812386335122906,
-German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",MissForest,0.5838492869277406,
-German Credit Card,MNAR,"Amount Credit, 10%",MissForest,0.8604823712065969,
-German Credit Card,MCAR,10%,MissForest,0.5635114222329781,
-German Credit Card,MAR,"missing billamt1 -> pay0, 10%",MissForest,0.2660306972261171,
-German Credit Card,MNAR,"billamt1, 10%",MissForest,0.3007289755068448,
-German Credit Card,MCAR,"billamt1, 10%",MissForest,0.2565487962125705,
-Telco,MAR,"missing totalCharges -> tenure, 10%",DAE,0.1218214362477122,
-Telco,MNAR,"tenure, 10%",DAE,0.1975653373520016,
-Telco,MCAR,10%,DAE,0.5302761152487535,
-Telco,MNAR,"totalcharges, 10%",DAE,0.1043761169710039,
-Telco,MCAR,"totalcharges, 10%",DAE,0.0798533095271632,
-German Statlog,MAR,"missing duration -> credit amount, 10%",DAE,0.9005313267217336,
-German Statlog,MNAR,"credit amount, 10%",DAE,1.0501442482729904,
-German Statlog,MCAR,10%,DAE,0.9142117421889095,
-German Statlog,MNAR,"duration, 10%",DAE,0.9565971730575596,
-German Statlog,MCAR,"duration, 10%",DAE,0.8253308328481391,
-German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",DAE,0.7119329591403392,
-German Credit Card,MNAR,"Amount Credit, 10%",DAE,0.9210972549946174,
-German Credit Card,MCAR,10%,DAE,0.6497697917324337,
-German Credit Card,MAR,"missing billamt1 -> pay0, 10%",DAE,0.2852242358109332,
-German Credit Card,MNAR,"billamt1, 10%",DAE,0.3076796338087871,
-German Credit Card,MCAR,"billamt1, 10%",DAE,0.2651148677161785,
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Prompt Zero-shot (Mistral-7B-Instruct-v0.3),0.9513879314347656,
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Prompt Few-shot k=2 (Mistral-7B-Instruct-v0.3),0.4561577198149442,
-Telco,MAR,"missing totalCharges -> tenure, 10%","LLM Batch Prompt (Mistral-7B-Instruct-v0.3, BatchImputation) [batch_size=40]",0.0356441623585211,
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=40 (Mistral-7B-Instruct-v0.3),0.0331508568510688,
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=40 folds=3 (Mistral-7B-Instruct-v0.3),0.7522986435293261,
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=80 folds=3 (Mistral-7B-Instruct-v0.3),0.2515804021890245,
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=160 folds=5 (Mistral-7B-Instruct-v0.3),0.5282965980660563,
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt (Mistral-7B-Instruct-v0.3),1.415015041966666,
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt All Missing (Mistral-7B-Instruct-v0.3),0.9846425082511888,
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt All Missing (Mistral-7B-Instruct-v0.3),1.11959335912491,
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt All Missing (Mistral-7B-Instruct-v0.3),1.11959335912491,
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.040882656399239,
-Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.2468261593529633,
-Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.0435443769693378,
-German Statlog,MNAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.9373591875723576,
-German Statlog,MCAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.8299327297114549,
-Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
-Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
-Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
-Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
-Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
-Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
-Telco,MNAR,"tenure, 10%",Mean/Mode,1.222596238108231,
-Telco,MCAR,10%,Mean/Mode,1.0011068193152424,
-Telco,MNAR,"totalcharges, 10%",Mean/Mode,1.1403228499324076,
-Telco,MCAR,"totalcharges, 10%",Mean/Mode,1.00000227422749,
-Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,1.1254671745160685,
-Telco,MNAR,"tenure, 10%",Mean/Mode,1.222596238108231,
-Telco,MCAR,10%,Mean/Mode,1.0011068193152424,
-Telco,MNAR,"totalcharges, 10%",Mean/Mode,1.1403228499324076,
-Telco,MCAR,"totalcharges, 10%",Mean/Mode,1.00000227422749,
-German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.2978096079934594,21929.10127810379
-German Credit Card,MCAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.2708757262269761,19945.83477085713
-German Statlog,MAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.8947131656382454,10.783784122468328
-German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),0.3871734906518503,28509.37800800525
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.0408015384236685,92.4811823803104
-Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.0326289721295294,73.95716041536848
-Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.0426577477645455,96.68848536989812
-German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.2913861828614764,21456.114723973988
-German Credit Card,MCAR,"billamt1, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.2372454357258309,17469.48066200023
-German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.3461586373486326,25489.26432512977
-German Statlog,MAR,"X2, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.8793474776584499,10.598584811190596
-German Statlog,MCAR,"X2, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.8640670471333456,10.414413089560064
-German Statlog,MNAR,"X2, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),0.8772705382707096,10.573551910309044
-Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.0448187131235608,101.58655145283528
-Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.0864553225666453,195.9605143073819
-Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.0664949310208665,150.71808761847174
-German Statlog,MAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.8951746752110463,10.789346597454362
-German Statlog,MCAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.827440683059727,9.972963451251587
-German Statlog,MNAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.9766334166156576,11.77115117564973
-German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.4117038418127559,30315.66142048254
-German Credit Card,MCAR,"billamt1, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.4766182850316941,35095.61264284564
-German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),0.6264700305742569,46129.890975382405
+dataset,missingness_type,missing_rate,imputation_method,mean_rmse,mean_nrmse
+Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,,1.1254671745160685
+Telco,MNAR,"tenure, 10%",Mean/Mode,,1.222596238108231
+Telco,MCAR,10%,Mean/Mode,,1.0011068193152424
+Telco,MNAR,"totalcharges, 10%",Mean/Mode,,1.1403228499324076
+Telco,MCAR,"totalcharges, 10%",Mean/Mode,,1.00000227422749
+German Statlog,MAR,"missing duration -> credit amount, 10%",Mean/Mode,,1.01308635837113
+German Statlog,MNAR,"credit amount, 10%",Mean/Mode,,1.0634526788087777
+German Statlog,MCAR,10%,Mean/Mode,,1.0067035747798811
+German Statlog,MNAR,"duration, 10%",Mean/Mode,,1.145709995570186
+German Statlog,MCAR,"duration, 10%",Mean/Mode,,1.0013136226243635
+German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",Mean/Mode,,1.0191296969990835
+German Credit Card,MNAR,"Amount Credit, 10%",Mean/Mode,,1.1602153565608218
+German Credit Card,MCAR,10%,Mean/Mode,,1.0001695961778092
+German Credit Card,MAR,"missing billamt1 -> pay0, 10%",Mean/Mode,,1.0079738087996415
+German Credit Card,MNAR,"billamt1, 10%",Mean/Mode,,1.0850506608559651
+German Credit Card,MCAR,"billamt1, 10%",Mean/Mode,,1.0004463963628996
+Telco,MAR,"missing totalCharges -> tenure, 10%",Median/Mode,,1.344856739849135
+Telco,MNAR,"tenure, 10%",Median/Mode,,1.3641905062794906
+Telco,MCAR,10%,Median/Mode,,1.0457838334433087
+Telco,MNAR,"totalcharges, 10%",Median/Mode,,1.354303203498585
+Telco,MCAR,"totalcharges, 10%",Median/Mode,,1.0815116210951905
+German Statlog,MAR,"missing duration -> credit amount, 10%",Median/Mode,,1.0729292703802156
+German Statlog,MNAR,"credit amount, 10%",Median/Mode,,1.3959825803148236
+German Statlog,MCAR,10%,Median/Mode,,1.1078249142175691
+German Statlog,MNAR,"duration, 10%",Median/Mode,,1.2485956077271865
+German Statlog,MCAR,"duration, 10%",Median/Mode,,1.035949386677697
+German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",Median/Mode,,1.0183987821594955
+German Credit Card,MNAR,"Amount Credit, 10%",Median/Mode,,1.2946114322229814
+German Credit Card,MCAR,10%,Median/Mode,,1.0578578427515533
+German Credit Card,MAR,"missing billamt1 -> pay0, 10%",Median/Mode,,1.1229570349396858
+German Credit Card,MNAR,"billamt1, 10%",Median/Mode,,1.2423381809598155
+German Credit Card,MCAR,"billamt1, 10%",Median/Mode,,1.0729990573449606
+Telco,MAR,"missing totalCharges -> tenure, 10%",MICE,,0.3289207223829619
+Telco,MNAR,"tenure, 10%",MICE,,0.4879714878219217
+Telco,MCAR,10%,MICE,,0.6313597648596225
+Telco,MNAR,"totalcharges, 10%",MICE,,0.3079917707384091
+Telco,MCAR,"totalcharges, 10%",MICE,,0.3249283394629289
+German Statlog,MAR,"missing duration -> credit amount, 10%",MICE,,0.8467193545336329
+German Statlog,MNAR,"credit amount, 10%",MICE,,0.9721633414767924
+German Statlog,MCAR,10%,MICE,,0.865593715703683
+German Statlog,MNAR,"duration, 10%",MICE,,0.8281219652549922
+German Statlog,MCAR,"duration, 10%",MICE,,0.7074083511003565
+German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",MICE,,0.7384114170090527
+German Credit Card,MNAR,"Amount Credit, 10%",MICE,,1.0783029528703325
+German Credit Card,MCAR,10%,MICE,,0.6660562395962785
+German Credit Card,MAR,"missing billamt1 -> pay0, 10%",MICE,,0.2673699253144478
+German Credit Card,MNAR,"billamt1, 10%",MICE,,0.2848334488076404
+German Credit Card,MCAR,"billamt1, 10%",MICE,,0.2398317117529855
+Telco,MAR,"missing totalCharges -> tenure, 10%",MissForest,,0.0453629858944906
+Telco,MNAR,"tenure, 10%",MissForest,,0.0758950437578459
+Telco,MCAR,10%,MissForest,,0.5457384062936226
+Telco,MNAR,"totalcharges, 10%",MissForest,,0.0454877305637051
+Telco,MCAR,"totalcharges, 10%",MissForest,,0.041159461015072
+German Statlog,MAR,"missing duration -> credit amount, 10%",MissForest,,0.7496695195305889
+German Statlog,MNAR,"credit amount, 10%",MissForest,,0.9617941222746677
+German Statlog,MCAR,10%,MissForest,,0.8445107901166612
+German Statlog,MNAR,"duration, 10%",MissForest,,0.7802080987931586
+German Statlog,MCAR,"duration, 10%",MissForest,,0.6812386335122906
+German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",MissForest,,0.5838492869277406
+German Credit Card,MNAR,"Amount Credit, 10%",MissForest,,0.8604823712065969
+German Credit Card,MCAR,10%,MissForest,,0.5635114222329781
+German Credit Card,MAR,"missing billamt1 -> pay0, 10%",MissForest,,0.2660306972261171
+German Credit Card,MNAR,"billamt1, 10%",MissForest,,0.3007289755068448
+German Credit Card,MCAR,"billamt1, 10%",MissForest,,0.2565487962125705
+Telco,MAR,"missing totalCharges -> tenure, 10%",DAE,,0.1218214362477122
+Telco,MNAR,"tenure, 10%",DAE,,0.1975653373520016
+Telco,MCAR,10%,DAE,,0.5302761152487535
+Telco,MNAR,"totalcharges, 10%",DAE,,0.1043761169710039
+Telco,MCAR,"totalcharges, 10%",DAE,,0.0798533095271632
+German Statlog,MAR,"missing duration -> credit amount, 10%",DAE,,0.9005313267217336
+German Statlog,MNAR,"credit amount, 10%",DAE,,1.0501442482729904
+German Statlog,MCAR,10%,DAE,,0.9142117421889095
+German Statlog,MNAR,"duration, 10%",DAE,,0.9565971730575596
+German Statlog,MCAR,"duration, 10%",DAE,,0.8253308328481391
+German Credit Card,MAR,"missing pay_0 -> limitbal, 10%",DAE,,0.7119329591403392
+German Credit Card,MNAR,"Amount Credit, 10%",DAE,,0.9210972549946174
+German Credit Card,MCAR,10%,DAE,,0.6497697917324337
+German Credit Card,MAR,"missing billamt1 -> pay0, 10%",DAE,,0.2852242358109332
+German Credit Card,MNAR,"billamt1, 10%",DAE,,0.3076796338087871
+German Credit Card,MCAR,"billamt1, 10%",DAE,,0.2651148677161785
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Prompt Zero-shot (Mistral-7B-Instruct-v0.3),,0.9513879314347656
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Prompt Few-shot k=2 (Mistral-7B-Instruct-v0.3),,0.4561577198149442
+Telco,MAR,"missing totalCharges -> tenure, 10%","LLM Batch Prompt (Mistral-7B-Instruct-v0.3, BatchImputation) [batch_size=40]",,0.0356441623585211
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=40 (Mistral-7B-Instruct-v0.3),,0.0331508568510688
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=40 folds=3 (Mistral-7B-Instruct-v0.3),,0.7522986435293261
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=80 folds=3 (Mistral-7B-Instruct-v0.3),,0.2515804021890245
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Prompt rows=160 folds=5 (Mistral-7B-Instruct-v0.3),,0.5282965980660563
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt (Mistral-7B-Instruct-v0.3),,1.415015041966666
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt All Missing (Mistral-7B-Instruct-v0.3),,0.9846425082511888
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt All Missing (Mistral-7B-Instruct-v0.3),,1.11959335912491
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Paper Single Prompt All Missing (Mistral-7B-Instruct-v0.3),,1.11959335912491
+Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,,1.1254671745160685
+Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,,1.1254671745160685
+Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,,1.1254671745160685
+Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,,1.1254671745160685
+Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,,1.1254671745160685
+Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,,1.1254671745160685
+Telco,MNAR,"tenure, 10%",Mean/Mode,,1.222596238108231
+Telco,MCAR,10%,Mean/Mode,,1.0011068193152424
+Telco,MNAR,"totalcharges, 10%",Mean/Mode,,1.1403228499324076
+Telco,MCAR,"totalcharges, 10%",Mean/Mode,,1.00000227422749
+Telco,MAR,"missing totalCharges -> tenure, 10%",Mean/Mode,,1.1254671745160685
+Telco,MNAR,"tenure, 10%",Mean/Mode,,1.222596238108231
+Telco,MCAR,10%,Mean/Mode,,1.0011068193152424
+Telco,MNAR,"totalcharges, 10%",Mean/Mode,,1.1403228499324076
+Telco,MCAR,"totalcharges, 10%",Mean/Mode,,1.00000227422749
+German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),30315.66142048254,0.3979482219308415
+German Credit Card,MCAR,"billamt1, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),35095.61264284564,0.5074549377734522
+German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),46129.890975382405,0.51884777446679
+German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),21929.10127810379,0.2878593589340807
+German Credit Card,MCAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),19945.83477085713,0.28840107296283907
+German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),28509.37800800525,0.3206603574844748
+German Credit Card,MAR,"billamt1 -> pay0, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),21456.114723973988,0.2816505497115982
+German Credit Card,MCAR,"billamt1, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),17469.48066200023,0.2525949414955435
+German Credit Card,MNAR,"billamt1, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),25489.26432512977,0.28669150930677423
+German Statlog,MAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),10.789346597454362,0.9021637454335334
+German Statlog,MCAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),9.972963451251589,0.7708775872751725
+German Statlog,MNAR,"X2, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),11.77115117564973,0.9910792346201907
+German Statlog,MAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),10.783784122468328,0.901698632627864
+German Statlog,MCAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),10.00299955013495,0.7731992798745231
+German Statlog,MNAR,"X2, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),11.29778739399888,0.9512240830368921
+German Statlog,MAR,"X2, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),10.598584811190596,0.886212977143087
+German Statlog,MCAR,"X2, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),10.414413089560064,0.80500020626863
+German Statlog,MNAR,"X2, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),10.573551910309043,0.8902466358739566
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),101.58655145283527,0.04358082552739057
+Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),195.9605143073819,0.08979700784069562
+Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Llama-3.1-8B-Instruct),150.7180876184717,0.06272004505873251
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),92.66504520957827,0.03975348222782572
+Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),559.458685658563,0.2563665244510678
+Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Mistral-7B-Instruct-v0.3),98.69812815200818,0.041072383167286355
+Telco,MAR,"missing totalCharges -> tenure, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),92.48118238031037,0.039674604721219774
+Telco,MCAR,"missing TotalCharges, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),73.95716041536848,0.0338901524991775
+Telco,MNAR,"missing TotalCharges, 10%",LLM Finetuned (Qwen2.5-7B-Instruct),96.6884853698981,0.04023608748547695

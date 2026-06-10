@@ -964,8 +964,10 @@ def run_post_train_evaluation(args, adapter_path):
 
     errors = valid_eval["ground_truth"] - valid_eval["prediction"]
     mean_rmse = float(((errors ** 2).mean()) ** 0.5)
-    std_true_full = float(observed_target.std(ddof=0))
-    mean_nrmse = float(mean_rmse / (std_true_full + 1e-8))
+    # Keep post-train evaluation aligned with the benchmark spec:
+    # normalize by the evaluated masked cells, not the full observed target column.
+    std_true_eval = float(valid_eval["ground_truth"].std(ddof=0))
+    mean_nrmse = float(mean_rmse / (std_true_eval + 1e-8))
 
     model_short = args.model_name.split("/")[-1]
     method_name = (

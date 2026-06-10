@@ -15,10 +15,12 @@ from src.paths import DATA_RESULTS
 
 CLASSICAL_FILES = [
     DATA_RESULTS / "benchmark_local_classical_meanmode_final.csv",
+    DATA_RESULTS / "benchmark_local_classical_medianmode_final.csv",
     DATA_RESULTS / "benchmark_local_classical_runs_mice_mean.csv",
     DATA_RESULTS / "benchmark_local_classical_missforest_final.csv",
     DATA_RESULTS / "benchmark_local_classical_dae_final.csv",
 ]
+PROMPT_RUNS_FILE = DATA_RESULTS / "benchmark_llm_prompt_runs.csv"
 
 
 DATASET_META = {
@@ -233,13 +235,30 @@ def _load_llm_rows():
     return llm_df[OUTPUT_COLUMNS]
 
 
+def _load_prompt_rows():
+    if not PROMPT_RUNS_FILE.exists():
+        return pd.DataFrame(columns=OUTPUT_COLUMNS)
+
+    df = pd.read_csv(PROMPT_RUNS_FILE)
+    if df.empty:
+        return pd.DataFrame(columns=OUTPUT_COLUMNS)
+
+    for col in OUTPUT_COLUMNS:
+        if col not in df.columns:
+            df[col] = pd.NA
+
+    df = df.drop_duplicates(subset=["run_id"], keep="last").copy()
+    return df[OUTPUT_COLUMNS]
+
+
 def main():
     output_path = DATA_RESULTS / "benchmark_all_completed_results.csv"
 
     classical = _load_classical_rows()
     llm = _load_llm_rows()
+    prompt = _load_prompt_rows()
 
-    combined = pd.concat([classical, llm], ignore_index=True, sort=False)
+    combined = pd.concat([classical, llm, prompt], ignore_index=True, sort=False)
     for col in OUTPUT_COLUMNS:
         if col not in combined.columns:
             combined[col] = pd.NA
@@ -266,6 +285,7 @@ def main():
     print("=" * 80)
     print(f"Classical rows: {len(classical)}")
     print(f"LLM rows: {len(llm)}")
+    print(f"Prompt rows: {len(prompt)}")
     print(f"Total rows: {len(combined)}")
     print(f"Output CSV: {output_path.resolve()}")
 

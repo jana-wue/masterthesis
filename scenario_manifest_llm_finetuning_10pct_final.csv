@@ -1,28 +1,28 @@
 run_group_id,dataset,target_column,missingness_type,model_key,model_label,hf_model_name,job_script,mech_env,detail_eval_file
 LLM10PCT_001,German Credit Card,BILL_AMT1,MAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_credit_llama31_safe.sbatch,MAR,credit_llama31_billamt1_mar_finetuned_eval.csv
-LLM10PCT_002,German Credit Card,BILL_AMT1,MAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_credit_mistral_safe.sbatch,MAR,credit_mistral_billamt1_mar_finetuned_eval.csv
-LLM10PCT_003,German Credit Card,BILL_AMT1,MAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_credit_qwen25_safe.sbatch,MAR,credit_qwen25_billamt1_mar_finetuned_eval.csv
-LLM10PCT_004,German Credit Card,BILL_AMT1,MCAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_credit_llama31_safe.sbatch,MCAR,credit_llama31_billamt1_mcar_finetuned_eval.csv
+LLM10PCT_002,German Credit Card,BILL_AMT1,MCAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_credit_llama31_safe.sbatch,MCAR,credit_llama31_billamt1_mcar_finetuned_eval.csv
+LLM10PCT_003,German Credit Card,BILL_AMT1,MNAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_credit_llama31_safe.sbatch,MNAR,credit_llama31_billamt1_mnar_finetuned_eval.csv
+LLM10PCT_004,German Credit Card,BILL_AMT1,MAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_credit_mistral_safe.sbatch,MAR,credit_mistral_billamt1_mar_finetuned_eval.csv
 LLM10PCT_005,German Credit Card,BILL_AMT1,MCAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_credit_mistral_safe.sbatch,MCAR,credit_mistral_billamt1_mcar_finetuned_eval.csv
-LLM10PCT_006,German Credit Card,BILL_AMT1,MCAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_credit_qwen25_safe.sbatch,MCAR,credit_qwen25_billamt1_mcar_finetuned_eval.csv
-LLM10PCT_007,German Credit Card,BILL_AMT1,MNAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_credit_llama31_safe.sbatch,MNAR,credit_llama31_billamt1_mnar_finetuned_eval.csv
-LLM10PCT_008,German Credit Card,BILL_AMT1,MNAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_credit_mistral_safe.sbatch,MNAR,credit_mistral_billamt1_mnar_finetuned_eval.csv
+LLM10PCT_006,German Credit Card,BILL_AMT1,MNAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_credit_mistral_safe.sbatch,MNAR,credit_mistral_billamt1_mnar_finetuned_eval.csv
+LLM10PCT_007,German Credit Card,BILL_AMT1,MAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_credit_qwen25_safe.sbatch,MAR,credit_qwen25_billamt1_mar_finetuned_eval.csv
+LLM10PCT_008,German Credit Card,BILL_AMT1,MCAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_credit_qwen25_safe.sbatch,MCAR,credit_qwen25_billamt1_mcar_finetuned_eval.csv
 LLM10PCT_009,German Credit Card,BILL_AMT1,MNAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_credit_qwen25_safe.sbatch,MNAR,credit_qwen25_billamt1_mnar_finetuned_eval.csv
 LLM10PCT_010,German Statlog,X2,MAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_statlog_llama31_safe.sbatch,MAR,statlog_llama31_x2_mar_finetuned_eval.csv
-LLM10PCT_011,German Statlog,X2,MAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_statlog_x2_safe.sbatch,MAR,statlog_mistral_x2_mar_finetuned_eval.csv
-LLM10PCT_012,German Statlog,X2,MAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_statlog_qwen25_safe.sbatch,MAR,statlog_qwen25_x2_mar_finetuned_eval.csv
-LLM10PCT_013,German Statlog,X2,MCAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_statlog_llama31_safe.sbatch,MCAR,statlog_llama31_x2_mcar_finetuned_eval.csv
+LLM10PCT_011,German Statlog,X2,MCAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_statlog_llama31_safe.sbatch,MCAR,statlog_llama31_x2_mcar_finetuned_eval.csv
+LLM10PCT_012,German Statlog,X2,MNAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_statlog_llama31_safe.sbatch,MNAR,statlog_llama31_x2_mnar_finetuned_eval.csv
+LLM10PCT_013,German Statlog,X2,MAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_statlog_x2_safe.sbatch,MAR,statlog_mistral_x2_mar_finetuned_eval.csv
 LLM10PCT_014,German Statlog,X2,MCAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_statlog_x2_safe.sbatch,MCAR,statlog_mistral_x2_mcar_finetuned_eval.csv
-LLM10PCT_015,German Statlog,X2,MCAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_statlog_qwen25_safe.sbatch,MCAR,statlog_qwen25_x2_mcar_finetuned_eval.csv
-LLM10PCT_016,German Statlog,X2,MNAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_statlog_llama31_safe.sbatch,MNAR,statlog_llama31_x2_mnar_finetuned_eval.csv
-LLM10PCT_017,German Statlog,X2,MNAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_statlog_x2_safe.sbatch,MNAR,statlog_mistral_x2_mnar_finetuned_eval.csv
+LLM10PCT_015,German Statlog,X2,MNAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_statlog_x2_safe.sbatch,MNAR,statlog_mistral_x2_mnar_finetuned_eval.csv
+LLM10PCT_016,German Statlog,X2,MAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_statlog_qwen25_safe.sbatch,MAR,statlog_qwen25_x2_mar_finetuned_eval.csv
+LLM10PCT_017,German Statlog,X2,MCAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_statlog_qwen25_safe.sbatch,MCAR,statlog_qwen25_x2_mcar_finetuned_eval.csv
 LLM10PCT_018,German Statlog,X2,MNAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_statlog_qwen25_safe.sbatch,MNAR,statlog_qwen25_x2_mnar_finetuned_eval.csv
 LLM10PCT_019,Telco,TotalCharges,MAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_telco_llama31_safe.sbatch,MAR,telco_llama31_totalcharges_mar_finetuned_eval.csv
-LLM10PCT_020,Telco,TotalCharges,MAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_telco_mistral_safe.sbatch,MAR,telco_mistral_totalcharges_mar_finetuned_eval.csv
-LLM10PCT_021,Telco,TotalCharges,MAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_telco_qwen25_safe.sbatch,MAR,telco_qwen25_totalcharges_mar_finetuned_eval.csv
-LLM10PCT_022,Telco,TotalCharges,MCAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_telco_llama31_safe.sbatch,MCAR,telco_llama31_totalcharges_mcar_finetuned_eval.csv
+LLM10PCT_020,Telco,TotalCharges,MCAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_telco_llama31_safe.sbatch,MCAR,telco_llama31_totalcharges_mcar_finetuned_eval.csv
+LLM10PCT_021,Telco,TotalCharges,MNAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_telco_llama31_safe.sbatch,MNAR,telco_llama31_totalcharges_mnar_finetuned_eval.csv
+LLM10PCT_022,Telco,TotalCharges,MAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_telco_mistral_safe.sbatch,MAR,telco_mistral_totalcharges_mar_finetuned_eval.csv
 LLM10PCT_023,Telco,TotalCharges,MCAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_telco_mistral_safe.sbatch,MCAR,telco_mistral_totalcharges_mcar_finetuned_eval.csv
-LLM10PCT_024,Telco,TotalCharges,MCAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_telco_qwen25_safe.sbatch,MCAR,telco_qwen25_totalcharges_mcar_finetuned_eval.csv
-LLM10PCT_025,Telco,TotalCharges,MNAR,llama31,Llama-3.1-8B-Instruct,meta-llama/Llama-3.1-8B-Instruct,jobs/run_telco_llama31_safe.sbatch,MNAR,telco_llama31_totalcharges_mnar_finetuned_eval.csv
-LLM10PCT_026,Telco,TotalCharges,MNAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_telco_mistral_safe.sbatch,MNAR,telco_mistral_totalcharges_mnar_finetuned_eval.csv
+LLM10PCT_024,Telco,TotalCharges,MNAR,mistral,Mistral-7B-Instruct-v0.3,mistralai/Mistral-7B-Instruct-v0.3,jobs/run_telco_mistral_safe.sbatch,MNAR,telco_mistral_totalcharges_mnar_finetuned_eval.csv
+LLM10PCT_025,Telco,TotalCharges,MAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_telco_qwen25_safe.sbatch,MAR,telco_qwen25_totalcharges_mar_finetuned_eval.csv
+LLM10PCT_026,Telco,TotalCharges,MCAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_telco_qwen25_safe.sbatch,MCAR,telco_qwen25_totalcharges_mcar_finetuned_eval.csv
 LLM10PCT_027,Telco,TotalCharges,MNAR,qwen25,Qwen2.5-7B-Instruct,Qwen/Qwen2.5-7B-Instruct,jobs/run_telco_qwen25_safe.sbatch,MNAR,telco_qwen25_totalcharges_mnar_finetuned_eval.csv
