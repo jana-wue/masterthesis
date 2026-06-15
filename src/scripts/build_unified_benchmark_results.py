@@ -20,7 +20,8 @@ CLASSICAL_FILES = [
     DATA_RESULTS / "benchmark_local_classical_missforest_final.csv",
     DATA_RESULTS / "benchmark_local_classical_dae_final.csv",
 ]
-PROMPT_RUNS_FILE = DATA_RESULTS / "benchmark_llm_prompt_runs.csv"
+PROMPT_RUNS_FILE = DATA_RESULTS / "benchmark_llm_prompt_runs_final.csv"
+PROMPT_RUNS_FALLBACK_FILE = DATA_RESULTS / "benchmark_llm_prompt_runs.csv"
 
 
 DATASET_META = {
@@ -236,10 +237,11 @@ def _load_llm_rows():
 
 
 def _load_prompt_rows():
-    if not PROMPT_RUNS_FILE.exists():
+    prompt_path = PROMPT_RUNS_FILE if PROMPT_RUNS_FILE.exists() else PROMPT_RUNS_FALLBACK_FILE
+    if not prompt_path.exists():
         return pd.DataFrame(columns=OUTPUT_COLUMNS)
 
-    df = pd.read_csv(PROMPT_RUNS_FILE)
+    df = pd.read_csv(prompt_path)
     if df.empty:
         return pd.DataFrame(columns=OUTPUT_COLUMNS)
 

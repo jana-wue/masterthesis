@@ -62,10 +62,7 @@ DATASET_META = {
             "MCAR": "billamt1, 10%",
             "MNAR": "billamt1, 10%",
         },
-        "domain_hints": [
-            "BILL_AMT1 is a credit-card bill amount and should stay on a plausible monetary scale.",
-            "Use the related bill and payment history columns to keep the estimate consistent.",
-        ],
+        "domain_hints": [],
     },
     "German Statlog": {
         "dataset_token": "statlog",
@@ -85,10 +82,7 @@ DATASET_META = {
             "MCAR": "X2, 10%",
             "MNAR": "X2, 10%",
         },
-        "domain_hints": [
-            "Keep the estimate numerically plausible relative to the observed target distribution.",
-            "Use the other observed numeric features for consistency, but return only one number.",
-        ],
+        "domain_hints": [],
     },
     "Telco": {
         "dataset_token": "telco",
@@ -108,10 +102,7 @@ DATASET_META = {
             "MCAR": "missing TotalCharges, 10%",
             "MNAR": "missing TotalCharges, 10%",
         },
-        "domain_hints": [
-            "For subscription billing data, TotalCharges is often close to tenure * MonthlyCharges.",
-            "Respect plausible values from the observed target distribution.",
-        ],
+        "domain_hints": [],
     },
 }
 

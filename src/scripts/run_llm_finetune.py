@@ -1075,10 +1075,7 @@ def parse_args():
     parser.add_argument(
         "--eval_domain_hints",
         nargs="*",
-        default=[
-            "For subscription billing data, TotalCharges is often close to tenure * MonthlyCharges.",
-            "Respect plausible values from the observed target distribution.",
-        ],
+        default=[],
     )
     parser.add_argument("--global_dataset", type=str, default="Telco")
     parser.add_argument("--global_missingness_type", type=str, default="MAR")
