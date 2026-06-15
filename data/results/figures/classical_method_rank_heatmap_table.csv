@@ -1,0 +1,8 @@
+,German Credit Card,German Credit Card,German Credit Card,German Credit Card,German Credit Card,German Credit Card,German Credit Card,German Credit Card,German Statlog,German Statlog,German Statlog,German Statlog,German Statlog,German Statlog,German Statlog,German Statlog,Telco,Telco,Telco,Telco,Telco,Telco,Telco,Telco
+,MAR_TARGET,MAR_TARGET,MCAR_TARGET,MCAR_TARGET,MNAR_TARGET,MNAR_TARGET,MCAR_GLOBAL,MCAR_GLOBAL,MAR_TARGET,MAR_TARGET,MCAR_TARGET,MCAR_TARGET,MNAR_TARGET,MNAR_TARGET,MCAR_GLOBAL,MCAR_GLOBAL,MAR_TARGET,MAR_TARGET,MCAR_TARGET,MCAR_TARGET,MNAR_TARGET,MNAR_TARGET,MCAR_GLOBAL,MCAR_GLOBAL
+,10,15,10,15,10,15,10,15,10,15,10,15,10,15,10,15,10,15,10,15,10,15,10,15
+Mean/Mode,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4
+Median/Mode,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5
+MICE,2,1,1,1,1,1,2,2,3,3,3,3,2,3,1,1,3,3,3,3,3,3,3,3
+MissForest,1,2,2,2,2,2,1,1,1,1,1,1,1,1,2,3,1,1,1,1,1,1,1,1
+DAE,3,3,3,3,3,3,3,3,2,2,2,2,3,2,3,2,2,2,2,2,2,2,2,2
