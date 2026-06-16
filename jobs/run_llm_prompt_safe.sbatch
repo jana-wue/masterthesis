@@ -21,7 +21,7 @@ MISSINGNESS_TYPE="${MISSINGNESS_TYPE:?MISSINGNESS_TYPE not set}"
 FEW_SHOT_SETTINGS="${FEW_SHOT_SETTINGS:-0 2}"
 MAX_NEW_TOKENS="${MAX_NEW_TOKENS:-20}"
 MANIFEST_PATH="${MANIFEST_PATH:-scenario_manifest_llm_finetuning_10pct_final.csv}"
-SKIP_EXISTING_FLAG="${SKIP_EXISTING_FLAG:---skip-existing}"
+SKIP_EXISTING_FLAG="${SKIP_EXISTING_FLAG---skip-existing}"
 N_EXAMPLES="${N_EXAMPLES:-}"
 
 "$PYTHON_BIN" -c "import pandas, torch, transformers; print('Dependency check OK')"

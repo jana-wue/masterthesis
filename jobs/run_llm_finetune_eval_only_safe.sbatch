@@ -19,9 +19,29 @@ DATASET="${DATASET:?DATASET not set}"
 MODEL_KEY="${MODEL_KEY:?MODEL_KEY not set}"
 MECH="${MECH:?MECH not set}"
 
+case "$MODEL_KEY" in
+  mistral)
+    MODEL_NAME='mistralai/Mistral-7B-Instruct-v0.3'
+    ;;
+  qwen25)
+    MODEL_NAME='Qwen/Qwen2.5-7B-Instruct'
+    ;;
+  llama31)
+    MODEL_NAME='meta-llama/Llama-3.1-8B-Instruct'
+    ;;
+  *)
+    echo "Unsupported MODEL_KEY=${MODEL_KEY}"
+    exit 1
+    ;;
+esac
+
 case "${DATASET}:${MODEL_KEY}:${MECH}" in
   Telco:mistral:MAR)
-    ADAPTER_PATH='data/processed/llm/mistral_telco_totalcharges_mar_lora'
+    if [[ -d 'data/processed/llm/mistral_telco_totalcharges_mar_lora' ]]; then
+      ADAPTER_PATH='data/processed/llm/mistral_telco_totalcharges_mar_lora'
+    else
+      ADAPTER_PATH='data/processed/llm/mistral_telco_totalcharges_lora'
+    fi
     EVAL_MISSING='data/processed/MAR/telco_customer_churn_mar_totalcharges_tenure_10pct.csv'
     TARGET_COLUMN='TotalCharges'
     ID_COLUMN='customerID'
@@ -275,6 +295,7 @@ CMD=(
   "$PYTHON_BIN"
   src/scripts/run_llm_finetune.py
   --eval_only
+  --model_name "$MODEL_NAME"
   --adapter_path "$ADAPTER_PATH"
   --eval_full_csv "$EVAL_FULL"
   --eval_missing_csv "$EVAL_MISSING"
