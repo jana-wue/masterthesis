@@ -1,0 +1,10 @@
+Dependency check OK
+Running command:
+ /home/users/j/jana.wue/.venvs/masterthesis-llm/bin/python src/scripts/run_llm_finetune.py --eval_only --adapter_path data/processed/llm/qwen25_telco_totalcharges_mar_lora --eval_full_csv data/raw/Telco-Customer-Churn_cleaned.csv --eval_missing_csv data/processed/MAR/telco_customer_churn_mar_totalcharges_tenure_10pct.csv --eval_target_column TotalCharges --eval_prompt_style current --global_dataset Telco --global_missingness_type MAR --global_missing_rate missing\ totalCharges\ -\>\ tenure\,\ 10% --eval_id_column customerID
+================================================================================
+RUNNING EVALUATION ONLY
+================================================================================
+Evaluation prompt style: current
+Saved post-train detailed eval to: /beegfs/home/users/j/jana.wue/work/masterthesis/data/results/telco_mistralai_Mistral-7B-Instruct-v0.3_qwen25_telco_totalcharges_mar_lora_finetuned_eval.csv
+Saved post-train eval summary to: data/processed/llm/qwen25_telco_totalcharges_mar_lora/post_train_eval_summary.json
+Appended to global result files: data/results/imputation_results.csv, data/results/imputation_results_nrsme.csv

@@ -1,0 +1,21 @@
+Dependency check OK
+Running command:
+ /home/users/j/jana.wue/.venvs/masterthesis-llm/bin/python src/scripts/run_llm.py --manifest scenario_manifest_llm_finetuning_10pct_final.csv --datasets Telco --model-keys llama31 --missingness-types MCAR --max-new-tokens 20 --few-shot-settings 2
+
+================================================================================
+LOADING MODEL | meta-llama/Llama-3.1-8B-Instruct
+================================================================================
+
+================================================================================
+PROMPT RUN | dataset=Telco | missingness=MCAR | model=llama31 | few_shot_k=2 | rows=715
+================================================================================
+
+================================================================================
+PROMPT RUN SUMMARY
+================================================================================
+                                              run_id  ... few_shot_k
+0  prompt::telco::llama31::mcar::k2::2026-06-16T0...  ...          2
+
+[1 rows x 28 columns]
+
+Saved run summary to: /beegfs/home/users/j/jana.wue/work/masterthesis/data/results/benchmark_llm_prompt_runs.csv

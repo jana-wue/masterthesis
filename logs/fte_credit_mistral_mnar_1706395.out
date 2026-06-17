@@ -1,0 +1,10 @@
+Dependency check OK
+Running command:
+ /home/users/j/jana.wue/.venvs/masterthesis-llm/bin/python src/scripts/run_llm_finetune.py --eval_only --model_name mistralai/Mistral-7B-Instruct-v0.3 --adapter_path data/processed/llm/mistral_credit_billamt1_mnar_lora --eval_full_csv data/raw/default_of_credit_card_clients.csv --eval_missing_csv data/processed/MNAR/german_credit_mnar_billamt1_10pct.csv --eval_target_column BILL_AMT1 --eval_prompt_style current --global_dataset German\ Credit\ Card --global_missingness_type MNAR --global_missing_rate billamt1\,\ 10% --eval_id_column ID
+================================================================================
+RUNNING EVALUATION ONLY
+================================================================================
+Evaluation prompt style: current
+Saved post-train detailed eval to: /beegfs/home/users/j/jana.wue/work/masterthesis/data/results/telco_mistralai_Mistral-7B-Instruct-v0.3_mistral_credit_billamt1_mnar_lora_finetuned_eval.csv
+Saved post-train eval summary to: data/processed/llm/mistral_credit_billamt1_mnar_lora/post_train_eval_summary.json
+Appended to global result files: data/results/imputation_results.csv, data/results/imputation_results_nrsme.csv

@@ -1,0 +1,10 @@
+Dependency check OK
+Running command:
+ /home/users/j/jana.wue/.venvs/masterthesis-llm/bin/python src/scripts/run_llm_finetune.py --eval_only --model_name meta-llama/Llama-3.1-8B-Instruct --adapter_path data/processed/llm/llama31_statlog_x2_mar_lora --eval_full_csv data/raw/german_statlog_numeric.csv --eval_missing_csv data/processed/MAR/german_statlog_numeric_mar_duration_creditamount_10pct.csv --eval_target_column X2 --eval_prompt_style current --global_dataset German\ Statlog --global_missingness_type MAR --global_missing_rate X2\,\ 10%
+================================================================================
+RUNNING EVALUATION ONLY
+================================================================================
+Evaluation prompt style: current
+Saved post-train detailed eval to: /beegfs/home/users/j/jana.wue/work/masterthesis/data/results/telco_meta-llama_Llama-3.1-8B-Instruct_llama31_statlog_x2_mar_lora_finetuned_eval.csv
+Saved post-train eval summary to: data/processed/llm/llama31_statlog_x2_mar_lora/post_train_eval_summary.json
+Appended to global result files: data/results/imputation_results.csv, data/results/imputation_results_nrsme.csv
