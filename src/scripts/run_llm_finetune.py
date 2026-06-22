@@ -9,6 +9,7 @@ import math
 import random
 import re
 from pathlib import Path
+from typing import Mapping, TypedDict
 
 import numpy as np
 import pandas as pd
@@ -19,6 +20,8 @@ from tqdm.auto import tqdm
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
     Trainer,
     TrainingArguments,
     default_data_collator,
@@ -35,7 +38,7 @@ DEFAULT_OUTPUT_DIR = DATA_PROCESSED / "llm" / "mistral_telco_totalcharges_lora"
 DEFAULT_CV_FOLDS = 5
 DEFAULT_CV_STRATIFY_BINS = 10
 RESULTS_RMSE_PATH = Path("data/results/imputation_results.csv")
-RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrsme.csv")
+RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrmse.csv")
 LEGACY_SYSTEM_MESSAGE = (
     "You are performing a missing value imputation task for tabular data. "
     "Given observed feature values, predict the missing target value. "
@@ -43,7 +46,21 @@ LEGACY_SYSTEM_MESSAGE = (
 )
 
 
-def load_jsonl(path) -> list[dict]:
+class ChatMessage(TypedDict):
+    """Represent one chat-formatted training message."""
+
+    role: str
+    content: str
+
+
+class TrainingRecord(TypedDict):
+    """Represent one JSONL finetuning training example."""
+
+    messages: list[ChatMessage]
+
+
+def load_jsonl(path: Path) -> list[TrainingRecord]:
+    """Load JSONL."""
     records = []
     with open(path, "r", encoding="utf-8") as f:
         for line in f:
@@ -51,14 +68,16 @@ def load_jsonl(path) -> list[dict]:
     return records
 
 
-def save_jsonl(path: Path, records: list[dict]) -> None:
+def save_jsonl(path: Path, records: list[TrainingRecord]) -> None:
+    """Save JSONL."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         for record in records:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
-def load_first_jsonl_record(path):
+def load_first_jsonl_record(path: Path) -> TrainingRecord | None:
+    """Load first JSONL record."""
     if not path.exists():
         return None
     with open(path, "r", encoding="utf-8") as f:
@@ -68,7 +87,8 @@ def load_first_jsonl_record(path):
     return json.loads(first_line)
 
 
-def detect_prompt_style_from_record(record):
+def detect_prompt_style_from_record(record: TrainingRecord | None) -> str | None:
+    """Detect prompt style from record."""
     if not isinstance(record, dict):
         return None
     messages = record.get("messages")
@@ -82,7 +102,8 @@ def detect_prompt_style_from_record(record):
     return None
 
 
-def resolve_eval_prompt_style(args, adapter_path):
+def resolve_eval_prompt_style(args: argparse.Namespace, adapter_path: Path) -> str:
+    """Resolve evaluation prompt style."""
     if args.eval_prompt_style != "auto":
         return args.eval_prompt_style
 
@@ -97,7 +118,8 @@ def resolve_eval_prompt_style(args, adapter_path):
     return "current"
 
 
-def format_example(example, tokenizer):
+def format_example(example: TrainingRecord, tokenizer: PreTrainedTokenizerBase) -> str:
+    """Format example."""
     return tokenizer.apply_chat_template(
         example["messages"],
         tokenize=False,
@@ -105,7 +127,8 @@ def format_example(example, tokenizer):
     )
 
 
-def format_prompt_only(example, tokenizer):
+def format_prompt_only(example: TrainingRecord, tokenizer: PreTrainedTokenizerBase) -> str:
+    """Format prompt only."""
     messages = example.get("messages", [])
     if not messages or messages[-1].get("role") != "assistant":
         raise ValueError("Expected training example ending with an assistant message.")
@@ -117,7 +140,12 @@ def format_prompt_only(example, tokenizer):
     )
 
 
-def tokenize_function(example, tokenizer, max_length: int = 512):
+def tokenize_function(
+    example: dict[str, str],
+    tokenizer: PreTrainedTokenizerBase,
+    max_length: int = 512,
+) -> dict[str, list[int] | int]:
+    """Tokenize function."""
     full_ids = tokenizer(
         example["text"],
         add_special_tokens=False,
@@ -164,12 +192,18 @@ def tokenize_function(example, tokenizer, max_length: int = 512):
     }
 
 
-def model_name_to_file_token(model_name):
+def model_name_to_file_token(model_name: str) -> str:
+    """Convert a model name into a file-safe token."""
     token = re.sub(r"[^A-Za-z0-9._-]+", "_", model_name).strip("_")
     return token or "unknown_model"
 
 
-def _append_results_row(csv_path: Path, required_columns, row):
+def _append_results_row(
+    csv_path: Path,
+    required_columns: list[str],
+    row: Mapping[str, object],
+) -> None:
+    """Append results row."""
     csv_path.parent.mkdir(parents=True, exist_ok=True)
 
     if csv_path.exists():
@@ -186,8 +220,15 @@ def _append_results_row(csv_path: Path, required_columns, row):
     df.to_csv(csv_path, index=False)
 
 
-def append_to_global_results(dataset, missingness_type, missing_rate, imputation_method,
-    mean_rmse, mean_nrmse):
+def append_to_global_results(
+    dataset: str,
+    missingness_type: str,
+    missing_rate: str,
+    imputation_method: str,
+    mean_rmse: float,
+    mean_nrmse: float,
+) -> None:
+    """Append to global results."""
     _append_results_row(
         csv_path=RESULTS_RMSE_PATH,
         required_columns=[
@@ -227,7 +268,8 @@ def append_to_global_results(dataset, missingness_type, missing_rate, imputation
     )
 
 
-def _append_prediction_rows(output_csv, rows_df):
+def _append_prediction_rows(output_csv: Path, rows_df: pd.DataFrame) -> None:
+    """Append prediction rows."""
     output_csv.parent.mkdir(parents=True, exist_ok=True)
     if output_csv.exists():
         existing_df = pd.read_csv(output_csv)
@@ -237,7 +279,8 @@ def _append_prediction_rows(output_csv, rows_df):
     combined.to_csv(output_csv, index=False)
 
 
-def extract_first_number(text):
+def extract_first_number(text: str | None) -> float | None:
+    """Extract the first numeric token from text."""
     if text is None:
         return None
     text = text.strip()
@@ -255,7 +298,11 @@ def extract_first_number(text):
     return None
 
 
-def apply_chat_template(messages, tokenizer):
+def apply_chat_template(
+    messages: list[dict[str, str]],
+    tokenizer: PreTrainedTokenizerBase,
+) -> str:
+    """Apply the chat template to the message list."""
     return tokenizer.apply_chat_template(
         messages,
         tokenize=False,
@@ -263,7 +310,13 @@ def apply_chat_template(messages, tokenizer):
     )
 
 
-def generate_raw_answer(prompt_text, tokenizer, model, max_new_tokens: int = 16):
+def generate_raw_answer(
+    prompt_text: str,
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
+    max_new_tokens: int = 16,
+) -> str:
+    """Generate raw answer."""
     model_device = model.device if hasattr(model, "device") else next(model.parameters()).device
     inputs = tokenizer(prompt_text, return_tensors="pt").to(model_device)
     input_length = inputs["input_ids"].shape[1]
@@ -283,7 +336,8 @@ def generate_raw_answer(prompt_text, tokenizer, model, max_new_tokens: int = 16)
     return raw_generated_text
 
 
-def cleanup_memory():
+def cleanup_memory() -> None:
+    """Release cached model memory."""
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
@@ -291,7 +345,11 @@ def cleanup_memory():
             torch.cuda.ipc_collect()
 
 
-def load_tokenizer(model_name_or_path, padding_side):
+def load_tokenizer(
+    model_name_or_path: str | Path,
+    padding_side: str,
+) -> PreTrainedTokenizerBase:
+    """Load tokenizer."""
     tokenizer = AutoTokenizer.from_pretrained(str(model_name_or_path))
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
@@ -299,7 +357,11 @@ def load_tokenizer(model_name_or_path, padding_side):
     return tokenizer
 
 
-def prepare_formatted_records(records, tokenizer):
+def prepare_formatted_records(
+    records: list[TrainingRecord],
+    tokenizer: PreTrainedTokenizerBase,
+) -> list[dict[str, str]]:
+    """Prepare formatted records."""
     return [
         {
             "text": format_example(record, tokenizer),
@@ -309,7 +371,12 @@ def prepare_formatted_records(records, tokenizer):
     ]
 
 
-def prepare_tokenized_dataset(records, tokenizer, max_length):
+def prepare_tokenized_dataset(
+    records: list[TrainingRecord],
+    tokenizer: PreTrainedTokenizerBase,
+    max_length: int,
+) -> tuple[Dataset, Dataset]:
+    """Prepare tokenized dataset."""
     formatted_records = prepare_formatted_records(records=records, tokenizer=tokenizer)
     dataset = Dataset.from_list(formatted_records)
     tokenized_dataset = dataset.map(
@@ -323,7 +390,8 @@ def prepare_tokenized_dataset(records, tokenizer, max_length):
     return dataset, tokenized_dataset
 
 
-def build_train_model_kwargs():
+def build_train_model_kwargs() -> dict[str, torch.dtype | str]:
+    """Build train model kwargs."""
     model_kwargs = {}
     if torch.cuda.is_available():
         model_kwargs["torch_dtype"] = torch.float16
@@ -333,7 +401,8 @@ def build_train_model_kwargs():
     return model_kwargs
 
 
-def build_eval_model_kwargs(eval_device):
+def build_eval_model_kwargs(eval_device: str) -> dict[str, torch.dtype | str]:
+    """Build evaluation model kwargs."""
     model_kwargs = {}
     if eval_device == "cpu":
         model_kwargs["torch_dtype"] = torch.float32
@@ -350,7 +419,14 @@ def build_eval_model_kwargs(eval_device):
     return model_kwargs
 
 
-def save_run_config(output_dir, args, input_path, n_examples_used, extra = None):
+def save_run_config(
+    output_dir: Path,
+    args: argparse.Namespace,
+    input_path: Path,
+    n_examples_used: int,
+    extra: Mapping[str, object] | None = None,
+) -> Path:
+    """Save run config."""
     config = {
         "model_name": args.model_name,
         "input_jsonl": str(input_path),
@@ -375,7 +451,14 @@ def save_run_config(output_dir, args, input_path, n_examples_used, extra = None)
     return config_path
 
 
-def train_lora_adapter(args, records, output_dir: Path, input_path: Path, run_config_extra = None):
+def train_lora_adapter(
+    args: argparse.Namespace,
+    records: list[TrainingRecord],
+    output_dir: Path,
+    input_path: Path,
+    run_config_extra: Mapping[str, object] | None = None,
+) -> Path:
+    """Train lora adapter."""
     if not records:
         raise ValueError("No training records provided for fine-tuning.")
 
@@ -461,14 +544,20 @@ def train_lora_adapter(args, records, output_dir: Path, input_path: Path, run_co
     return config_path
 
 
-def extract_assistant_target_value(record):
+def extract_assistant_target_value(record: TrainingRecord) -> float | None:
+    """Extract assistant target value."""
     messages = record.get("messages", [])
     if not messages or messages[-1].get("role") != "assistant":
         return None
     return extract_first_number(str(messages[-1].get("content", "")))
 
 
-def build_stratification_labels(target_values, n_splits, requested_bins):
+def build_stratification_labels(
+    target_values: list[float],
+    n_splits: int,
+    requested_bins: int,
+) -> tuple[list[int] | None, int]:
+    """Build stratification labels."""
     series = pd.Series(target_values, dtype="float64")
     if series.nunique(dropna=True) < 2:
         return None, 0
@@ -503,7 +592,13 @@ def build_stratification_labels(target_values, n_splits, requested_bins):
     return None, 0
 
 
-def build_cv_splits(records, n_splits, seed, requested_bins):
+def build_cv_splits(
+    records: list[TrainingRecord],
+    n_splits: int,
+    seed: int,
+    requested_bins: int,
+) -> list[dict[str, int | list[int]]]:
+    """Build cv splits."""
     try:
         from sklearn.model_selection import StratifiedKFold
     except ModuleNotFoundError as exc:
@@ -561,7 +656,15 @@ def build_cv_splits(records, n_splits, seed, requested_bins):
     return folds
 
 
-def evaluate_adapter_on_jsonl_records(args, adapter_path, test_records, fold_id, n_folds, train_target_median):
+def evaluate_adapter_on_jsonl_records(
+    args: argparse.Namespace,
+    adapter_path: Path,
+    test_records: list[TrainingRecord],
+    fold_id: int,
+    n_folds: int,
+    train_target_median: float,
+) -> pd.DataFrame:
+    """Evaluate adapter on JSONL records."""
     if not test_records:
         raise ValueError(f"Fold {fold_id} has no test records.")
 
@@ -645,7 +748,13 @@ def evaluate_adapter_on_jsonl_records(args, adapter_path, test_records, fold_id,
     return pd.DataFrame(rows)
 
 
-def run_stratified_cv_finetune(args, records, input_path: Path, output_dir: Path):
+def run_stratified_cv_finetune(
+    args: argparse.Namespace,
+    records: list[TrainingRecord],
+    input_path: Path,
+    output_dir: Path,
+) -> dict[str, object]:
+    """Run stratified cv finetune."""
     fold_specs = build_cv_splits(
         records=records,
         n_splits=args.cv_folds,
@@ -784,7 +893,12 @@ def run_stratified_cv_finetune(args, records, input_path: Path, output_dir: Path
     return summary
 
 
-def build_legacy_inference_messages(row, target_column, feature_columns):
+def build_legacy_inference_messages(
+    row: pd.Series,
+    target_column: str,
+    feature_columns: list[str],
+) -> list[dict[str, str]]:
+    """Build legacy inference messages."""
     lines = ["Observed values:"]
     for col in feature_columns:
         if col == target_column:
@@ -798,7 +912,8 @@ def build_legacy_inference_messages(row, target_column, feature_columns):
     ]
 
 
-def fallback_totalcharges(row, totalcharges_median):
+def fallback_totalcharges(row: pd.Series, totalcharges_median: float) -> tuple[float, str]:
+    """Handle fallback totalcharges."""
     tenure = row.get("tenure")
     monthly = row.get("MonthlyCharges")
     if pd.notna(tenure) and pd.notna(monthly):
@@ -809,8 +924,18 @@ def fallback_totalcharges(row, totalcharges_median):
     return float(totalcharges_median), "fallback_median"
 
 
-def predict_numeric(row, imputer, tokenizer, model, totalcharges_median, max_new_tokens,
-    prompt_style, target_column, feature_columns):
+def predict_numeric(
+    row: pd.Series,
+    imputer: LLMImputer,
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
+    totalcharges_median: float,
+    max_new_tokens: int,
+    prompt_style: str,
+    target_column: str,
+    feature_columns: list[str],
+) -> tuple[float, str, str]:
+    """Predict numeric."""
     if prompt_style == "legacy":
         messages = build_legacy_inference_messages(
             row=row,
@@ -854,7 +979,11 @@ def predict_numeric(row, imputer, tokenizer, model, totalcharges_median, max_new
     return fallback_value, combined_raw, fallback_source
 
 
-def run_post_train_evaluation(args, adapter_path):
+def run_post_train_evaluation(
+    args: argparse.Namespace,
+    adapter_path: Path,
+) -> dict[str, object]:
+    """Run post train evaluation."""
     df_full = pd.read_csv(args.eval_full_csv)
     df_missing = pd.read_csv(args.eval_missing_csv)
     target_column = args.eval_target_column
@@ -1009,7 +1138,8 @@ def run_post_train_evaluation(args, adapter_path):
     return summary
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_jsonl", type=Path, default=DEFAULT_INPUT_JSONL)
     parser.add_argument("--output_dir", type=Path, default=DEFAULT_OUTPUT_DIR)
@@ -1088,7 +1218,8 @@ def parse_args():
     return parser.parse_args()
 
 
-def build_lora_config(args) -> LoraConfig:
+def build_lora_config(args: argparse.Namespace) -> LoraConfig:
+    """Build lora config."""
     kwargs = {
         "r": args.lora_r,
         "lora_alpha": args.lora_alpha,
@@ -1104,6 +1235,7 @@ def build_lora_config(args) -> LoraConfig:
 
 
 def main() -> None:
+    """Run the script entry point."""
     args = parse_args()
 
     input_path = Path(args.input_jsonl)

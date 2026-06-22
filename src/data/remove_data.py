@@ -1,6 +1,8 @@
 import numpy as np
+import pandas as pd
 
-def mcar(df, missing_frac, random_state=42):
+
+def mcar(df: pd.DataFrame, missing_frac: float, random_state: int = 42) -> pd.DataFrame:
     """MCAR: Random Missing Values over all features"""
     np.random.seed(random_state)
     df_mcar = df.copy()
@@ -9,7 +11,13 @@ def mcar(df, missing_frac, random_state=42):
     return df_mcar
 
 
-def mcar_single_feature(df, missing_frac, feature, random_state=42):
+def mcar_single_feature(
+    df: pd.DataFrame,
+    missing_frac: float,
+    feature: str,
+    random_state: int = 42,
+) -> pd.DataFrame:
+    """Generate single-feature MCAR missingness."""
     np.random.seed(random_state)
     df_mcar = df.copy()
 
@@ -24,7 +32,13 @@ def mcar_single_feature(df, missing_frac, feature, random_state=42):
     return df_mcar
 
 
-def mar(df, feature_dep, missing_feature, missing_frac, random_state):
+def mar(
+    df: pd.DataFrame,
+    feature_dep: str,
+    missing_feature: str,
+    missing_frac: float,
+    random_state: int,
+) -> pd.DataFrame:
     """
     MAR: Missingness in `missing_feature` depends on `feature_dep` (observed).
     """
@@ -48,8 +62,8 @@ def mar(df, feature_dep, missing_feature, missing_frac, random_state):
     dep = df_m.loc[candidates, feature_dep].astype(float)
 
     # robust scaling via ranks
-    ranks = dep.rank(method="average")  # 1..N
-    weights = ranks / ranks.sum()       # sum to 1
+    ranks = dep.rank(method="average")
+    weights = ranks / ranks.sum()
 
     chosen = rng.choice(candidates.to_numpy(), size=n_missing, replace=False, p=weights.to_numpy())
     df_m.loc[chosen, missing_feature] = np.nan
@@ -57,7 +71,12 @@ def mar(df, feature_dep, missing_feature, missing_frac, random_state):
     return df_m
 
 
-def mnar(df, feature, missing_frac, random_state):
+def mnar(
+    df: pd.DataFrame,
+    feature: str,
+    missing_frac: float,
+    random_state: int,
+) -> pd.DataFrame:
     """
     MNAR: Missingness in `feature` depends on the value of `feature` itself.
     """
@@ -78,7 +97,7 @@ def mnar(df, feature, missing_frac, random_state):
 
     values = df_m.loc[candidates, feature].astype(float)
 
-    # Robust scaling via ranks (stabil bei Ausreißern)
+    # Robust scaling via ranks
     ranks = values.rank(method="average")
     weights = ranks / ranks.sum()
 
@@ -92,4 +111,3 @@ def mnar(df, feature, missing_frac, random_state):
     df_m.loc[chosen, feature] = np.nan
 
     return df_m
-

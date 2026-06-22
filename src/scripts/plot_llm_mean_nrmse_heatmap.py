@@ -13,9 +13,18 @@ os.environ.setdefault("MPLCONFIGDIR", str(MPL_CONFIG_DIR))
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 import numpy as np
 import pandas as pd
 import seaborn as sns
+
+plt.rcParams.update(
+    {
+        "font.family": "serif",
+        "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
+        "mathtext.fontset": "dejavuserif",
+    }
+)
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -56,6 +65,7 @@ ROW_LABELS = {
 
 
 def _load_llm_results() -> pd.DataFrame:
+    """Load LLM results."""
     df = pd.read_csv(INPUT_PATH)
     work = df[
         (df["method_family"].isin(METHOD_FAMILY_ORDER))
@@ -69,6 +79,7 @@ def _load_llm_results() -> pd.DataFrame:
 
 
 def _build_summary(llm_df: pd.DataFrame) -> pd.DataFrame:
+    """Build summary."""
     group_cols = ["dataset_name", "scenario_family", "method_family", "model_key"]
     summary = (
         llm_df.groupby(group_cols, as_index=False)["mean_nrmse"]
@@ -80,6 +91,7 @@ def _build_summary(llm_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _task_sort_key(task: tuple[str, str]) -> tuple[int, int]:
+    """Handle task sort key."""
     dataset_name, scenario_family = task
     return (
         DATASET_ORDER.index(dataset_name),
@@ -88,6 +100,7 @@ def _task_sort_key(task: tuple[str, str]) -> tuple[int, int]:
 
 
 def _build_metric_matrix(summary: pd.DataFrame) -> tuple[pd.DataFrame, list[tuple[str, str]]]:
+    """Build metric matrix."""
     tasks = sorted(
         {(row["dataset_name"], row["scenario_family"]) for _, row in summary.iterrows()},
         key=_task_sort_key,
@@ -108,10 +121,12 @@ def _build_metric_matrix(summary: pd.DataFrame) -> tuple[pd.DataFrame, list[tupl
 
 
 def _build_display_labels(tasks: list[tuple[str, str]]) -> list[str]:
+    """Build display labels."""
     return [f"{SCENARIO_LABELS[scenario_family]}\n10%" for _, scenario_family in tasks]
 
 
-def _draw_dataset_group_labels(ax, tasks: list[tuple[str, str]]) -> None:
+def _draw_dataset_group_labels(ax: Axes, tasks: list[tuple[str, str]]) -> None:
+    """Draw dataset group labels."""
     dataset_positions: dict[str, list[int]] = {}
     for idx, (dataset_name, _) in enumerate(tasks):
         dataset_positions.setdefault(dataset_name, []).append(idx)
@@ -142,11 +157,13 @@ def _draw_dataset_group_labels(ax, tasks: list[tuple[str, str]]) -> None:
 
 
 def _annotation_color(value: float, vmin: float, vmax: float) -> str:
+    """Handle annotation color."""
     midpoint = vmin + 0.55 * (vmax - vmin)
     return "#fffdf7" if value >= midpoint else "#1f2933"
 
 
 def _plot_heatmap(metric_matrix: pd.DataFrame, tasks: list[tuple[str, str]]) -> None:
+    """Plot heatmap."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     MPL_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -188,20 +205,21 @@ def _plot_heatmap(metric_matrix: pd.DataFrame, tasks: list[tuple[str, str]]) -> 
                 color=_annotation_color(float(value), vmin, vmax),
             )
 
-    fig.suptitle("LLM-Based Methods: Mean NRMSE on Each Benchmark Task", fontsize=20, y=0.98)
+    fig.suptitle("LLM-Based Methods: Mean NRMSE on Each Benchmark Task", fontsize=20, y=0.965)
     ax.set_xlabel("")
     ax.set_ylabel("")
     ax.set_xticklabels(_build_display_labels(tasks), rotation=55, ha="right", fontsize=10)
     ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=11)
     _draw_dataset_group_labels(ax, tasks)
 
-    plt.tight_layout(rect=(0, 0, 1, 0.92))
+    plt.tight_layout(rect=(0, 0, 1, 0.945))
     fig.savefig(OUTPUT_PNG, dpi=300, bbox_inches="tight")
     fig.savefig(OUTPUT_PDF, bbox_inches="tight")
     plt.close(fig)
 
 
 def main() -> None:
+    """Run the script entry point."""
     llm_df = _load_llm_results()
     summary = _build_summary(llm_df)
     metric_matrix, tasks = _build_metric_matrix(summary)

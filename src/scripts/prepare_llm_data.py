@@ -4,11 +4,13 @@ import argparse
 import json
 import re
 from pathlib import Path
+from typing import TypedDict
 
 import pandas as pd
 
 from src.data.helper_dataprocessing import make_numeric_columns_numeric
 from src.imputation.llm import LLMImputer, LLMImputerConfig
+from src.scripts.run_llm_finetune import TrainingRecord
 from src.paths import DATA_PROCESSED
 
 
@@ -16,7 +18,23 @@ DEFAULT_MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
 DEFAULT_MECHANISMS = ("MAR", "MCAR", "MNAR")
 
 
-def save_jsonl(records, output_path):
+class PrepareManifestRow(TypedDict):
+    """Represent one preparation-manifest entry."""
+
+    input_csv: str
+    mechanism: str
+    target_column: str | None
+    status: str
+    reason: str | None
+    output_jsonl: str | None
+    n_rows: int
+    n_examples: int
+    n_missing_target: int
+    n_observed_target: int
+
+
+def save_jsonl(records: list[TrainingRecord], output_path: Path) -> None:
+    """Save JSONL."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     with open(output_path, "w", encoding="utf-8") as f:
@@ -24,12 +42,14 @@ def save_jsonl(records, output_path):
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
-def to_file_token(value):
+def to_file_token(value: object) -> str:
+    """Convert a value into a file-safe token."""
     token = re.sub(r"[^A-Za-z0-9._-]+", "_", str(value)).strip("_")
     return token or "unknown"
 
 
 def _is_id_like_name(column_name: str) -> bool:
+    """Handle is id like name."""
     name = column_name.strip().lower()
     return (
         name == "id"
@@ -39,13 +59,20 @@ def _is_id_like_name(column_name: str) -> bool:
     )
 
 
-def detect_id_columns(df, explicit_id_columns):
+def detect_id_columns(df: pd.DataFrame, explicit_id_columns: list[str]) -> set[str]:
+    """Detect id columns."""
     explicit = {col for col in explicit_id_columns if col in df.columns}
     inferred = {col for col in df.columns if _is_id_like_name(col)}
     return explicit | inferred
 
 
-def resolve_target_columns(df,id_columns, target_mode, explicit_targets):
+def resolve_target_columns(
+    df: pd.DataFrame,
+    id_columns: set[str],
+    target_mode: str,
+    explicit_targets: list[str] | None,
+) -> list[str]:
+    """Resolve target columns."""
     missing_counts = df.isna().sum()
     numeric_df = make_numeric_columns_numeric(df, exclude=list(id_columns))
     numeric_columns = set(numeric_df.select_dtypes(include=["number"]).columns)
@@ -77,7 +104,13 @@ def resolve_target_columns(df,id_columns, target_mode, explicit_targets):
     return [primary]
 
 
-def build_output_path(output_root, mechanism, input_path, target_column):
+def build_output_path(
+    output_root: Path,
+    mechanism: str,
+    input_path: Path,
+    target_column: str,
+) -> Path:
+    """Build output path."""
     return (
         output_root
         / mechanism
@@ -85,7 +118,13 @@ def build_output_path(output_root, mechanism, input_path, target_column):
     )
 
 
-def build_training_jsonl_for_target(df, target_column, id_columns, model_name):
+def build_training_jsonl_for_target(
+    df: pd.DataFrame,
+    target_column: str,
+    id_columns: set[str],
+    model_name: str,
+) -> list[TrainingRecord]:
+    """Build training JSONL for target."""
     feature_columns = [col for col in df.columns if col not in {target_column, *id_columns}]
 
     imputer = LLMImputer(
@@ -99,9 +138,17 @@ def build_training_jsonl_for_target(df, target_column, id_columns, model_name):
     return imputer.build_training_dataset(df)
 
 
-def process_input_file(input_path, output_root, model_name, target_mode, explicit_targets, explicit_id_columns,
-    dry_run, print_first_example):
-
+def process_input_file(
+    input_path: Path,
+    output_root: Path,
+    model_name: str,
+    target_mode: str,
+    explicit_targets: list[str] | None,
+    explicit_id_columns: list[str],
+    dry_run: bool,
+    print_first_example: bool,
+) -> list[PrepareManifestRow]:
+    """Process input file."""
     df_raw = pd.read_csv(input_path)
     mechanism = input_path.parent.name
     id_columns = detect_id_columns(df_raw, explicit_id_columns)
@@ -114,7 +161,7 @@ def process_input_file(input_path, output_root, model_name, target_mode, explici
         explicit_targets=explicit_targets,
     )
 
-    rows: list[dict] = []
+    rows: list[PrepareManifestRow] = []
     if not target_columns:
         rows.append(
             {
@@ -180,7 +227,12 @@ def process_input_file(input_path, output_root, model_name, target_mode, explici
     return rows
 
 
-def discover_input_files(input_root, mechanisms, include_glob):
+def discover_input_files(
+    input_root: Path,
+    mechanisms: list[str],
+    include_glob: str,
+) -> list[Path]:
+    """Discover input files."""
     paths: list[Path] = []
     for mechanism in mechanisms:
         mechanism_dir = input_root / mechanism
@@ -190,7 +242,8 @@ def discover_input_files(input_root, mechanisms, include_glob):
     return paths
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
         description=(
             "Prepare LLM finetuning JSONL data from processed missingness CSV files. "
@@ -237,6 +290,7 @@ def parse_args():
 
 def prepare_telco_totalcharges_mar() -> None:
     # Backward-compatible helper for the original one-off use case.
+    """Prepare Telco totalcharges MAR."""
     input_path = DATA_PROCESSED / "MAR" / "telco_customer_churn_mar_totalcharges_tenure_10pct.csv"
     process_input_file(
         input_path=input_path,
@@ -251,6 +305,7 @@ def prepare_telco_totalcharges_mar() -> None:
 
 
 def main() -> None:
+    """Run the script entry point."""
     args = parse_args()
     input_files = discover_input_files(
         input_root=args.input_root,

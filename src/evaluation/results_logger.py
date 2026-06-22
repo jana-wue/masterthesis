@@ -1,15 +1,16 @@
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Mapping, Sequence
 import re
 
 import pandas as pd
 
-from src.evaluation.metrics import pop_eval_context_by_means
+from src.evaluation.metrics import EvalContext, pop_eval_context_by_means
 
 
 # Global result tables
 RESULTS_RMSE_PATH = Path("data/results/imputation_results.csv")
-RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrsme.csv")
+RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrmse.csv")
 
 # Backward-compatible alias
 RESULTS_PATH = RESULTS_NRMSE_PATH
@@ -18,12 +19,18 @@ RESULTS_PATH = RESULTS_NRMSE_PATH
 SETTING_RESULTS_DIR = Path("data/results/setting_runs")
 
 
-def _to_file_token(value):
+def _to_file_token(value: object) -> str:
+    """Convert a value into a file-safe token."""
     token = re.sub(r"[^A-Za-z0-9._-]+", "_", str(value)).strip("_")
     return token.lower() or "unknown"
 
 
-def _append_results_row(csv_path, required_columns, row):
+def _append_results_row(
+    csv_path: Path,
+    required_columns: Sequence[str],
+    row: Mapping[str, object],
+) -> None:
+    """Append results row."""
     csv_path.parent.mkdir(parents=True, exist_ok=True)
 
     if csv_path.exists():
@@ -41,7 +48,8 @@ def _append_results_row(csv_path, required_columns, row):
     df.to_csv(csv_path, index=False)
 
 
-def _append_results_rows(csv_path, rows_df):
+def _append_results_rows(csv_path: Path, rows_df: pd.DataFrame) -> None:
+    """Append results rows."""
     csv_path.parent.mkdir(parents=True, exist_ok=True)
     drop_cols = [col for col in ["mean_rmse", "mean_nrmse", "rmse"] if col in rows_df.columns]
     if drop_cols:
@@ -66,7 +74,14 @@ def _append_results_rows(csv_path, rows_df):
     combined.to_csv(csv_path, index=False)
 
 
-def _resolve_setting_results_path(dataset, missingness_type, imputation_method, model_name=None, results_path=None):
+def _resolve_setting_results_path(
+    dataset: str,
+    missingness_type: str,
+    imputation_method: str,
+    model_name: str | None = None,
+    results_path: str | Path | None = None,
+) -> Path:
+    """Resolve setting results path."""
     if results_path is not None:
         return Path(results_path)
 
@@ -82,13 +97,22 @@ def _resolve_setting_results_path(dataset, missingness_type, imputation_method, 
     return SETTING_RESULTS_DIR / filename
 
 
-def _build_detail_rows_from_context(ctx, run_timestamp_utc, dataset, missingness_type, missing_rate, imputation_method, model_name):
+def _build_detail_rows_from_context(
+    ctx: EvalContext,
+    run_timestamp_utc: str,
+    dataset: str,
+    missingness_type: str,
+    missing_rate: int | float | str,
+    imputation_method: str,
+    model_name: str | None,
+) -> pd.DataFrame:
+    """Build detail rows from context."""
     df_true = ctx["df_true"]
     df_missing = ctx["df_missing"]
     df_imputed = ctx["df_imputed"]
 
     numeric_cols = df_true.select_dtypes(include=["number"]).columns
-    rows = []
+    rows: list[dict[str, object]] = []
 
     for col in numeric_cols:
         mask = df_missing[col].isna() & df_true[col].notna()
@@ -125,8 +149,16 @@ def _build_detail_rows_from_context(ctx, run_timestamp_utc, dataset, missingness
     return pd.DataFrame(rows)
 
 
-def append_setting_result(dataset, missingness_type, missing_rate, imputation_method, model_name=None, results_path=None,
-    extra=None, detail_rows=None):
+def append_setting_result(
+    dataset: str,
+    missingness_type: str,
+    missing_rate: int | float | str,
+    imputation_method: str,
+    model_name: str | None = None,
+    results_path: str | Path | None = None,
+    extra: Mapping[str, object] | None = None,
+    detail_rows: pd.DataFrame | None = None,
+) -> Path:
     """
     Append detailed prediction rows to a setting-specific file.
     """
@@ -152,8 +184,19 @@ def append_setting_result(dataset, missingness_type, missing_rate, imputation_me
     return output_path
 
 
-def append_global_results(dataset, missingness_type, missing_rate, imputation_method, mean_rmse, mean_nrmse, model_name=None,
-    results_path=None, extra=None, write_setting_file=True, detail_rows=None):
+def append_global_results(
+    dataset: str,
+    missingness_type: str,
+    missing_rate: int | float | str,
+    imputation_method: str,
+    mean_rmse: float,
+    mean_nrmse: float,
+    model_name: str | None = None,
+    results_path: str | Path | None = None,
+    extra: Mapping[str, object] | None = None,
+    write_setting_file: bool = True,
+    detail_rows: pd.DataFrame | None = None,
+) -> Path | None:
     """
     Append row to global result files
     """
@@ -214,8 +257,16 @@ def append_global_results(dataset, missingness_type, missing_rate, imputation_me
     )
 
 
-def append_method_result(dataset, missingness_type, missing_rate, imputation_method, mean_rmse, mean_nrmse,
-    method_results_path=None, extra=None):
+def append_method_result(
+    dataset: str,
+    missingness_type: str,
+    missing_rate: int | float | str,
+    imputation_method: str,
+    mean_rmse: float,
+    mean_nrmse: float,
+    method_results_path: str | Path | None = None,
+    extra: Mapping[str, object] | None = None,
+) -> None:
     """
     Alias for older callers
     """
@@ -225,8 +276,17 @@ def append_method_result(dataset, missingness_type, missing_rate, imputation_met
     )
 
 
-def log_result(dataset, missingness_type, missing_rate, imputation_method, mean_rmse, mean_nrmse, model_name=None,
-    method_results_path=None, extra=None):
+def log_result(
+    dataset: str,
+    missingness_type: str,
+    missing_rate: int | float | str,
+    imputation_method: str,
+    mean_rmse: float,
+    mean_nrmse: float,
+    model_name: str | None = None,
+    method_results_path: str | Path | None = None,
+    extra: Mapping[str, object] | None = None,
+) -> None:
     """
     Entrypoint used by current classical run scripts.
     """

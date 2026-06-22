@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 from pathlib import Path
 import sys
+from typing import TypedDict
 
 import pandas as pd
 
@@ -22,6 +23,7 @@ CLASSICAL_FILES = [
 ]
 PROMPT_RUNS_FILE = DATA_RESULTS / "benchmark_llm_prompt_runs_final.csv"
 PROMPT_RUNS_FALLBACK_FILE = DATA_RESULTS / "benchmark_llm_prompt_runs.csv"
+LLM_FINETUNED_DIR = DATA_RESULTS / "new_without_domain_hints"
 
 
 DATASET_META = {
@@ -103,7 +105,40 @@ OUTPUT_COLUMNS = [
 ]
 
 
-def _load_classical_rows():
+class LlmResultRow(TypedDict):
+    """Represent one inferred LLM result row for the unified table."""
+
+    run_id: str
+    run_timestamp_utc: str
+    dataset_key: str
+    dataset_name: str
+    target_column: str
+    scenario_family: str
+    missingness_type: str
+    mcar_scope: str
+    rate_pct: int
+    seed: int
+    method_family: str
+    method_key: str
+    method_name: str
+    model_key: str
+    model_name: str | pd._libs.missing.NAType
+    status: str
+    error_message: pd._libs.missing.NAType
+    full_path: pd._libs.missing.NAType
+    missing_path: pd._libs.missing.NAType
+    n_masked_target: int
+    mean_rmse: float
+    mean_nrmse: float
+    runtime_seconds: pd._libs.missing.NAType
+    fallback_rate: float | pd._libs.missing.NAType
+    source_file: str
+    source_type: str
+    provenance_note: str
+
+
+def _load_classical_rows() -> pd.DataFrame:
+    """Load classical rows."""
     frames = []
 
     for csv_path in CLASSICAL_FILES:
@@ -130,19 +165,44 @@ def _load_classical_rows():
     return combined[OUTPUT_COLUMNS]
 
 
-def _parse_llm_filename(csv_path):
+def _parse_llm_filename(csv_path: Path) -> tuple[str, str, str]:
+    """Parse LLM filename."""
     stem = csv_path.stem
-    parts = stem.split("_")
-    if len(parts) < 5 or parts[-2:] != ["finetuned", "eval"]:
+    if not stem.endswith("_finetuned_eval"):
         raise ValueError(f"Unexpected LLM finetuned eval filename: {csv_path.name}")
 
-    dataset_token = parts[0]
-    model_token = parts[1]
-    scenario_token = parts[-3]
+    if "_credit_billamt1_" in stem:
+        dataset_token = "credit"
+    elif "_statlog_x2_" in stem:
+        dataset_token = "statlog"
+    elif "_telco_totalcharges" in stem:
+        dataset_token = "telco"
+    else:
+        raise ValueError(f"Could not infer dataset token from filename: {csv_path.name}")
+
+    if "_qwen25_" in stem:
+        model_token = "qwen25"
+    elif "_llama31_" in stem:
+        model_token = "llama31"
+    elif "_mistral_" in stem:
+        model_token = "mistral"
+    else:
+        raise ValueError(f"Could not infer model token from filename: {csv_path.name}")
+
+    if "_mnar_lora_finetuned_eval" in stem:
+        scenario_token = "mnar"
+    elif "_mcar_lora_finetuned_eval" in stem:
+        scenario_token = "mcar"
+    elif "_mar_lora_finetuned_eval" in stem or "_totalcharges_lora_finetuned_eval" in stem:
+        scenario_token = "mar"
+    else:
+        raise ValueError(f"Could not infer scenario token from filename: {csv_path.name}")
+
     return dataset_token, model_token, scenario_token
 
 
-def _build_llm_row(csv_path):
+def _build_llm_row(csv_path: Path) -> LlmResultRow | None:
+    """Build LLM row."""
     df = pd.read_csv(csv_path)
     if df.empty:
         return None
@@ -217,10 +277,12 @@ def _build_llm_row(csv_path):
     }
 
 
-def _load_llm_rows():
+def _load_llm_rows() -> pd.DataFrame:
+    """Load LLM rows."""
     rows = []
 
-    for csv_path in sorted(DATA_RESULTS.glob("*_finetuned_eval.csv")):
+    finetuned_dir = LLM_FINETUNED_DIR if LLM_FINETUNED_DIR.exists() else DATA_RESULTS
+    for csv_path in sorted(finetuned_dir.glob("*_finetuned_eval.csv")):
         row = _build_llm_row(csv_path)
         if row is not None:
             rows.append(row)
@@ -236,7 +298,8 @@ def _load_llm_rows():
     return llm_df[OUTPUT_COLUMNS]
 
 
-def _load_prompt_rows():
+def _load_prompt_rows() -> pd.DataFrame:
+    """Load prompt rows."""
     prompt_path = PROMPT_RUNS_FILE if PROMPT_RUNS_FILE.exists() else PROMPT_RUNS_FALLBACK_FILE
     if not prompt_path.exists():
         return pd.DataFrame(columns=OUTPUT_COLUMNS)
@@ -253,7 +316,8 @@ def _load_prompt_rows():
     return df[OUTPUT_COLUMNS]
 
 
-def main():
+def main() -> None:
+    """Run the script entry point."""
     output_path = DATA_RESULTS / "benchmark_all_completed_results.csv"
 
     classical = _load_classical_rows()

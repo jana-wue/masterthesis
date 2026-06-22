@@ -17,6 +17,14 @@ from matplotlib.lines import Line2D
 import pandas as pd
 import seaborn as sns
 
+plt.rcParams.update(
+    {
+        "font.family": "serif",
+        "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
+        "mathtext.fontset": "dejavuserif",
+    }
+)
+
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -71,6 +79,7 @@ METHOD_COLORS = {
 
 
 def _load_shared_comparison_rows() -> pd.DataFrame:
+    """Load shared comparison rows."""
     df = pd.read_csv(INPUT_PATH)
     work = df[
         (df["status"] == "success")
@@ -85,6 +94,7 @@ def _load_shared_comparison_rows() -> pd.DataFrame:
 
 
 def _build_summary(comparison_df: pd.DataFrame) -> pd.DataFrame:
+    """Build summary."""
     work = comparison_df.copy()
 
     classical_mask = work["method_family"] == "classical"
@@ -113,10 +123,18 @@ def _build_summary(comparison_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _plot(summary: pd.DataFrame) -> None:
+    """Plot this helper."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     MPL_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
-    sns.set_theme(style="whitegrid")
+    sns.set_theme(
+        style="whitegrid",
+        rc={
+            "font.family": "serif",
+            "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
+            "mathtext.fontset": "dejavuserif",
+        },
+    )
     fig, ax = plt.subplots(figsize=(9.2, 6.6))
 
     y_positions = list(range(len(summary)))
@@ -167,14 +185,14 @@ def _plot(summary: pd.DataFrame) -> None:
         Line2D([0], [0], marker="o", color="none", markerfacecolor="#6a994e", markeredgecolor="white",
                markeredgewidth=1.0, markersize=9, label="Finetuning"),
     ]
-    fig.suptitle("All Methods: Summary Performance Overview", fontsize=18, y=0.98)
+    fig.suptitle("All Methods: Summary Performance Overview", fontsize=18, y=0.965)
     fig.legend(
         handles=legend_handles,
         loc="upper center",
         frameon=False,
         fontsize=9.5,
         ncol=3,
-        bbox_to_anchor=(0.5, 0.95),
+        bbox_to_anchor=(0.5, 0.94),
         columnspacing=1.2,
         handletextpad=0.4,
     )
@@ -183,13 +201,14 @@ def _plot(summary: pd.DataFrame) -> None:
     fig.text(0.99, 0.02, note, ha="right", va="bottom", fontsize=9, color="#5d6773")
 
     sns.despine(ax=ax, left=True)
-    plt.tight_layout(rect=(0, 0.04, 1, 0.9))
+    plt.tight_layout(rect=(0, 0.04, 1, 0.93))
     fig.savefig(OUTPUT_PNG, dpi=300, bbox_inches="tight")
     fig.savefig(OUTPUT_PDF, bbox_inches="tight")
     plt.close(fig)
 
 
 def main() -> None:
+    """Run the script entry point."""
     comparison_df = _load_shared_comparison_rows()
     summary = _build_summary(comparison_df)
 

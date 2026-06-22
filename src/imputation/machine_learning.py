@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
@@ -14,7 +16,14 @@ class MICEImputer(BaseImputer):
     Numeric features are imputed via regression.
     """
 
-    def __init__(self, random_state = 42, max_iter = 10, n_imputations = 1, sample_posterior = False):
+    def __init__(
+        self,
+        random_state: int = 42,
+        max_iter: int = 10,
+        n_imputations: int = 1,
+        sample_posterior: bool = False,
+    ) -> None:
+        """Initialize the object state."""
         if sample_posterior and n_imputations > 1:
             super().__init__(f"MICE posterior mean (m={n_imputations})")
         else:
@@ -28,7 +37,8 @@ class MICEImputer(BaseImputer):
         self.encoder_ = None
         self.imputer_ = None
 
-    def fit(self, X):
+    def fit(self, X: pd.DataFrame) -> MICEImputer:
+        """Fit the imputer to the input data."""
         X = X.copy()
 
         self.numeric_cols_ = list(X.select_dtypes(include=["number"]).columns)
@@ -51,7 +61,8 @@ class MICEImputer(BaseImputer):
         self.imputer_.fit(X)
         return self
 
-    def transform(self, X):
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Transform the input data with the fitted imputer."""
         if self.imputer_ is None:
             raise RuntimeError("Call fit() before transform().")
 
@@ -92,7 +103,8 @@ class MICEImputer(BaseImputer):
 
         return X_imputed
 
-    def fit_transform(self, X):
+    def fit_transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Fit the imputer and transform the input data."""
         return self.fit(X).transform(X)
 
 
@@ -106,16 +118,17 @@ class MissForestImputer(BaseImputer):
 
     def __init__(
             self,
-            n_estimators = 200,
-            max_iter = 10,
-            random_state = 42,
-            n_jobs = -1,
-            min_samples_leaf = 1,
-            max_features = "sqrt",
-            decreasing = False,
-            verbose = False,
-            fallback_cat = "missing",
-    ):
+            n_estimators: int = 200,
+            max_iter: int = 10,
+            random_state: int = 42,
+            n_jobs: int = -1,
+            min_samples_leaf: int = 1,
+            max_features: str | int | float | None = "sqrt",
+            decreasing: bool = False,
+            verbose: bool = False,
+            fallback_cat: str = "missing",
+    ) -> None:
+        """Initialize the object state."""
         super().__init__("MissForest")
         self.n_estimators = n_estimators
         self.max_iter = max_iter
@@ -136,7 +149,8 @@ class MissForestImputer(BaseImputer):
         self.convergence_history_ = []
         self.n_iter_ = 0
 
-    def fit(self, X):
+    def fit(self, X: pd.DataFrame) -> MissForestImputer:
+        """Fit the imputer to the input data."""
         X = X.copy()
 
         self.numeric_cols_ = list(X.select_dtypes(include=["number"]).columns)
@@ -171,7 +185,8 @@ class MissForestImputer(BaseImputer):
 
         return self
 
-    def _initial_imputation(self, X):
+    def _initial_imputation(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Handle initial imputation."""
         X_work = X.copy()
         assert self.initial_fill_values_ is not None
 
@@ -188,7 +203,13 @@ class MissForestImputer(BaseImputer):
 
         return X_work.astype(float)
 
-    def _compute_numeric_delta(self, previous, current, original_missing_mask):
+    def _compute_numeric_delta(
+        self,
+        previous: pd.DataFrame,
+        current: pd.DataFrame,
+        original_missing_mask: dict[str, np.ndarray],
+    ) -> float:
+        """Compute numeric delta."""
         numeric_cols = [
             c for c in self.numeric_cols_ if c in original_missing_mask and original_missing_mask[c].any()
         ]
@@ -208,7 +229,13 @@ class MissForestImputer(BaseImputer):
             denominator = 1e-12
         return numerator / denominator
 
-    def _compute_categorical_delta(self, previous, current, original_missing_mask):
+    def _compute_categorical_delta(
+        self,
+        previous: pd.DataFrame,
+        current: pd.DataFrame,
+        original_missing_mask: dict[str, np.ndarray],
+    ) -> float:
+        """Compute categorical delta."""
         categorical_cols = [
             c for c in self.categorical_cols_ if c in original_missing_mask and original_missing_mask[c].any()
         ]
@@ -228,7 +255,8 @@ class MissForestImputer(BaseImputer):
             return float("nan")
         return mismatches / total
 
-    def transform(self, X):
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Transform the input data with the fitted imputer."""
         if (
             self.numeric_cols_ is None
             or self.categorical_cols_ is None
@@ -357,5 +385,6 @@ class MissForestImputer(BaseImputer):
 
         return X_imputed
 
-    def fit_transform(self, X):
+    def fit_transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Fit the imputer and transform the input data."""
         return self.fit(X).transform(X)

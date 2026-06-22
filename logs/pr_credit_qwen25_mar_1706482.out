@@ -1,7 +1,0 @@
-Dependency check OK
-Running command:
- /home/users/j/jana.wue/.venvs/masterthesis-llm/bin/python src/scripts/run_llm.py --manifest scenario_manifest_llm_finetuning_10pct_final.csv --datasets German\ Credit\ Card --model-keys qwen25 --missingness-types MAR --max-new-tokens 20 --few-shot-settings 2
-
-================================================================================
-LOADING MODEL | Qwen/Qwen2.5-7B-Instruct
-================================================================================

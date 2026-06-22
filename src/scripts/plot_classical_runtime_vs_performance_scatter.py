@@ -52,6 +52,7 @@ LABEL_OFFSETS = {
 
 
 def _load_classical_results() -> pd.DataFrame:
+    """Load classical results."""
     df = pd.read_csv(INPUT_PATH)
     work = df[(df["method_family"] == "classical") & (df["status"] == "success")].copy()
     if work.empty:
@@ -62,6 +63,7 @@ def _load_classical_results() -> pd.DataFrame:
 
 
 def _build_summary(classical_df: pd.DataFrame) -> pd.DataFrame:
+    """Build summary."""
     summary = (
         classical_df.groupby("method_key", as_index=False)
         .agg(
@@ -87,6 +89,7 @@ def _build_summary(classical_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _plot_scatter(summary: pd.DataFrame) -> None:
+    """Plot scatter."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     MPL_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -134,6 +137,7 @@ def _plot_scatter(summary: pd.DataFrame) -> None:
 
 
 def main() -> None:
+    """Run the script entry point."""
     classical_df = _load_classical_results()
     summary = _build_summary(classical_df)
 

@@ -9,6 +9,7 @@ from pathlib import Path
 
 import pandas as pd
 import torch
+from transformers import PreTrainedModel, PreTrainedTokenizerBase
 
 from src.imputation.llm_paper_single import (
     build_paper_single_prompt,
@@ -22,10 +23,11 @@ MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
 DATASET_NAME_PROMPT = "Telco-Customer-Churn"
 TARGET_COLUMN = "TotalCharges"
 RESULTS_RMSE_PATH = Path("data/results/imputation_results.csv")
-RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrsme.csv")
+RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrmse.csv")
 
 
-def _load_telco_mar_data():
+def _load_telco_mar_data() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Load Telco MAR data."""
     df_full = pd.read_csv(DATA_RAW / "Telco-Customer-Churn_cleaned.csv")
     df_missing = pd.read_csv(
         DATA_PROCESSED / "MAR" / "telco_customer_churn_mar_totalcharges_tenure_10pct.csv"
@@ -33,12 +35,14 @@ def _load_telco_mar_data():
     return df_full, df_missing
 
 
-def model_name_to_file_token(model_name: str):
+def model_name_to_file_token(model_name: str) -> str:
+    """Convert a model name into a file-safe token."""
     token = re.sub(r"[^A-Za-z0-9._-]+", "_", model_name).strip("_")
     return token or "unknown_model"
 
 
 def _append_results_row(csv_path: Path, required_columns: list[str], row: dict) -> None:
+    """Append results row."""
     csv_path.parent.mkdir(parents=True, exist_ok=True)
 
     if csv_path.exists():
@@ -63,6 +67,7 @@ def append_to_global_results(
     mean_rmse: float,
     mean_nrmse: float,
 ) -> None:
+    """Append to global results."""
     _append_results_row(
         csv_path=RESULTS_RMSE_PATH,
         required_columns=[
@@ -103,6 +108,7 @@ def append_to_global_results(
 
 
 def _append_prediction_rows(output_csv: Path, rows_df: pd.DataFrame) -> None:
+    """Append prediction rows."""
     output_csv.parent.mkdir(parents=True, exist_ok=True)
 
     if output_csv.exists():
@@ -114,7 +120,12 @@ def _append_prediction_rows(output_csv: Path, rows_df: pd.DataFrame) -> None:
     combined.to_csv(output_csv, index=False)
 
 
-def _load_or_get_model(model_name, tokenizer=None, model=None):
+def _load_or_get_model(
+    model_name: str,
+    tokenizer: PreTrainedTokenizerBase | None = None,
+    model: PreTrainedModel | None = None,
+) -> tuple[PreTrainedTokenizerBase, PreTrainedModel]:
+    """Load or get model."""
     owns_model = tokenizer is None or model is None
     if not owns_model:
         return tokenizer, model
@@ -144,7 +155,8 @@ def _load_or_get_model(model_name, tokenizer=None, model=None):
     return tokenizer, model
 
 
-def _apply_user_chat_template(prompt_text, tokenizer):
+def _apply_user_chat_template(prompt_text: str, tokenizer: PreTrainedTokenizerBase) -> str:
+    """Handle apply user chat template."""
     if hasattr(tokenizer, "apply_chat_template"):
         return tokenizer.apply_chat_template(
             [{"role": "user", "content": prompt_text}],
@@ -154,7 +166,13 @@ def _apply_user_chat_template(prompt_text, tokenizer):
     return prompt_text
 
 
-def _generate_answer(prompt_text, tokenizer, model, max_new_tokens):
+def _generate_answer(
+    prompt_text: str,
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
+    max_new_tokens: int,
+) -> str:
+    """Generate answer."""
     model_input = _apply_user_chat_template(prompt_text, tokenizer)
     model_device = model.device if hasattr(model, "device") else next(model.parameters()).device
     inputs = tokenizer(model_input, return_tensors="pt").to(model_device)
@@ -174,7 +192,8 @@ def _generate_answer(prompt_text, tokenizer, model, max_new_tokens):
     return tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
 
 
-def fallback_totalcharges(row, totalcharges_median):
+def fallback_totalcharges(row: pd.Series, totalcharges_median: float) -> tuple[float, str]:
+    """Handle fallback totalcharges."""
     tenure = row.get("tenure")
     monthly = row.get("MonthlyCharges")
 
@@ -187,7 +206,8 @@ def fallback_totalcharges(row, totalcharges_median):
     return float(totalcharges_median), "fallback_median"
 
 
-def _resolve_target_indices(df_missing, row_index: int | None) -> list[int]:
+def _resolve_target_indices(df_missing: pd.DataFrame, row_index: int | None) -> list[int]:
+    """Resolve target indices."""
     missing_indices = df_missing.index[df_missing[TARGET_COLUMN].isna()].tolist()
     if not missing_indices:
         raise ValueError(f"No missing rows found for target column '{TARGET_COLUMN}'.")
@@ -201,8 +221,19 @@ def _resolve_target_indices(df_missing, row_index: int | None) -> list[int]:
     return [int(row_index)]
 
 
-def impute_single_row_with_paper_prompt(row, dataset_name, target_column, feature_columns, target_stats: dict[str, float] | None,
-    domain_hints: list[str] | None, tokenizer, model, max_new_tokens: int, fallback_median: float):
+def impute_single_row_with_paper_prompt(
+    row: pd.Series,
+    dataset_name: str,
+    target_column: str,
+    feature_columns: list[str],
+    target_stats: dict[str, float] | None,
+    domain_hints: list[str] | None,
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
+    max_new_tokens: int,
+    fallback_median: float,
+) -> tuple[float, str, str]:
+    """Handle impute single row with paper prompt."""
     primary_prompt = build_paper_single_prompt(
         dataset_name=dataset_name,
         row=row,
@@ -247,7 +278,8 @@ def impute_single_row_with_paper_prompt(row, dataset_name, target_column, featur
     return fallback_value, source, combined_raw
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
         description=(
             "Single-row imputation with a paper-style prompt. "
@@ -287,6 +319,7 @@ def parse_args():
 
 
 def main() -> None:
+    """Run the script entry point."""
     args = parse_args()
 
     df_full, df_missing = _load_telco_mar_data()

@@ -6,7 +6,8 @@ import re
 import pandas as pd
 
 
-def format_prompt_value(value):
+def format_prompt_value(value: object) -> str:
+    """Format prompt value."""
     if pd.isna(value):
         return "MISSING"
 
@@ -16,7 +17,8 @@ def format_prompt_value(value):
     return str(value)
 
 
-def summarize_target_distribution(df, target_column):
+def summarize_target_distribution(df: pd.DataFrame, target_column: str) -> dict[str, float]:
+    """Summarize target distribution."""
     observed = pd.to_numeric(df[target_column], errors="coerce").dropna()
     if observed.empty:
         return {}
@@ -31,7 +33,12 @@ def summarize_target_distribution(df, target_column):
     }
 
 
-def row_to_feature_text(row, target_column, feature_columns=None):
+def row_to_feature_text(
+    row: pd.Series,
+    target_column: str,
+    feature_columns: list[str] | None = None,
+) -> str:
+    """Handle row to feature text."""
     if feature_columns is None:
         columns = [col for col in row.index if col != target_column]
     else:
@@ -40,7 +47,8 @@ def row_to_feature_text(row, target_column, feature_columns=None):
     return "\n".join(f"{col}: {format_prompt_value(row[col])}" for col in columns)
 
 
-def _format_target_stats(target_stats: dict[str, float] | None):
+def _format_target_stats(target_stats: dict[str, float] | None) -> str:
+    """Format target stats."""
     if not target_stats:
         return "Target distribution summary: unavailable."
 
@@ -53,8 +61,15 @@ def _format_target_stats(target_stats: dict[str, float] | None):
     return "\n".join(lines)
 
 
-def build_paper_single_prompt(dataset_name, row, target_column, feature_columns, target_stats: dict[str, float] | None = None,
-    domain_hints: list[str] | None = None):
+def build_paper_single_prompt(
+    dataset_name: str,
+    row: pd.Series,
+    target_column: str,
+    feature_columns: list[str] | None,
+    target_stats: dict[str, float] | None = None,
+    domain_hints: list[str] | None = None,
+) -> str:
+    """Build paper single prompt."""
     feature_text = row_to_feature_text(
         row=row,
         target_column=target_column,
@@ -109,8 +124,15 @@ def build_paper_single_prompt(dataset_name, row, target_column, feature_columns,
     return "\n".join(lines)
 
 
-def build_paper_single_retry_prompt(dataset_name, row, target_column, feature_columns=None, target_stats: dict[str, float] | None = None,
-    domain_hints: list[str] | None = None):
+def build_paper_single_retry_prompt(
+    dataset_name: str,
+    row: pd.Series,
+    target_column: str,
+    feature_columns: list[str] | None = None,
+    target_stats: dict[str, float] | None = None,
+    domain_hints: list[str] | None = None,
+) -> str:
+    """Build paper single retry prompt."""
     base_prompt = build_paper_single_prompt(
         dataset_name=dataset_name,
         row=row,
@@ -133,14 +155,16 @@ def build_paper_single_retry_prompt(dataset_name, row, target_column, feature_co
     )
 
 
-def _extract_code_block_content(response_text):
+def _extract_code_block_content(response_text: str) -> str:
+    """Extract code block content."""
     blocks = re.findall(r"```(?:text|csv)?\s*(.*?)\s*```", response_text, re.DOTALL)
     if not blocks:
         return response_text.strip()
     return max(blocks, key=len).strip()
 
 
-def _normalize_number_token(token):
+def _normalize_number_token(token: str) -> str:
+    """Normalize number token."""
     token = token.strip()
 
     # Handle "1,234.56" vs "1.234,56" and plain "123,45".
@@ -155,7 +179,8 @@ def _normalize_number_token(token):
     return token
 
 
-def extract_numeric_value(response_text) -> float | None:
+def extract_numeric_value(response_text: str | None) -> float | None:
+    """Extract numeric value."""
     if response_text is None:
         return None
 

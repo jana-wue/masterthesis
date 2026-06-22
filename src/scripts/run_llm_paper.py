@@ -7,7 +7,8 @@ import gc
 
 import pandas as pd
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from matplotlib.axes import Axes
+from transformers import AutoModelForCausalLM, AutoTokenizer, PreTrainedModel, PreTrainedTokenizerBase
 
 from src.imputation.llm_paper import (
     build_paper_prompt,
@@ -22,15 +23,17 @@ MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
 DATASET_NAME_PROMPT = "Telco-Customer-Churn"
 TARGET_COLUMN = "TotalCharges"
 RESULTS_RMSE_PATH = Path("data/results/imputation_results.csv")
-RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrsme.csv")
+RESULTS_NRMSE_PATH = Path("data/results/imputation_results_nrmse.csv")
 
 
 def model_name_to_file_token(model_name: str) -> str:
+    """Convert a model name into a file-safe token."""
     token = re.sub(r"[^A-Za-z0-9._-]+", "_", model_name).strip("_")
     return token or "unknown_model"
 
 
 def _append_results_row(csv_path: Path, required_columns: list[str], row: dict) -> None:
+    """Append results row."""
     csv_path.parent.mkdir(parents=True, exist_ok=True)
 
     if csv_path.exists():
@@ -47,8 +50,15 @@ def _append_results_row(csv_path: Path, required_columns: list[str], row: dict) 
     df.to_csv(csv_path, index=False)
 
 
-def append_to_global_results(dataset, missingness_type, missing_rate, imputation_method,
-    mean_rmse, mean_nrmse) -> None:
+def append_to_global_results(
+    dataset: str,
+    missingness_type: str,
+    missing_rate: str,
+    imputation_method: str,
+    mean_rmse: float,
+    mean_nrmse: float,
+) -> None:
+    """Append to global results."""
     _append_results_row(
         csv_path=RESULTS_RMSE_PATH,
         required_columns=[
@@ -88,7 +98,8 @@ def append_to_global_results(dataset, missingness_type, missing_rate, imputation
     )
 
 
-def _load_telco_mar_data():
+def _load_telco_mar_data() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Load Telco MAR data."""
     df_full = pd.read_csv(DATA_RAW / "Telco-Customer-Churn_cleaned.csv")
     df_missing = pd.read_csv(
         DATA_PROCESSED / "MAR" / "telco_customer_churn_mar_totalcharges_tenure_10pct.csv"
@@ -96,7 +107,11 @@ def _load_telco_mar_data():
     return df_full, df_missing
 
 
-def _build_prompt_matrix(df_missing, n_rows):
+def _build_prompt_matrix(
+    df_missing: pd.DataFrame,
+    n_rows: int | None,
+) -> tuple[pd.DataFrame, list[int], list[int]]:
+    """Build prompt matrix."""
     work = df_missing.drop(columns=["customerID"], errors="ignore").copy()
     if n_rows is not None:
         work = work.head(n_rows).copy()
@@ -116,7 +131,8 @@ def _build_prompt_matrix(df_missing, n_rows):
     return prompt_matrix, original_indices, missing_positions
 
 
-def _split_into_folds(positions, n_folds):
+def _split_into_folds(positions: list[int], n_folds: int) -> list[list[int]]:
+    """Split into folds."""
     if n_folds < 1:
         raise ValueError("n_folds must be >= 1.")
     if not positions:
@@ -136,7 +152,11 @@ def _split_into_folds(positions, n_folds):
     return folds
 
 
-def _load_or_get_model(tokenizer=None, model=None):
+def _load_or_get_model(
+    tokenizer: PreTrainedTokenizerBase | None = None,
+    model: PreTrainedModel | None = None,
+) -> tuple[PreTrainedTokenizerBase, PreTrainedModel]:
+    """Load or get model."""
     owns_model = tokenizer is None or model is None
     if owns_model:
         print("=" * 80)
@@ -156,7 +176,8 @@ def _load_or_get_model(tokenizer=None, model=None):
     return tokenizer, model
 
 
-def apply_user_chat_template(prompt_text, tokenizer):
+def apply_user_chat_template(prompt_text: str, tokenizer: PreTrainedTokenizerBase) -> str:
+    """Handle apply user chat template."""
     if hasattr(tokenizer, "apply_chat_template"):
         return tokenizer.apply_chat_template(
             [{"role": "user", "content": prompt_text}],
@@ -166,7 +187,13 @@ def apply_user_chat_template(prompt_text, tokenizer):
     return prompt_text
 
 
-def generate_matrix_answer(prompt_text, tokenizer,model, max_new_tokens):
+def generate_matrix_answer(
+    prompt_text: str,
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
+    max_new_tokens: int,
+) -> str:
+    """Generate matrix answer."""
     model_input = apply_user_chat_template(prompt_text, tokenizer)
     inputs = tokenizer(model_input, return_tensors="pt").to(model.device)
     input_length = inputs["input_ids"].shape[1]
@@ -185,7 +212,8 @@ def generate_matrix_answer(prompt_text, tokenizer,model, max_new_tokens):
     return tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
 
 
-def fallback_totalcharges(row, totalcharges_median):
+def fallback_totalcharges(row: pd.Series, totalcharges_median: float) -> tuple[float, str]:
+    """Handle fallback totalcharges."""
     tenure = row.get("tenure")
     monthly = row.get("MonthlyCharges")
 
@@ -198,7 +226,8 @@ def fallback_totalcharges(row, totalcharges_median):
     return float(totalcharges_median), "fallback_median"
 
 
-def _append_prediction_rows(output_csv, rows_df):
+def _append_prediction_rows(output_csv: Path, rows_df: pd.DataFrame) -> None:
+    """Append prediction rows."""
     output_csv.parent.mkdir(parents=True, exist_ok=True)
 
     if output_csv.exists():
@@ -210,7 +239,8 @@ def _append_prediction_rows(output_csv, rows_df):
     combined.to_csv(output_csv, index=False)
 
 
-def _debug_dump_prompt(prompt_text, debug_prompts, debug_label):
+def _debug_dump_prompt(prompt_text: str, debug_prompts: bool, debug_label: str) -> None:
+    """Handle debug dump prompt."""
     if not debug_prompts:
         return
 
@@ -227,7 +257,11 @@ def _debug_dump_prompt(prompt_text, debug_prompts, debug_label):
     print(f"Saved debug prompt to: {debug_path}")
 
 
-def _normalize_or_recover_rows(parsed_df, prompt_matrix):
+def _normalize_or_recover_rows(
+    parsed_df: pd.DataFrame,
+    prompt_matrix: pd.DataFrame,
+) -> tuple[pd.DataFrame, str | None]:
+    """Normalize or recover rows."""
     expected_columns = list(prompt_matrix.columns)
     expected_rows = len(prompt_matrix)
 
@@ -270,7 +304,11 @@ def _normalize_or_recover_rows(parsed_df, prompt_matrix):
         return work.reset_index(drop=True), recovered_note
 
 
-def _build_compact_fold_matrix(fold_matrix, fold_positions, max_rows):
+def _build_compact_fold_matrix(
+    fold_matrix: pd.DataFrame,
+    fold_positions: list[int],
+    max_rows: int | None,
+) -> tuple[pd.DataFrame, dict[int, int], list[int]]:
     """
     Build a smaller per-fold prompt matrix while keeping all evaluated rows.
     """
@@ -310,14 +348,16 @@ def _build_compact_fold_matrix(fold_matrix, fold_positions, max_rows):
 
 
 def _impute_full_matrix(
-    prompt_matrix,
-    tokenizer,
-    model,
-    max_new_tokens,
-    debug_prompts=False,
-    debug_label="run",
-):
+    prompt_matrix: pd.DataFrame,
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
+    max_new_tokens: int,
+    debug_prompts: bool = False,
+    debug_label: str = "run",
+) -> tuple[pd.DataFrame, str, str | None]:
+    """Handle impute full matrix."""
     def _generate_or_raise(prompt_text: str) -> str:
+        """Generate or raise."""
         try:
             return generate_matrix_answer(
                 prompt_text=prompt_text,
@@ -391,7 +431,8 @@ def _impute_full_matrix(
         return prompt_matrix.copy(), raw_retry, parse_error
 
 
-def _summarize_notes(notes, max_items=5):
+def _summarize_notes(notes: list[str], max_items: int = 5) -> str | None:
+    """Summarize notes."""
     if not notes:
         return None
     unique = []
@@ -407,16 +448,16 @@ def _summarize_notes(notes, max_items=5):
 
 
 def _impute_matrix_in_batches(
-    matrix,
-    tokenizer,
-    model,
-    max_new_tokens,
-    batch_row=40,
-    batch_col=None,
-    min_batch_row=1,
-    debug_prompts=False,
-    debug_label="run",
-):
+    matrix: pd.DataFrame,
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
+    max_new_tokens: int,
+    batch_row: int = 40,
+    batch_col: int | None = None,
+    min_batch_row: int = 1,
+    debug_prompts: bool = False,
+    debug_label: str = "run",
+) -> tuple[pd.DataFrame, str, str | None]:
     """
     Paper-style batching with adaptive row splitting.
     By default this keeps full column context in each prompt chunk.
@@ -571,10 +612,11 @@ def run_telco_paper_prompt(
     batch_row: int = 40,
     batch_col: int | None = None,
     min_batch_row: int = 1,
-    tokenizer=None,
-    model=None,
+    tokenizer: PreTrainedTokenizerBase | None = None,
+    model: PreTrainedModel | None = None,
     debug_prompts: bool = False,
-):
+) -> pd.DataFrame:
+    """Run Telco paper prompt."""
     df_full, df_missing = _load_telco_mar_data()
 
     prompt_matrix, original_indices, missing_positions = _build_prompt_matrix(
@@ -674,9 +716,10 @@ def run_telco_paper_prompt_folds(
     batch_col: int | None = None,
     min_batch_row: int = 1,
     debug_prompts: bool = False,
-    tokenizer=None,
-    model=None,
-):
+    tokenizer: PreTrainedTokenizerBase | None = None,
+    model: PreTrainedModel | None = None,
+) -> pd.DataFrame:
+    """Run Telco paper prompt folds."""
     df_full, df_missing = _load_telco_mar_data()
     prompt_matrix, original_indices, missing_positions = _build_prompt_matrix(
         df_missing=df_missing,
@@ -817,6 +860,7 @@ def evaluate_telco_paper_prompt(
     min_batch_row: int = 1,
     debug_prompts: bool = False,
 ) -> pd.DataFrame:
+    """Evaluate Telco paper prompt."""
     if n_folds > 1:
         results_df = run_telco_paper_prompt_folds(
             n_rows=n_rows,

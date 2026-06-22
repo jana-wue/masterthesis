@@ -13,7 +13,8 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.paths import DATA_RESULTS
 
 
-def _build_parser():
+def _build_parser() -> argparse.ArgumentParser:
+    """Build the command-line argument parser."""
     parser = argparse.ArgumentParser(
         description="Create simple benchmark aggregation (mean/std) from run-level results."
     )
@@ -32,7 +33,8 @@ def _build_parser():
     return parser
 
 
-def main():
+def main() -> None:
+    """Run the script entry point."""
     args = _build_parser().parse_args()
 
     if not args.input_csv.exists():

@@ -8,13 +8,14 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.scripts.run_classical_manifest import main as run_classical_manifest_main
 
 
-def run_dae():
+def run_dae() -> None:
+    """Run DAE."""
     forwarded_args = list(sys.argv[1:])
     if "--method_keys" not in forwarded_args:
         forwarded_args = ["--method_keys", "dae"] + forwarded_args
 
     sys.argv = [sys.argv[0]] + forwarded_args
-    return run_classical_manifest_main()
+    run_classical_manifest_main()
 
 
 if __name__ == "__main__":

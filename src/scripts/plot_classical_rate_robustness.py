@@ -53,6 +53,7 @@ RATE_ORDER = [10, 15]
 
 
 def _load_rows() -> pd.DataFrame:
+    """Load rows."""
     df = pd.read_csv(INPUT_PATH)
     work = df[
         (df["method_family"] == "classical")
@@ -66,6 +67,7 @@ def _load_rows() -> pd.DataFrame:
 
 
 def _build_summary(df: pd.DataFrame) -> pd.DataFrame:
+    """Build summary."""
     summary = (
         df.groupby(["scenario_family", "rate_pct", "method_key"], as_index=False)["mean_nrmse"]
         .mean()
@@ -80,6 +82,7 @@ def _build_summary(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _plot(summary: pd.DataFrame) -> None:
+    """Plot this helper."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     MPL_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -138,6 +141,7 @@ def _plot(summary: pd.DataFrame) -> None:
 
 
 def main() -> None:
+    """Run the script entry point."""
     rows = _load_rows()
     summary = _build_summary(rows)
 

@@ -6,7 +6,8 @@ from io import StringIO
 import pandas as pd
 
 
-def _extract_code_block_content(response_text):
+def _extract_code_block_content(response_text: str) -> str:
+    """Extract code block content."""
     blocks = re.findall(r"```(?:csv)?\s*(.*?)\s*```", response_text, re.DOTALL)
     if not blocks:
         return response_text.strip()
@@ -14,14 +15,16 @@ def _extract_code_block_content(response_text):
     return max(blocks, key=len).strip()
 
 
-def _score_candidate(df: pd.DataFrame, expected_shape):
+def _score_candidate(df: pd.DataFrame, expected_shape: tuple[int, int]) -> int:
+    """Handle score candidate."""
     expected_rows, expected_cols = expected_shape
     rows, cols = df.shape
     one_col_penalty = 1000 if expected_cols > 1 and cols == 1 else 0
     return one_col_penalty + abs(cols - expected_cols) * 100 + abs(rows - expected_rows)
 
 
-def _parse_markdown_table(content) -> pd.DataFrame | None:
+def _parse_markdown_table(content: str) -> pd.DataFrame | None:
+    """Parse markdown table."""
     lines = [line.strip() for line in content.splitlines() if line.strip()]
     if len(lines) < 2:
         return None
@@ -49,7 +52,10 @@ def _parse_markdown_table(content) -> pd.DataFrame | None:
         return None
 
 
-def clean_and_parse_llm_data(response_text, expected_shape):
+def clean_and_parse_llm_data(
+    response_text: str,
+    expected_shape: tuple[int, int],
+) -> pd.DataFrame:
     """
     Parse LLM output into a DataFrame.
     """
@@ -92,7 +98,7 @@ def clean_and_parse_llm_data(response_text, expected_shape):
     return best_df
 
 
-def build_paper_prompt(dataset_name: str, missing_data):
+def build_paper_prompt(dataset_name: str, missing_data: pd.DataFrame) -> str:
     """
     Prompt copied 1:1 from ArthurMangussi/LLMsImputation (adjust_prompt).
     """
@@ -123,7 +129,7 @@ def build_paper_prompt(dataset_name: str, missing_data):
     return prompt
 
 
-def build_paper_retry_prompt(dataset_name, missing_data):
+def build_paper_retry_prompt(dataset_name: str, missing_data: pd.DataFrame) -> str:
     """
     Stricter retry prompt used only when first parsing fails.
     """
@@ -140,7 +146,11 @@ def build_paper_retry_prompt(dataset_name, missing_data):
     )
 
 
-def normalize_imputed_matrix(df_imputed, expected_columns, expected_rows) -> pd.DataFrame:
+def normalize_imputed_matrix(
+    df_imputed: pd.DataFrame,
+    expected_columns: Sequence[str],
+    expected_rows: int,
+) -> pd.DataFrame:
     """
     Align parsed matrix to the expected Telco shape/columns.
     """

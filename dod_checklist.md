@@ -12,21 +12,22 @@
   - [x] MICE
   - [x] MissForest
   - [x] DAE
-- [x] LLM finetuned: all runs completed (Mistral + Llama + Qwen).
-- [ ] No missing seed/method/model combinations relative to `scenario_manifest.csv`.
+- [x] LLM finetuned final scope completed (`10%`, `seed=42`, no `MCAR_GLOBAL`).
+- [x] LLM prompt final scope completed (few-shot `k=2`, `10%`, `seed=42`).
+- [x] No missing seed/method/model combinations relative to `scenario_manifest.csv`.
 
 ## C) Metric Completeness
 - [x] Every run has RMSE and NRMSE.
-- [ ] NRMSE uses benchmark definition (std of evaluated ground truth cells).
-- [ ] LLM runs include fallback rate.
+- [x] NRMSE uses benchmark definition (std of evaluated ground truth cells).
+- [x] LLM runs include fallback rate.
 
 ## D) Result Hygiene
-- [ ] No duplicate primary keys (`dataset_key, scenario_family, rate_pct, seed, method, model_key`).
+- [x] No duplicate primary keys (`dataset_key, scenario_family, rate_pct, seed, method, model_key`).
 - [x] No smoke/test rows in final benchmark tables.
-- [ ] Final tables are generated from clean benchmark result files only.
+- [x] Final tables are generated from clean benchmark result files only.
 
 ## E) Final Outputs for Thesis
-- [ ] Primary leaderboard: target-only comparison for all methods.
-- [ ] Mean ± std across seeds for each method/setting.
-- [ ] Separate section for `MCAR_GLOBAL` secondary analysis (if included).
-- [ ] Explicit note of remaining limitations and compute constraints.
+- [x] Primary leaderboard: target-only comparison for all final-scope methods.
+- [x] Mean ± std across seeds for each classical setting.
+- [x] Separate section for `MCAR_GLOBAL` secondary analysis for classical methods only.
+- [x] Explicit note of remaining limitations and compute constraints.

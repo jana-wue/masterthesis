@@ -1,721 +1,601 @@
 run_id,dataset_key,dataset_name,target_column,scenario_family,missingness_type,mcar_scope,mar_dependency_column,mnar_driver_column,mcar_global_excluded_columns,rate_pct,seed,method_family,method_key,method_name,model_key,model_name,include_in_primary_leaderboard,include_in_secondary_full_matrix
+R000005,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,classical,dae,DAE,,,True,False
 R000001,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,classical,meanmode,Mean/Mode,,,True,False
 R000002,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,classical,medianmode,Median/Mode,,,True,False
 R000003,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,classical,mice,MICE,,,True,False
 R000004,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,classical,missforest,MissForest,,,True,False
-R000005,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,classical,dae,DAE,,,True,False
+R000010,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,202,classical,dae,DAE,,,True,False
 R000006,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,202,classical,meanmode,Mean/Mode,,,True,False
 R000007,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,202,classical,medianmode,Median/Mode,,,True,False
 R000008,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,202,classical,mice,MICE,,,True,False
 R000009,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,202,classical,missforest,MissForest,,,True,False
-R000010,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,202,classical,dae,DAE,,,True,False
+R000015,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,303,classical,dae,DAE,,,True,False
 R000011,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,303,classical,meanmode,Mean/Mode,,,True,False
 R000012,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,303,classical,medianmode,Median/Mode,,,True,False
 R000013,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,303,classical,mice,MICE,,,True,False
 R000014,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,303,classical,missforest,MissForest,,,True,False
-R000015,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,303,classical,dae,DAE,,,True,False
+R000020,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,404,classical,dae,DAE,,,True,False
 R000016,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,404,classical,meanmode,Mean/Mode,,,True,False
 R000017,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,404,classical,medianmode,Median/Mode,,,True,False
 R000018,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,404,classical,mice,MICE,,,True,False
 R000019,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,404,classical,missforest,MissForest,,,True,False
-R000020,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,404,classical,dae,DAE,,,True,False
+R000025,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,505,classical,dae,DAE,,,True,False
 R000021,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,505,classical,meanmode,Mean/Mode,,,True,False
 R000022,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,505,classical,medianmode,Median/Mode,,,True,False
 R000023,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,505,classical,mice,MICE,,,True,False
 R000024,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,505,classical,missforest,MissForest,,,True,False
-R000025,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,505,classical,dae,DAE,,,True,False
+R000039,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,42,classical,dae,DAE,,,True,False
 R000035,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,42,classical,meanmode,Mean/Mode,,,True,False
 R000036,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,42,classical,medianmode,Median/Mode,,,True,False
 R000037,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,42,classical,mice,MICE,,,True,False
 R000038,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,42,classical,missforest,MissForest,,,True,False
-R000039,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,42,classical,dae,DAE,,,True,False
+R000044,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,202,classical,dae,DAE,,,True,False
 R000040,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,202,classical,meanmode,Mean/Mode,,,True,False
 R000041,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,202,classical,medianmode,Median/Mode,,,True,False
 R000042,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,202,classical,mice,MICE,,,True,False
 R000043,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,202,classical,missforest,MissForest,,,True,False
-R000044,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,202,classical,dae,DAE,,,True,False
+R000049,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,303,classical,dae,DAE,,,True,False
 R000045,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,303,classical,meanmode,Mean/Mode,,,True,False
 R000046,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,303,classical,medianmode,Median/Mode,,,True,False
 R000047,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,303,classical,mice,MICE,,,True,False
 R000048,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,303,classical,missforest,MissForest,,,True,False
-R000049,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,303,classical,dae,DAE,,,True,False
+R000054,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,404,classical,dae,DAE,,,True,False
 R000050,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,404,classical,meanmode,Mean/Mode,,,True,False
 R000051,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,404,classical,medianmode,Median/Mode,,,True,False
 R000052,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,404,classical,mice,MICE,,,True,False
 R000053,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,404,classical,missforest,MissForest,,,True,False
-R000054,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,404,classical,dae,DAE,,,True,False
+R000059,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,505,classical,dae,DAE,,,True,False
 R000055,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,505,classical,meanmode,Mean/Mode,,,True,False
 R000056,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,505,classical,medianmode,Median/Mode,,,True,False
 R000057,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,505,classical,mice,MICE,,,True,False
 R000058,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,505,classical,missforest,MissForest,,,True,False
-R000059,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,505,classical,dae,DAE,,,True,False
+R000073,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,classical,dae,DAE,,,True,False
 R000069,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,classical,meanmode,Mean/Mode,,,True,False
 R000070,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,classical,medianmode,Median/Mode,,,True,False
 R000071,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,classical,mice,MICE,,,True,False
 R000072,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,classical,missforest,MissForest,,,True,False
-R000073,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,classical,dae,DAE,,,True,False
+R000078,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,202,classical,dae,DAE,,,True,False
 R000074,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,202,classical,meanmode,Mean/Mode,,,True,False
 R000075,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,202,classical,medianmode,Median/Mode,,,True,False
 R000076,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,202,classical,mice,MICE,,,True,False
 R000077,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,202,classical,missforest,MissForest,,,True,False
-R000078,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,202,classical,dae,DAE,,,True,False
+R000083,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,303,classical,dae,DAE,,,True,False
 R000079,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,303,classical,meanmode,Mean/Mode,,,True,False
 R000080,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,303,classical,medianmode,Median/Mode,,,True,False
 R000081,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,303,classical,mice,MICE,,,True,False
 R000082,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,303,classical,missforest,MissForest,,,True,False
-R000083,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,303,classical,dae,DAE,,,True,False
+R000088,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,404,classical,dae,DAE,,,True,False
 R000084,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,404,classical,meanmode,Mean/Mode,,,True,False
 R000085,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,404,classical,medianmode,Median/Mode,,,True,False
 R000086,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,404,classical,mice,MICE,,,True,False
 R000087,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,404,classical,missforest,MissForest,,,True,False
-R000088,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,404,classical,dae,DAE,,,True,False
+R000093,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,505,classical,dae,DAE,,,True,False
 R000089,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,505,classical,meanmode,Mean/Mode,,,True,False
 R000090,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,505,classical,medianmode,Median/Mode,,,True,False
 R000091,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,505,classical,mice,MICE,,,True,False
 R000092,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,505,classical,missforest,MissForest,,,True,False
-R000093,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,505,classical,dae,DAE,,,True,False
+R000107,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,42,classical,dae,DAE,,,True,False
 R000103,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,42,classical,meanmode,Mean/Mode,,,True,False
 R000104,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,42,classical,medianmode,Median/Mode,,,True,False
 R000105,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,42,classical,mice,MICE,,,True,False
 R000106,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,42,classical,missforest,MissForest,,,True,False
-R000107,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,42,classical,dae,DAE,,,True,False
+R000112,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,202,classical,dae,DAE,,,True,False
 R000108,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,202,classical,meanmode,Mean/Mode,,,True,False
 R000109,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,202,classical,medianmode,Median/Mode,,,True,False
 R000110,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,202,classical,mice,MICE,,,True,False
 R000111,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,202,classical,missforest,MissForest,,,True,False
-R000112,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,202,classical,dae,DAE,,,True,False
+R000117,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,303,classical,dae,DAE,,,True,False
 R000113,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,303,classical,meanmode,Mean/Mode,,,True,False
 R000114,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,303,classical,medianmode,Median/Mode,,,True,False
 R000115,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,303,classical,mice,MICE,,,True,False
 R000116,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,303,classical,missforest,MissForest,,,True,False
-R000117,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,303,classical,dae,DAE,,,True,False
+R000122,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,404,classical,dae,DAE,,,True,False
 R000118,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,404,classical,meanmode,Mean/Mode,,,True,False
 R000119,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,404,classical,medianmode,Median/Mode,,,True,False
 R000120,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,404,classical,mice,MICE,,,True,False
 R000121,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,404,classical,missforest,MissForest,,,True,False
-R000122,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,404,classical,dae,DAE,,,True,False
+R000127,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,505,classical,dae,DAE,,,True,False
 R000123,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,505,classical,meanmode,Mean/Mode,,,True,False
 R000124,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,505,classical,medianmode,Median/Mode,,,True,False
 R000125,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,505,classical,mice,MICE,,,True,False
 R000126,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,505,classical,missforest,MissForest,,,True,False
-R000127,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,505,classical,dae,DAE,,,True,False
+R000141,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,classical,dae,DAE,,,True,False
 R000137,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,classical,meanmode,Mean/Mode,,,True,False
 R000138,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,classical,medianmode,Median/Mode,,,True,False
 R000139,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,classical,mice,MICE,,,True,False
 R000140,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,classical,missforest,MissForest,,,True,False
-R000141,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,classical,dae,DAE,,,True,False
+R000146,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,202,classical,dae,DAE,,,True,False
 R000142,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,202,classical,meanmode,Mean/Mode,,,True,False
 R000143,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,202,classical,medianmode,Median/Mode,,,True,False
 R000144,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,202,classical,mice,MICE,,,True,False
 R000145,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,202,classical,missforest,MissForest,,,True,False
-R000146,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,202,classical,dae,DAE,,,True,False
+R000151,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,303,classical,dae,DAE,,,True,False
 R000147,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,303,classical,meanmode,Mean/Mode,,,True,False
 R000148,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,303,classical,medianmode,Median/Mode,,,True,False
 R000149,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,303,classical,mice,MICE,,,True,False
 R000150,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,303,classical,missforest,MissForest,,,True,False
-R000151,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,303,classical,dae,DAE,,,True,False
+R000156,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,404,classical,dae,DAE,,,True,False
 R000152,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,404,classical,meanmode,Mean/Mode,,,True,False
 R000153,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,404,classical,medianmode,Median/Mode,,,True,False
 R000154,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,404,classical,mice,MICE,,,True,False
 R000155,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,404,classical,missforest,MissForest,,,True,False
-R000156,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,404,classical,dae,DAE,,,True,False
+R000161,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,505,classical,dae,DAE,,,True,False
 R000157,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,505,classical,meanmode,Mean/Mode,,,True,False
 R000158,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,505,classical,medianmode,Median/Mode,,,True,False
 R000159,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,505,classical,mice,MICE,,,True,False
 R000160,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,505,classical,missforest,MissForest,,,True,False
-R000161,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,505,classical,dae,DAE,,,True,False
+R000175,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,42,classical,dae,DAE,,,True,False
 R000171,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,42,classical,meanmode,Mean/Mode,,,True,False
 R000172,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,42,classical,medianmode,Median/Mode,,,True,False
 R000173,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,42,classical,mice,MICE,,,True,False
 R000174,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,42,classical,missforest,MissForest,,,True,False
-R000175,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,42,classical,dae,DAE,,,True,False
+R000180,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,202,classical,dae,DAE,,,True,False
 R000176,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,202,classical,meanmode,Mean/Mode,,,True,False
 R000177,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,202,classical,medianmode,Median/Mode,,,True,False
 R000178,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,202,classical,mice,MICE,,,True,False
 R000179,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,202,classical,missforest,MissForest,,,True,False
-R000180,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,202,classical,dae,DAE,,,True,False
+R000185,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,303,classical,dae,DAE,,,True,False
 R000181,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,303,classical,meanmode,Mean/Mode,,,True,False
 R000182,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,303,classical,medianmode,Median/Mode,,,True,False
 R000183,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,303,classical,mice,MICE,,,True,False
 R000184,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,303,classical,missforest,MissForest,,,True,False
-R000185,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,303,classical,dae,DAE,,,True,False
+R000190,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,404,classical,dae,DAE,,,True,False
 R000186,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,404,classical,meanmode,Mean/Mode,,,True,False
 R000187,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,404,classical,medianmode,Median/Mode,,,True,False
 R000188,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,404,classical,mice,MICE,,,True,False
 R000189,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,404,classical,missforest,MissForest,,,True,False
-R000190,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,404,classical,dae,DAE,,,True,False
+R000195,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,505,classical,dae,DAE,,,True,False
 R000191,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,505,classical,meanmode,Mean/Mode,,,True,False
 R000192,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,505,classical,medianmode,Median/Mode,,,True,False
 R000193,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,505,classical,mice,MICE,,,True,False
 R000194,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,505,classical,missforest,MissForest,,,True,False
-R000195,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,505,classical,dae,DAE,,,True,False
-R000205,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,classical,meanmode,Mean/Mode,,,True,True
-R000206,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,classical,medianmode,Median/Mode,,,True,True
-R000207,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,classical,mice,MICE,,,True,True
-R000208,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,classical,missforest,MissForest,,,True,True
-R000209,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,classical,dae,DAE,,,True,True
-R000210,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,classical,meanmode,Mean/Mode,,,True,True
-R000211,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,classical,medianmode,Median/Mode,,,True,True
-R000212,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,classical,mice,MICE,,,True,True
-R000213,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,classical,missforest,MissForest,,,True,True
-R000214,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,classical,dae,DAE,,,True,True
-R000215,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,classical,meanmode,Mean/Mode,,,True,True
-R000216,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,classical,medianmode,Median/Mode,,,True,True
-R000217,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,classical,mice,MICE,,,True,True
-R000218,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,classical,missforest,MissForest,,,True,True
-R000219,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,classical,dae,DAE,,,True,True
-R000220,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,404,classical,meanmode,Mean/Mode,,,True,True
-R000221,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,404,classical,medianmode,Median/Mode,,,True,True
-R000222,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,404,classical,mice,MICE,,,True,True
-R000223,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,404,classical,missforest,MissForest,,,True,True
-R000224,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,404,classical,dae,DAE,,,True,True
-R000225,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,505,classical,meanmode,Mean/Mode,,,True,True
-R000226,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,505,classical,medianmode,Median/Mode,,,True,True
-R000227,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,505,classical,mice,MICE,,,True,True
-R000228,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,505,classical,missforest,MissForest,,,True,True
-R000229,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,505,classical,dae,DAE,,,True,True
-R000239,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,classical,meanmode,Mean/Mode,,,True,True
-R000240,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,classical,medianmode,Median/Mode,,,True,True
-R000241,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,classical,mice,MICE,,,True,True
-R000242,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,classical,missforest,MissForest,,,True,True
-R000243,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,classical,dae,DAE,,,True,True
-R000244,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,classical,meanmode,Mean/Mode,,,True,True
-R000245,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,classical,medianmode,Median/Mode,,,True,True
-R000246,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,classical,mice,MICE,,,True,True
-R000247,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,classical,missforest,MissForest,,,True,True
-R000248,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,classical,dae,DAE,,,True,True
-R000249,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,classical,meanmode,Mean/Mode,,,True,True
-R000250,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,classical,medianmode,Median/Mode,,,True,True
-R000251,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,classical,mice,MICE,,,True,True
-R000252,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,classical,missforest,MissForest,,,True,True
-R000253,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,classical,dae,DAE,,,True,True
-R000254,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,404,classical,meanmode,Mean/Mode,,,True,True
-R000255,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,404,classical,medianmode,Median/Mode,,,True,True
-R000256,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,404,classical,mice,MICE,,,True,True
-R000257,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,404,classical,missforest,MissForest,,,True,True
-R000258,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,404,classical,dae,DAE,,,True,True
-R000259,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,505,classical,meanmode,Mean/Mode,,,True,True
-R000260,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,505,classical,medianmode,Median/Mode,,,True,True
-R000261,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,505,classical,mice,MICE,,,True,True
-R000262,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,505,classical,missforest,MissForest,,,True,True
-R000263,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,505,classical,dae,DAE,,,True,True
+R000209,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,classical,dae,DAE,,,True,False
+R000205,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,classical,meanmode,Mean/Mode,,,True,False
+R000206,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,classical,medianmode,Median/Mode,,,True,False
+R000207,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,classical,mice,MICE,,,True,False
+R000208,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,classical,missforest,MissForest,,,True,False
+R000214,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,classical,dae,DAE,,,True,False
+R000210,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,classical,meanmode,Mean/Mode,,,True,False
+R000211,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,classical,medianmode,Median/Mode,,,True,False
+R000212,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,classical,mice,MICE,,,True,False
+R000213,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,classical,missforest,MissForest,,,True,False
+R000219,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,classical,dae,DAE,,,True,False
+R000215,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,classical,meanmode,Mean/Mode,,,True,False
+R000216,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,classical,medianmode,Median/Mode,,,True,False
+R000217,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,classical,mice,MICE,,,True,False
+R000218,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,classical,missforest,MissForest,,,True,False
+R000224,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,404,classical,dae,DAE,,,True,False
+R000220,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,404,classical,meanmode,Mean/Mode,,,True,False
+R000221,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,404,classical,medianmode,Median/Mode,,,True,False
+R000222,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,404,classical,mice,MICE,,,True,False
+R000223,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,404,classical,missforest,MissForest,,,True,False
+R000229,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,505,classical,dae,DAE,,,True,False
+R000225,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,505,classical,meanmode,Mean/Mode,,,True,False
+R000226,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,505,classical,medianmode,Median/Mode,,,True,False
+R000227,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,505,classical,mice,MICE,,,True,False
+R000228,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,505,classical,missforest,MissForest,,,True,False
+R000243,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,classical,dae,DAE,,,True,False
+R000239,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,classical,meanmode,Mean/Mode,,,True,False
+R000240,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,classical,medianmode,Median/Mode,,,True,False
+R000241,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,classical,mice,MICE,,,True,False
+R000242,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,classical,missforest,MissForest,,,True,False
+R000248,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,classical,dae,DAE,,,True,False
+R000244,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,classical,meanmode,Mean/Mode,,,True,False
+R000245,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,classical,medianmode,Median/Mode,,,True,False
+R000246,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,classical,mice,MICE,,,True,False
+R000247,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,classical,missforest,MissForest,,,True,False
+R000253,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,classical,dae,DAE,,,True,False
+R000249,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,classical,meanmode,Mean/Mode,,,True,False
+R000250,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,classical,medianmode,Median/Mode,,,True,False
+R000251,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,classical,mice,MICE,,,True,False
+R000252,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,classical,missforest,MissForest,,,True,False
+R000258,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,404,classical,dae,DAE,,,True,False
+R000254,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,404,classical,meanmode,Mean/Mode,,,True,False
+R000255,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,404,classical,medianmode,Median/Mode,,,True,False
+R000256,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,404,classical,mice,MICE,,,True,False
+R000257,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,404,classical,missforest,MissForest,,,True,False
+R000263,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,505,classical,dae,DAE,,,True,False
+R000259,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,505,classical,meanmode,Mean/Mode,,,True,False
+R000260,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,505,classical,medianmode,Median/Mode,,,True,False
+R000261,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,505,classical,mice,MICE,,,True,False
+R000262,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,505,classical,missforest,MissForest,,,True,False
+R000277,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,classical,dae,DAE,,,True,False
 R000273,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,classical,meanmode,Mean/Mode,,,True,False
 R000274,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,classical,medianmode,Median/Mode,,,True,False
 R000275,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,classical,mice,MICE,,,True,False
 R000276,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,classical,missforest,MissForest,,,True,False
-R000277,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,classical,dae,DAE,,,True,False
+R000282,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,202,classical,dae,DAE,,,True,False
 R000278,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,202,classical,meanmode,Mean/Mode,,,True,False
 R000279,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,202,classical,medianmode,Median/Mode,,,True,False
 R000280,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,202,classical,mice,MICE,,,True,False
 R000281,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,202,classical,missforest,MissForest,,,True,False
-R000282,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,202,classical,dae,DAE,,,True,False
+R000287,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,303,classical,dae,DAE,,,True,False
 R000283,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,303,classical,meanmode,Mean/Mode,,,True,False
 R000284,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,303,classical,medianmode,Median/Mode,,,True,False
 R000285,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,303,classical,mice,MICE,,,True,False
 R000286,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,303,classical,missforest,MissForest,,,True,False
-R000287,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,303,classical,dae,DAE,,,True,False
+R000292,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,404,classical,dae,DAE,,,True,False
 R000288,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,404,classical,meanmode,Mean/Mode,,,True,False
 R000289,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,404,classical,medianmode,Median/Mode,,,True,False
 R000290,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,404,classical,mice,MICE,,,True,False
 R000291,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,404,classical,missforest,MissForest,,,True,False
-R000292,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,404,classical,dae,DAE,,,True,False
+R000297,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,505,classical,dae,DAE,,,True,False
 R000293,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,505,classical,meanmode,Mean/Mode,,,True,False
 R000294,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,505,classical,medianmode,Median/Mode,,,True,False
 R000295,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,505,classical,mice,MICE,,,True,False
 R000296,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,505,classical,missforest,MissForest,,,True,False
-R000297,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,505,classical,dae,DAE,,,True,False
+R000311,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,42,classical,dae,DAE,,,True,False
 R000307,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,42,classical,meanmode,Mean/Mode,,,True,False
 R000308,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,42,classical,medianmode,Median/Mode,,,True,False
 R000309,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,42,classical,mice,MICE,,,True,False
 R000310,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,42,classical,missforest,MissForest,,,True,False
-R000311,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,42,classical,dae,DAE,,,True,False
+R000316,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,202,classical,dae,DAE,,,True,False
 R000312,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,202,classical,meanmode,Mean/Mode,,,True,False
 R000313,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,202,classical,medianmode,Median/Mode,,,True,False
 R000314,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,202,classical,mice,MICE,,,True,False
 R000315,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,202,classical,missforest,MissForest,,,True,False
-R000316,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,202,classical,dae,DAE,,,True,False
+R000321,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,303,classical,dae,DAE,,,True,False
 R000317,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,303,classical,meanmode,Mean/Mode,,,True,False
 R000318,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,303,classical,medianmode,Median/Mode,,,True,False
 R000319,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,303,classical,mice,MICE,,,True,False
 R000320,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,303,classical,missforest,MissForest,,,True,False
-R000321,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,303,classical,dae,DAE,,,True,False
+R000326,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,404,classical,dae,DAE,,,True,False
 R000322,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,404,classical,meanmode,Mean/Mode,,,True,False
 R000323,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,404,classical,medianmode,Median/Mode,,,True,False
 R000324,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,404,classical,mice,MICE,,,True,False
 R000325,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,404,classical,missforest,MissForest,,,True,False
-R000326,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,404,classical,dae,DAE,,,True,False
+R000331,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,505,classical,dae,DAE,,,True,False
 R000327,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,505,classical,meanmode,Mean/Mode,,,True,False
 R000328,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,505,classical,medianmode,Median/Mode,,,True,False
 R000329,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,505,classical,mice,MICE,,,True,False
 R000330,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,505,classical,missforest,MissForest,,,True,False
-R000331,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,505,classical,dae,DAE,,,True,False
+R000345,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,classical,dae,DAE,,,True,False
 R000341,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,classical,meanmode,Mean/Mode,,,True,False
 R000342,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,classical,medianmode,Median/Mode,,,True,False
 R000343,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,classical,mice,MICE,,,True,False
 R000344,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,classical,missforest,MissForest,,,True,False
-R000345,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,classical,dae,DAE,,,True,False
+R000350,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,202,classical,dae,DAE,,,True,False
 R000346,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,202,classical,meanmode,Mean/Mode,,,True,False
 R000347,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,202,classical,medianmode,Median/Mode,,,True,False
 R000348,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,202,classical,mice,MICE,,,True,False
 R000349,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,202,classical,missforest,MissForest,,,True,False
-R000350,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,202,classical,dae,DAE,,,True,False
+R000355,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,303,classical,dae,DAE,,,True,False
 R000351,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,303,classical,meanmode,Mean/Mode,,,True,False
 R000352,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,303,classical,medianmode,Median/Mode,,,True,False
 R000353,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,303,classical,mice,MICE,,,True,False
 R000354,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,303,classical,missforest,MissForest,,,True,False
-R000355,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,303,classical,dae,DAE,,,True,False
+R000360,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,404,classical,dae,DAE,,,True,False
 R000356,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,404,classical,meanmode,Mean/Mode,,,True,False
 R000357,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,404,classical,medianmode,Median/Mode,,,True,False
 R000358,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,404,classical,mice,MICE,,,True,False
 R000359,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,404,classical,missforest,MissForest,,,True,False
-R000360,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,404,classical,dae,DAE,,,True,False
+R000365,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,505,classical,dae,DAE,,,True,False
 R000361,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,505,classical,meanmode,Mean/Mode,,,True,False
 R000362,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,505,classical,medianmode,Median/Mode,,,True,False
 R000363,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,505,classical,mice,MICE,,,True,False
 R000364,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,505,classical,missforest,MissForest,,,True,False
-R000365,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,505,classical,dae,DAE,,,True,False
+R000379,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,42,classical,dae,DAE,,,True,False
 R000375,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,42,classical,meanmode,Mean/Mode,,,True,False
 R000376,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,42,classical,medianmode,Median/Mode,,,True,False
 R000377,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,42,classical,mice,MICE,,,True,False
 R000378,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,42,classical,missforest,MissForest,,,True,False
-R000379,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,42,classical,dae,DAE,,,True,False
+R000384,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,202,classical,dae,DAE,,,True,False
 R000380,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,202,classical,meanmode,Mean/Mode,,,True,False
 R000381,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,202,classical,medianmode,Median/Mode,,,True,False
 R000382,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,202,classical,mice,MICE,,,True,False
 R000383,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,202,classical,missforest,MissForest,,,True,False
-R000384,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,202,classical,dae,DAE,,,True,False
+R000389,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,303,classical,dae,DAE,,,True,False
 R000385,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,303,classical,meanmode,Mean/Mode,,,True,False
 R000386,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,303,classical,medianmode,Median/Mode,,,True,False
 R000387,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,303,classical,mice,MICE,,,True,False
 R000388,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,303,classical,missforest,MissForest,,,True,False
-R000389,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,303,classical,dae,DAE,,,True,False
+R000394,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,404,classical,dae,DAE,,,True,False
 R000390,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,404,classical,meanmode,Mean/Mode,,,True,False
 R000391,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,404,classical,medianmode,Median/Mode,,,True,False
 R000392,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,404,classical,mice,MICE,,,True,False
 R000393,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,404,classical,missforest,MissForest,,,True,False
-R000394,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,404,classical,dae,DAE,,,True,False
+R000399,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,505,classical,dae,DAE,,,True,False
 R000395,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,505,classical,meanmode,Mean/Mode,,,True,False
 R000396,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,505,classical,medianmode,Median/Mode,,,True,False
 R000397,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,505,classical,mice,MICE,,,True,False
 R000398,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,505,classical,missforest,MissForest,,,True,False
-R000399,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,505,classical,dae,DAE,,,True,False
+R000413,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,classical,dae,DAE,,,True,False
 R000409,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,classical,meanmode,Mean/Mode,,,True,False
 R000410,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,classical,medianmode,Median/Mode,,,True,False
 R000411,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,classical,mice,MICE,,,True,False
 R000412,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,classical,missforest,MissForest,,,True,False
-R000413,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,classical,dae,DAE,,,True,False
+R000418,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,202,classical,dae,DAE,,,True,False
 R000414,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,202,classical,meanmode,Mean/Mode,,,True,False
 R000415,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,202,classical,medianmode,Median/Mode,,,True,False
 R000416,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,202,classical,mice,MICE,,,True,False
 R000417,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,202,classical,missforest,MissForest,,,True,False
-R000418,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,202,classical,dae,DAE,,,True,False
+R000423,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,303,classical,dae,DAE,,,True,False
 R000419,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,303,classical,meanmode,Mean/Mode,,,True,False
 R000420,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,303,classical,medianmode,Median/Mode,,,True,False
 R000421,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,303,classical,mice,MICE,,,True,False
 R000422,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,303,classical,missforest,MissForest,,,True,False
-R000423,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,303,classical,dae,DAE,,,True,False
+R000428,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,404,classical,dae,DAE,,,True,False
 R000424,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,404,classical,meanmode,Mean/Mode,,,True,False
 R000425,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,404,classical,medianmode,Median/Mode,,,True,False
 R000426,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,404,classical,mice,MICE,,,True,False
 R000427,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,404,classical,missforest,MissForest,,,True,False
-R000428,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,404,classical,dae,DAE,,,True,False
+R000433,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,505,classical,dae,DAE,,,True,False
 R000429,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,505,classical,meanmode,Mean/Mode,,,True,False
 R000430,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,505,classical,medianmode,Median/Mode,,,True,False
 R000431,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,505,classical,mice,MICE,,,True,False
 R000432,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,505,classical,missforest,MissForest,,,True,False
-R000433,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,505,classical,dae,DAE,,,True,False
+R000447,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,42,classical,dae,DAE,,,True,False
 R000443,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,42,classical,meanmode,Mean/Mode,,,True,False
 R000444,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,42,classical,medianmode,Median/Mode,,,True,False
 R000445,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,42,classical,mice,MICE,,,True,False
 R000446,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,42,classical,missforest,MissForest,,,True,False
-R000447,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,42,classical,dae,DAE,,,True,False
+R000452,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,202,classical,dae,DAE,,,True,False
 R000448,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,202,classical,meanmode,Mean/Mode,,,True,False
 R000449,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,202,classical,medianmode,Median/Mode,,,True,False
 R000450,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,202,classical,mice,MICE,,,True,False
 R000451,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,202,classical,missforest,MissForest,,,True,False
-R000452,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,202,classical,dae,DAE,,,True,False
+R000457,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,303,classical,dae,DAE,,,True,False
 R000453,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,303,classical,meanmode,Mean/Mode,,,True,False
 R000454,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,303,classical,medianmode,Median/Mode,,,True,False
 R000455,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,303,classical,mice,MICE,,,True,False
 R000456,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,303,classical,missforest,MissForest,,,True,False
-R000457,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,303,classical,dae,DAE,,,True,False
+R000462,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,404,classical,dae,DAE,,,True,False
 R000458,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,404,classical,meanmode,Mean/Mode,,,True,False
 R000459,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,404,classical,medianmode,Median/Mode,,,True,False
 R000460,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,404,classical,mice,MICE,,,True,False
 R000461,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,404,classical,missforest,MissForest,,,True,False
-R000462,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,404,classical,dae,DAE,,,True,False
+R000467,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,505,classical,dae,DAE,,,True,False
 R000463,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,505,classical,meanmode,Mean/Mode,,,True,False
 R000464,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,505,classical,medianmode,Median/Mode,,,True,False
 R000465,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,505,classical,mice,MICE,,,True,False
 R000466,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,505,classical,missforest,MissForest,,,True,False
-R000467,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,505,classical,dae,DAE,,,True,False
-R000477,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,classical,meanmode,Mean/Mode,,,True,True
-R000478,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,classical,medianmode,Median/Mode,,,True,True
-R000479,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,classical,mice,MICE,,,True,True
-R000480,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,classical,missforest,MissForest,,,True,True
-R000481,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,classical,dae,DAE,,,True,True
-R000482,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,classical,meanmode,Mean/Mode,,,True,True
-R000483,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,classical,medianmode,Median/Mode,,,True,True
-R000484,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,classical,mice,MICE,,,True,True
-R000485,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,classical,missforest,MissForest,,,True,True
-R000486,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,classical,dae,DAE,,,True,True
-R000487,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,classical,meanmode,Mean/Mode,,,True,True
-R000488,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,classical,medianmode,Median/Mode,,,True,True
-R000489,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,classical,mice,MICE,,,True,True
-R000490,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,classical,missforest,MissForest,,,True,True
-R000491,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,classical,dae,DAE,,,True,True
-R000492,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,404,classical,meanmode,Mean/Mode,,,True,True
-R000493,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,404,classical,medianmode,Median/Mode,,,True,True
-R000494,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,404,classical,mice,MICE,,,True,True
-R000495,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,404,classical,missforest,MissForest,,,True,True
-R000496,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,404,classical,dae,DAE,,,True,True
-R000497,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,505,classical,meanmode,Mean/Mode,,,True,True
-R000498,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,505,classical,medianmode,Median/Mode,,,True,True
-R000499,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,505,classical,mice,MICE,,,True,True
-R000500,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,505,classical,missforest,MissForest,,,True,True
-R000501,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,505,classical,dae,DAE,,,True,True
-R000511,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,classical,meanmode,Mean/Mode,,,True,True
-R000512,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,classical,medianmode,Median/Mode,,,True,True
-R000513,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,classical,mice,MICE,,,True,True
-R000514,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,classical,missforest,MissForest,,,True,True
-R000515,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,classical,dae,DAE,,,True,True
-R000516,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,classical,meanmode,Mean/Mode,,,True,True
-R000517,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,classical,medianmode,Median/Mode,,,True,True
-R000518,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,classical,mice,MICE,,,True,True
-R000519,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,classical,missforest,MissForest,,,True,True
-R000520,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,classical,dae,DAE,,,True,True
-R000521,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,classical,meanmode,Mean/Mode,,,True,True
-R000522,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,classical,medianmode,Median/Mode,,,True,True
-R000523,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,classical,mice,MICE,,,True,True
-R000524,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,classical,missforest,MissForest,,,True,True
-R000525,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,classical,dae,DAE,,,True,True
-R000526,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,404,classical,meanmode,Mean/Mode,,,True,True
-R000527,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,404,classical,medianmode,Median/Mode,,,True,True
-R000528,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,404,classical,mice,MICE,,,True,True
-R000529,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,404,classical,missforest,MissForest,,,True,True
-R000530,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,404,classical,dae,DAE,,,True,True
-R000531,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,505,classical,meanmode,Mean/Mode,,,True,True
-R000532,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,505,classical,medianmode,Median/Mode,,,True,True
-R000533,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,505,classical,mice,MICE,,,True,True
-R000534,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,505,classical,missforest,MissForest,,,True,True
-R000535,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,505,classical,dae,DAE,,,True,True
+R000481,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,classical,dae,DAE,,,True,False
+R000477,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,classical,meanmode,Mean/Mode,,,True,False
+R000478,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,classical,medianmode,Median/Mode,,,True,False
+R000479,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,classical,mice,MICE,,,True,False
+R000480,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,classical,missforest,MissForest,,,True,False
+R000486,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,classical,dae,DAE,,,True,False
+R000482,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,classical,meanmode,Mean/Mode,,,True,False
+R000483,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,classical,medianmode,Median/Mode,,,True,False
+R000484,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,classical,mice,MICE,,,True,False
+R000485,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,classical,missforest,MissForest,,,True,False
+R000491,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,classical,dae,DAE,,,True,False
+R000487,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,classical,meanmode,Mean/Mode,,,True,False
+R000488,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,classical,medianmode,Median/Mode,,,True,False
+R000489,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,classical,mice,MICE,,,True,False
+R000490,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,classical,missforest,MissForest,,,True,False
+R000496,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,404,classical,dae,DAE,,,True,False
+R000492,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,404,classical,meanmode,Mean/Mode,,,True,False
+R000493,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,404,classical,medianmode,Median/Mode,,,True,False
+R000494,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,404,classical,mice,MICE,,,True,False
+R000495,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,404,classical,missforest,MissForest,,,True,False
+R000501,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,505,classical,dae,DAE,,,True,False
+R000497,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,505,classical,meanmode,Mean/Mode,,,True,False
+R000498,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,505,classical,medianmode,Median/Mode,,,True,False
+R000499,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,505,classical,mice,MICE,,,True,False
+R000500,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,505,classical,missforest,MissForest,,,True,False
+R000515,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,classical,dae,DAE,,,True,False
+R000511,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,classical,meanmode,Mean/Mode,,,True,False
+R000512,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,classical,medianmode,Median/Mode,,,True,False
+R000513,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,classical,mice,MICE,,,True,False
+R000514,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,classical,missforest,MissForest,,,True,False
+R000520,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,classical,dae,DAE,,,True,False
+R000516,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,classical,meanmode,Mean/Mode,,,True,False
+R000517,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,classical,medianmode,Median/Mode,,,True,False
+R000518,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,classical,mice,MICE,,,True,False
+R000519,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,classical,missforest,MissForest,,,True,False
+R000525,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,classical,dae,DAE,,,True,False
+R000521,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,classical,meanmode,Mean/Mode,,,True,False
+R000522,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,classical,medianmode,Median/Mode,,,True,False
+R000523,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,classical,mice,MICE,,,True,False
+R000524,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,classical,missforest,MissForest,,,True,False
+R000530,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,404,classical,dae,DAE,,,True,False
+R000526,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,404,classical,meanmode,Mean/Mode,,,True,False
+R000527,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,404,classical,medianmode,Median/Mode,,,True,False
+R000528,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,404,classical,mice,MICE,,,True,False
+R000529,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,404,classical,missforest,MissForest,,,True,False
+R000535,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,505,classical,dae,DAE,,,True,False
+R000531,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,505,classical,meanmode,Mean/Mode,,,True,False
+R000532,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,505,classical,medianmode,Median/Mode,,,True,False
+R000533,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,505,classical,mice,MICE,,,True,False
+R000534,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,505,classical,missforest,MissForest,,,True,False
+R000549,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,classical,dae,DAE,,,True,False
 R000545,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,classical,meanmode,Mean/Mode,,,True,False
 R000546,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,classical,medianmode,Median/Mode,,,True,False
 R000547,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,classical,mice,MICE,,,True,False
 R000548,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,classical,missforest,MissForest,,,True,False
-R000549,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,classical,dae,DAE,,,True,False
+R000554,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,202,classical,dae,DAE,,,True,False
 R000550,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,202,classical,meanmode,Mean/Mode,,,True,False
 R000551,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,202,classical,medianmode,Median/Mode,,,True,False
 R000552,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,202,classical,mice,MICE,,,True,False
 R000553,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,202,classical,missforest,MissForest,,,True,False
-R000554,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,202,classical,dae,DAE,,,True,False
+R000559,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,303,classical,dae,DAE,,,True,False
 R000555,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,303,classical,meanmode,Mean/Mode,,,True,False
 R000556,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,303,classical,medianmode,Median/Mode,,,True,False
 R000557,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,303,classical,mice,MICE,,,True,False
 R000558,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,303,classical,missforest,MissForest,,,True,False
-R000559,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,303,classical,dae,DAE,,,True,False
+R000564,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,404,classical,dae,DAE,,,True,False
 R000560,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,404,classical,meanmode,Mean/Mode,,,True,False
 R000561,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,404,classical,medianmode,Median/Mode,,,True,False
 R000562,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,404,classical,mice,MICE,,,True,False
 R000563,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,404,classical,missforest,MissForest,,,True,False
-R000564,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,404,classical,dae,DAE,,,True,False
+R000569,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,505,classical,dae,DAE,,,True,False
 R000565,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,505,classical,meanmode,Mean/Mode,,,True,False
 R000566,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,505,classical,medianmode,Median/Mode,,,True,False
 R000567,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,505,classical,mice,MICE,,,True,False
 R000568,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,505,classical,missforest,MissForest,,,True,False
-R000569,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,505,classical,dae,DAE,,,True,False
+R000583,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,42,classical,dae,DAE,,,True,False
 R000579,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,42,classical,meanmode,Mean/Mode,,,True,False
 R000580,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,42,classical,medianmode,Median/Mode,,,True,False
 R000581,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,42,classical,mice,MICE,,,True,False
 R000582,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,42,classical,missforest,MissForest,,,True,False
-R000583,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,42,classical,dae,DAE,,,True,False
+R000588,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,202,classical,dae,DAE,,,True,False
 R000584,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,202,classical,meanmode,Mean/Mode,,,True,False
 R000585,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,202,classical,medianmode,Median/Mode,,,True,False
 R000586,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,202,classical,mice,MICE,,,True,False
 R000587,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,202,classical,missforest,MissForest,,,True,False
-R000588,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,202,classical,dae,DAE,,,True,False
+R000593,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,303,classical,dae,DAE,,,True,False
 R000589,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,303,classical,meanmode,Mean/Mode,,,True,False
 R000590,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,303,classical,medianmode,Median/Mode,,,True,False
 R000591,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,303,classical,mice,MICE,,,True,False
 R000592,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,303,classical,missforest,MissForest,,,True,False
-R000593,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,303,classical,dae,DAE,,,True,False
+R000598,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,404,classical,dae,DAE,,,True,False
 R000594,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,404,classical,meanmode,Mean/Mode,,,True,False
 R000595,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,404,classical,medianmode,Median/Mode,,,True,False
 R000596,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,404,classical,mice,MICE,,,True,False
 R000597,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,404,classical,missforest,MissForest,,,True,False
-R000598,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,404,classical,dae,DAE,,,True,False
+R000603,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,505,classical,dae,DAE,,,True,False
 R000599,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,505,classical,meanmode,Mean/Mode,,,True,False
 R000600,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,505,classical,medianmode,Median/Mode,,,True,False
 R000601,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,505,classical,mice,MICE,,,True,False
 R000602,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,505,classical,missforest,MissForest,,,True,False
-R000603,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,505,classical,dae,DAE,,,True,False
+R000617,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,classical,dae,DAE,,,True,False
 R000613,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,classical,meanmode,Mean/Mode,,,True,False
 R000614,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,classical,medianmode,Median/Mode,,,True,False
 R000615,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,classical,mice,MICE,,,True,False
 R000616,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,classical,missforest,MissForest,,,True,False
-R000617,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,classical,dae,DAE,,,True,False
+R000622,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,202,classical,dae,DAE,,,True,False
 R000618,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,202,classical,meanmode,Mean/Mode,,,True,False
 R000619,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,202,classical,medianmode,Median/Mode,,,True,False
 R000620,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,202,classical,mice,MICE,,,True,False
 R000621,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,202,classical,missforest,MissForest,,,True,False
-R000622,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,202,classical,dae,DAE,,,True,False
+R000627,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,303,classical,dae,DAE,,,True,False
 R000623,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,303,classical,meanmode,Mean/Mode,,,True,False
 R000624,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,303,classical,medianmode,Median/Mode,,,True,False
 R000625,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,303,classical,mice,MICE,,,True,False
 R000626,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,303,classical,missforest,MissForest,,,True,False
-R000627,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,303,classical,dae,DAE,,,True,False
+R000632,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,404,classical,dae,DAE,,,True,False
 R000628,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,404,classical,meanmode,Mean/Mode,,,True,False
 R000629,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,404,classical,medianmode,Median/Mode,,,True,False
 R000630,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,404,classical,mice,MICE,,,True,False
 R000631,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,404,classical,missforest,MissForest,,,True,False
-R000632,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,404,classical,dae,DAE,,,True,False
+R000637,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,505,classical,dae,DAE,,,True,False
 R000633,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,505,classical,meanmode,Mean/Mode,,,True,False
 R000634,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,505,classical,medianmode,Median/Mode,,,True,False
 R000635,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,505,classical,mice,MICE,,,True,False
 R000636,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,505,classical,missforest,MissForest,,,True,False
-R000637,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,505,classical,dae,DAE,,,True,False
+R000651,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,42,classical,dae,DAE,,,True,False
 R000647,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,42,classical,meanmode,Mean/Mode,,,True,False
 R000648,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,42,classical,medianmode,Median/Mode,,,True,False
 R000649,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,42,classical,mice,MICE,,,True,False
 R000650,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,42,classical,missforest,MissForest,,,True,False
-R000651,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,42,classical,dae,DAE,,,True,False
+R000656,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,202,classical,dae,DAE,,,True,False
 R000652,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,202,classical,meanmode,Mean/Mode,,,True,False
 R000653,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,202,classical,medianmode,Median/Mode,,,True,False
 R000654,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,202,classical,mice,MICE,,,True,False
 R000655,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,202,classical,missforest,MissForest,,,True,False
-R000656,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,202,classical,dae,DAE,,,True,False
+R000661,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,303,classical,dae,DAE,,,True,False
 R000657,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,303,classical,meanmode,Mean/Mode,,,True,False
 R000658,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,303,classical,medianmode,Median/Mode,,,True,False
 R000659,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,303,classical,mice,MICE,,,True,False
 R000660,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,303,classical,missforest,MissForest,,,True,False
-R000661,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,303,classical,dae,DAE,,,True,False
+R000666,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,404,classical,dae,DAE,,,True,False
 R000662,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,404,classical,meanmode,Mean/Mode,,,True,False
 R000663,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,404,classical,medianmode,Median/Mode,,,True,False
 R000664,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,404,classical,mice,MICE,,,True,False
 R000665,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,404,classical,missforest,MissForest,,,True,False
-R000666,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,404,classical,dae,DAE,,,True,False
+R000671,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,505,classical,dae,DAE,,,True,False
 R000667,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,505,classical,meanmode,Mean/Mode,,,True,False
 R000668,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,505,classical,medianmode,Median/Mode,,,True,False
 R000669,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,505,classical,mice,MICE,,,True,False
 R000670,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,505,classical,missforest,MissForest,,,True,False
-R000671,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,505,classical,dae,DAE,,,True,False
+R000685,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,classical,dae,DAE,,,True,False
 R000681,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,classical,meanmode,Mean/Mode,,,True,False
 R000682,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,classical,medianmode,Median/Mode,,,True,False
 R000683,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,classical,mice,MICE,,,True,False
 R000684,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,classical,missforest,MissForest,,,True,False
-R000685,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,classical,dae,DAE,,,True,False
+R000690,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,202,classical,dae,DAE,,,True,False
 R000686,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,202,classical,meanmode,Mean/Mode,,,True,False
 R000687,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,202,classical,medianmode,Median/Mode,,,True,False
 R000688,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,202,classical,mice,MICE,,,True,False
 R000689,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,202,classical,missforest,MissForest,,,True,False
-R000690,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,202,classical,dae,DAE,,,True,False
+R000695,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,303,classical,dae,DAE,,,True,False
 R000691,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,303,classical,meanmode,Mean/Mode,,,True,False
 R000692,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,303,classical,medianmode,Median/Mode,,,True,False
 R000693,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,303,classical,mice,MICE,,,True,False
 R000694,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,303,classical,missforest,MissForest,,,True,False
-R000695,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,303,classical,dae,DAE,,,True,False
+R000700,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,404,classical,dae,DAE,,,True,False
 R000696,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,404,classical,meanmode,Mean/Mode,,,True,False
 R000697,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,404,classical,medianmode,Median/Mode,,,True,False
 R000698,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,404,classical,mice,MICE,,,True,False
 R000699,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,404,classical,missforest,MissForest,,,True,False
-R000700,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,404,classical,dae,DAE,,,True,False
+R000705,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,505,classical,dae,DAE,,,True,False
 R000701,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,505,classical,meanmode,Mean/Mode,,,True,False
 R000702,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,505,classical,medianmode,Median/Mode,,,True,False
 R000703,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,505,classical,mice,MICE,,,True,False
 R000704,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,505,classical,missforest,MissForest,,,True,False
-R000705,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,505,classical,dae,DAE,,,True,False
+R000719,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,42,classical,dae,DAE,,,True,False
 R000715,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,42,classical,meanmode,Mean/Mode,,,True,False
 R000716,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,42,classical,medianmode,Median/Mode,,,True,False
 R000717,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,42,classical,mice,MICE,,,True,False
 R000718,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,42,classical,missforest,MissForest,,,True,False
-R000719,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,42,classical,dae,DAE,,,True,False
+R000724,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,202,classical,dae,DAE,,,True,False
 R000720,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,202,classical,meanmode,Mean/Mode,,,True,False
 R000721,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,202,classical,medianmode,Median/Mode,,,True,False
 R000722,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,202,classical,mice,MICE,,,True,False
 R000723,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,202,classical,missforest,MissForest,,,True,False
-R000724,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,202,classical,dae,DAE,,,True,False
+R000729,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,303,classical,dae,DAE,,,True,False
 R000725,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,303,classical,meanmode,Mean/Mode,,,True,False
 R000726,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,303,classical,medianmode,Median/Mode,,,True,False
 R000727,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,303,classical,mice,MICE,,,True,False
 R000728,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,303,classical,missforest,MissForest,,,True,False
-R000729,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,303,classical,dae,DAE,,,True,False
+R000734,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,404,classical,dae,DAE,,,True,False
 R000730,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,404,classical,meanmode,Mean/Mode,,,True,False
 R000731,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,404,classical,medianmode,Median/Mode,,,True,False
 R000732,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,404,classical,mice,MICE,,,True,False
 R000733,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,404,classical,missforest,MissForest,,,True,False
-R000734,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,404,classical,dae,DAE,,,True,False
+R000739,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,505,classical,dae,DAE,,,True,False
 R000735,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,505,classical,meanmode,Mean/Mode,,,True,False
 R000736,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,505,classical,medianmode,Median/Mode,,,True,False
 R000737,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,505,classical,mice,MICE,,,True,False
 R000738,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,505,classical,missforest,MissForest,,,True,False
-R000739,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,505,classical,dae,DAE,,,True,False
-R000749,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,classical,meanmode,Mean/Mode,,,True,True
-R000750,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,classical,medianmode,Median/Mode,,,True,True
-R000751,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,classical,mice,MICE,,,True,True
-R000752,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,classical,missforest,MissForest,,,True,True
-R000753,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,classical,dae,DAE,,,True,True
-R000754,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,classical,meanmode,Mean/Mode,,,True,True
-R000755,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,classical,medianmode,Median/Mode,,,True,True
-R000756,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,classical,mice,MICE,,,True,True
-R000757,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,classical,missforest,MissForest,,,True,True
-R000758,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,classical,dae,DAE,,,True,True
-R000759,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,classical,meanmode,Mean/Mode,,,True,True
-R000760,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,classical,medianmode,Median/Mode,,,True,True
-R000761,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,classical,mice,MICE,,,True,True
-R000762,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,classical,missforest,MissForest,,,True,True
-R000763,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,classical,dae,DAE,,,True,True
-R000764,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,404,classical,meanmode,Mean/Mode,,,True,True
-R000765,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,404,classical,medianmode,Median/Mode,,,True,True
-R000766,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,404,classical,mice,MICE,,,True,True
-R000767,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,404,classical,missforest,MissForest,,,True,True
-R000768,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,404,classical,dae,DAE,,,True,True
-R000769,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,505,classical,meanmode,Mean/Mode,,,True,True
-R000770,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,505,classical,medianmode,Median/Mode,,,True,True
-R000771,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,505,classical,mice,MICE,,,True,True
-R000772,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,505,classical,missforest,MissForest,,,True,True
-R000773,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,505,classical,dae,DAE,,,True,True
-R000783,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,classical,meanmode,Mean/Mode,,,True,True
-R000784,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,classical,medianmode,Median/Mode,,,True,True
-R000785,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,classical,mice,MICE,,,True,True
-R000786,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,classical,missforest,MissForest,,,True,True
-R000787,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,classical,dae,DAE,,,True,True
-R000788,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,classical,meanmode,Mean/Mode,,,True,True
-R000789,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,classical,medianmode,Median/Mode,,,True,True
-R000790,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,classical,mice,MICE,,,True,True
-R000791,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,classical,missforest,MissForest,,,True,True
-R000792,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,classical,dae,DAE,,,True,True
-R000793,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,classical,meanmode,Mean/Mode,,,True,True
-R000794,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,classical,medianmode,Median/Mode,,,True,True
-R000795,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,classical,mice,MICE,,,True,True
-R000796,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,classical,missforest,MissForest,,,True,True
-R000797,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,classical,dae,DAE,,,True,True
-R000798,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,404,classical,meanmode,Mean/Mode,,,True,True
-R000799,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,404,classical,medianmode,Median/Mode,,,True,True
-R000800,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,404,classical,mice,MICE,,,True,True
-R000801,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,404,classical,missforest,MissForest,,,True,True
-R000802,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,404,classical,dae,DAE,,,True,True
-R000803,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,505,classical,meanmode,Mean/Mode,,,True,True
-R000804,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,505,classical,medianmode,Median/Mode,,,True,True
-R000805,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,505,classical,mice,MICE,,,True,True
-R000806,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,505,classical,missforest,MissForest,,,True,True
-R000807,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,505,classical,dae,DAE,,,True,True
-R000808,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000809,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000810,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000811,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000812,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000813,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000814,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000815,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000816,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000817,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000818,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000819,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000820,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000821,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000822,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000823,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000824,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000825,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000826,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000827,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000828,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000829,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000830,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000831,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000832,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000833,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000834,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000835,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000836,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000837,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000838,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000839,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000840,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000841,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000842,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000843,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000844,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000845,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000846,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000847,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000848,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000849,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000850,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000851,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000852,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000853,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000854,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000855,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000856,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000857,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000858,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000859,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000860,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000861,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000862,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000863,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000864,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000865,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000866,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000867,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000868,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000869,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000870,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000871,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000872,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000873,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000874,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000875,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000876,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000877,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000878,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000879,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000880,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000881,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000882,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000883,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000884,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000885,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000886,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000887,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000888,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000889,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000890,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000891,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000892,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000893,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000894,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000895,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000896,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000897,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000898,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000899,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000900,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000901,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000902,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000903,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000904,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000905,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000906,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000907,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000908,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000909,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000910,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000911,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000912,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000913,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000914,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000915,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000916,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000917,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000918,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000919,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000920,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000921,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000922,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000923,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000924,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000925,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000926,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,404,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
-R000927,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,505,classical,mice_post_mean,MICE posterior mean (m=5),,,False,True
+R000753,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,classical,dae,DAE,,,True,False
+R000749,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,classical,meanmode,Mean/Mode,,,True,False
+R000750,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,classical,medianmode,Median/Mode,,,True,False
+R000751,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,classical,mice,MICE,,,True,False
+R000752,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,classical,missforest,MissForest,,,True,False
+R000758,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,classical,dae,DAE,,,True,False
+R000754,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,classical,meanmode,Mean/Mode,,,True,False
+R000755,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,classical,medianmode,Median/Mode,,,True,False
+R000756,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,classical,mice,MICE,,,True,False
+R000757,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,classical,missforest,MissForest,,,True,False
+R000763,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,classical,dae,DAE,,,True,False
+R000759,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,classical,meanmode,Mean/Mode,,,True,False
+R000760,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,classical,medianmode,Median/Mode,,,True,False
+R000761,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,classical,mice,MICE,,,True,False
+R000762,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,classical,missforest,MissForest,,,True,False
+R000768,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,404,classical,dae,DAE,,,True,False
+R000764,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,404,classical,meanmode,Mean/Mode,,,True,False
+R000765,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,404,classical,medianmode,Median/Mode,,,True,False
+R000766,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,404,classical,mice,MICE,,,True,False
+R000767,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,404,classical,missforest,MissForest,,,True,False
+R000773,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,505,classical,dae,DAE,,,True,False
+R000769,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,505,classical,meanmode,Mean/Mode,,,True,False
+R000770,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,505,classical,medianmode,Median/Mode,,,True,False
+R000771,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,505,classical,mice,MICE,,,True,False
+R000772,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,505,classical,missforest,MissForest,,,True,False
+R000787,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,classical,dae,DAE,,,True,False
+R000783,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,classical,meanmode,Mean/Mode,,,True,False
+R000784,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,classical,medianmode,Median/Mode,,,True,False
+R000785,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,classical,mice,MICE,,,True,False
+R000786,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,classical,missforest,MissForest,,,True,False
+R000792,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,classical,dae,DAE,,,True,False
+R000788,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,classical,meanmode,Mean/Mode,,,True,False
+R000789,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,classical,medianmode,Median/Mode,,,True,False
+R000790,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,classical,mice,MICE,,,True,False
+R000791,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,classical,missforest,MissForest,,,True,False
+R000797,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,classical,dae,DAE,,,True,False
+R000793,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,classical,meanmode,Mean/Mode,,,True,False
+R000794,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,classical,medianmode,Median/Mode,,,True,False
+R000795,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,classical,mice,MICE,,,True,False
+R000796,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,classical,missforest,MissForest,,,True,False
+R000802,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,404,classical,dae,DAE,,,True,False
+R000798,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,404,classical,meanmode,Mean/Mode,,,True,False
+R000799,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,404,classical,medianmode,Median/Mode,,,True,False
+R000800,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,404,classical,mice,MICE,,,True,False
+R000801,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,404,classical,missforest,MissForest,,,True,False
+R000807,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,505,classical,dae,DAE,,,True,False
+R000803,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,505,classical,meanmode,Mean/Mode,,,True,False
+R000804,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,505,classical,medianmode,Median/Mode,,,True,False
+R000805,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,505,classical,mice,MICE,,,True,False
+R000806,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,505,classical,missforest,MissForest,,,True,False

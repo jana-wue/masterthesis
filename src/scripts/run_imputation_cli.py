@@ -6,23 +6,23 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.scripts.imputation_pipeline import (
-    get_available_dataset_keys,
-    get_available_method_keys,
-    run_all_imputation_methods,
-    run_imputation_method,
-)
+from src.scripts.run_classical_manifest import main as run_classical_manifest_main
 
 
-def _build_parser():
+AVAILABLE_METHODS = ["meanmode", "medianmode", "mice", "missforest", "dae"]
+AVAILABLE_DATASETS = ["telco", "statlog", "creditcard"]
+
+
+def _build_parser() -> argparse.ArgumentParser:
+    """Build the command-line argument parser."""
     parser = argparse.ArgumentParser(
-        description="Run deduplicated imputation experiments by method and dataset filter.",
+        description="Run the final-scope classical benchmark via the manifest runner.",
     )
     parser.add_argument(
         "--method",
         nargs="+",
         default=["all"],
-        help="Method key(s): meanmode, medianmode, mice, mice_post_mean, missforest or all.",
+        help="Method key(s): meanmode, medianmode, mice, missforest, dae or all.",
     )
     parser.add_argument(
         "--dataset",
@@ -43,7 +43,12 @@ def _build_parser():
     return parser
 
 
-def _resolve_selection(values, available_values, label):
+def _resolve_selection(
+    values: list[str],
+    available_values: list[str],
+    label: str,
+) -> list[str]:
+    """Resolve selection."""
     normalized = [value.strip().lower() for value in values]
     if "all" in normalized:
         return available_values
@@ -54,7 +59,7 @@ def _resolve_selection(values, available_values, label):
         raise ValueError(f"Unknown {label}(s): {', '.join(unknown)}. Available: {available}, all")
 
     # keep user order, remove duplicates
-    ordered = []
+    ordered: list[str] = []
     seen = set()
     for value in normalized:
         if value not in seen:
@@ -63,12 +68,13 @@ def _resolve_selection(values, available_values, label):
     return ordered
 
 
-def main():
+def main() -> None:
+    """Run the script entry point."""
     parser = _build_parser()
     args = parser.parse_args()
 
-    available_methods = get_available_method_keys()
-    available_datasets = get_available_dataset_keys()
+    available_methods = AVAILABLE_METHODS
+    available_datasets = AVAILABLE_DATASETS
 
     if args.list:
         print("Methods:", ", ".join(available_methods))
@@ -82,14 +88,17 @@ def main():
     print("Selected datasets:", ", ".join(dataset_keys))
 
     if args.dry_run:
-        print("Dry run only. No experiments executed.")
-        return
+        forwarded_args = ["--dry_run"]
+    else:
+        forwarded_args = []
 
-    if len(method_keys) == 1:
-        run_imputation_method(method_keys[0], dataset_keys=dataset_keys)
-        return
+    if method_keys != available_methods:
+        forwarded_args.extend(["--method_keys", ",".join(method_keys)])
+    if dataset_keys != available_datasets:
+        forwarded_args.extend(["--dataset_keys", ",".join(dataset_keys)])
 
-    run_all_imputation_methods(dataset_keys=dataset_keys, method_keys=method_keys)
+    sys.argv = [sys.argv[0]] + forwarded_args
+    run_classical_manifest_main()
 
 
 if __name__ == "__main__":

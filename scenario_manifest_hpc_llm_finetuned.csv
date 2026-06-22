@@ -1,217 +1,28 @@
 run_id,dataset_key,dataset_name,target_column,scenario_family,missingness_type,mcar_scope,mar_dependency_column,mnar_driver_column,mcar_global_excluded_columns,rate_pct,seed,method_family,method_key,method_name,model_key,model_name,include_in_primary_leaderboard,include_in_secondary_full_matrix
-R000026,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000027,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000028,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000029,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000030,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000031,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000032,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000033,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000034,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000060,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000061,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000062,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000063,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000064,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000065,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000066,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000067,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000068,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000094,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000095,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000096,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000097,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000098,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000099,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000100,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000101,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000102,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000128,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000129,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000130,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000131,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000132,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000133,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000134,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000135,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000136,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000162,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000163,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000164,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000165,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000166,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000167,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000168,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000169,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000170,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000196,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000197,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000198,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000199,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000200,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000201,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000202,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000203,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000204,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000230,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000231,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000232,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000233,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000234,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000235,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000236,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000237,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000238,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000264,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000265,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000266,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000267,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000268,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000269,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000270,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000271,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000272,telco,Telco,TotalCharges,MCAR_GLOBAL,MCAR,global,,,customerID|Churn,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000298,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000299,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000300,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000301,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000302,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000303,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000304,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000305,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000306,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000332,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000333,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000334,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000335,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000336,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000337,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000338,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000339,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000340,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000366,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000367,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000368,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000369,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000370,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000371,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000372,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000373,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000374,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000400,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000401,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000402,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000403,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000404,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000405,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000406,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000407,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000408,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000434,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000435,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000436,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000437,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000438,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000439,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000440,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000441,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000442,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000468,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000469,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000470,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000471,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000472,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000473,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000474,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000475,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000476,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000502,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000503,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000504,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000505,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000506,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000507,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000508,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000509,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000510,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000536,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000537,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000538,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000539,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000540,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000541,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000542,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000543,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000544,statlog,German Statlog,X2,MCAR_GLOBAL,MCAR,global,,,class,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000570,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000571,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000572,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000573,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000574,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000575,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000576,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000577,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000578,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000604,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000605,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000606,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000607,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000608,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000609,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000610,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000611,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000612,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000638,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000639,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000640,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000641,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000642,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000643,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000644,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000645,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000646,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000672,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000673,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000674,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000675,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000676,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000677,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000678,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000679,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000680,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000706,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000707,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000708,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000709,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000710,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000711,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000712,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000713,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000714,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000740,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000741,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000742,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000743,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000744,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000745,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000746,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000747,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000748,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000774,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000775,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000776,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000777,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000778,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000779,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000780,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000781,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000782,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,10,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000808,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000809,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000810,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000811,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000812,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000813,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,202,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
-R000814,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
-R000815,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
-R000816,creditcard,German Credit Card,BILL_AMT1,MCAR_GLOBAL,MCAR,global,,,ID|default payment next month,15,303,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
+inferred::telco_mistralai_Mistral-7B-Instruct-v0.3_mistral_telco_totalcharges_lora_finetuned_eval::2026-06-16T07:54:52.741787+00:00,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
+inferred::telco_meta-llama_Llama-3.1-8B-Instruct_llama31_telco_totalcharges_mar_lora_finetuned_eval::2026-06-16T07:56:20.691463+00:00,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
+inferred::telco_Qwen_Qwen2.5-7B-Instruct_qwen25_telco_totalcharges_mar_lora_finetuned_eval::2026-06-16T07:39:47.189955+00:00,telco,Telco,TotalCharges,MAR_TARGET,MAR,target,tenure,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
+inferred::telco_mistralai_Mistral-7B-Instruct-v0.3_mistral_telco_totalcharges_mnar_lora_finetuned_eval::2026-06-16T08:09:42.899625+00:00,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
+inferred::telco_meta-llama_Llama-3.1-8B-Instruct_llama31_telco_totalcharges_mnar_lora_finetuned_eval::2026-06-16T08:06:20.748264+00:00,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
+inferred::telco_Qwen_Qwen2.5-7B-Instruct_qwen25_telco_totalcharges_mnar_lora_finetuned_eval::2026-06-16T07:52:30.352358+00:00,telco,Telco,TotalCharges,MNAR_TARGET,MNAR,target,,TotalCharges,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
+inferred::telco_mistralai_Mistral-7B-Instruct-v0.3_mistral_telco_totalcharges_mcar_lora_finetuned_eval::2026-06-16T08:02:18.943946+00:00,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
+inferred::telco_meta-llama_Llama-3.1-8B-Instruct_llama31_telco_totalcharges_mcar_lora_finetuned_eval::2026-06-16T08:01:17.072328+00:00,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
+inferred::telco_Qwen_Qwen2.5-7B-Instruct_qwen25_telco_totalcharges_mcar_lora_finetuned_eval::2026-06-16T07:46:08.244848+00:00,telco,Telco,TotalCharges,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
+inferred::telco_mistralai_Mistral-7B-Instruct-v0.3_mistral_statlog_x2_mar_lora_finetuned_eval::2026-06-16T09:41:27.906047+00:00,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
+inferred::telco_meta-llama_Llama-3.1-8B-Instruct_llama31_statlog_x2_mar_lora_finetuned_eval::2026-06-16T09:41:45.017856+00:00,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
+inferred::telco_Qwen_Qwen2.5-7B-Instruct_qwen25_statlog_x2_mar_lora_finetuned_eval::2026-06-16T09:41:05.149062+00:00,statlog,German Statlog,X2,MAR_TARGET,MAR,target,X5,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
+inferred::telco_mistralai_Mistral-7B-Instruct-v0.3_mistral_statlog_x2_mnar_lora_finetuned_eval::2026-06-16T09:45:28.607250+00:00,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
+inferred::telco_meta-llama_Llama-3.1-8B-Instruct_llama31_statlog_x2_mnar_lora_finetuned_eval::2026-06-16T09:45:27.231475+00:00,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
+inferred::telco_Qwen_Qwen2.5-7B-Instruct_qwen25_statlog_x2_mnar_lora_finetuned_eval::2026-06-16T09:44:53.829890+00:00,statlog,German Statlog,X2,MNAR_TARGET,MNAR,target,,X2,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
+inferred::telco_mistralai_Mistral-7B-Instruct-v0.3_mistral_statlog_x2_mcar_lora_finetuned_eval::2026-06-16T09:43:25.365374+00:00,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
+inferred::telco_meta-llama_Llama-3.1-8B-Instruct_llama31_statlog_x2_mcar_lora_finetuned_eval::2026-06-16T09:43:34.553500+00:00,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
+inferred::telco_Qwen_Qwen2.5-7B-Instruct_qwen25_statlog_x2_mcar_lora_finetuned_eval::2026-06-16T09:42:58.255128+00:00,statlog,German Statlog,X2,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
+inferred::telco_mistralai_Mistral-7B-Instruct-v0.3_mistral_credit_billamt1_mar_lora_finetuned_eval::2026-06-16T08:28:21.317689+00:00,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
+inferred::telco_meta-llama_Llama-3.1-8B-Instruct_llama31_credit_billamt1_mar_lora_finetuned_eval::2026-06-16T08:22:36.804949+00:00,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
+inferred::telco_Qwen_Qwen2.5-7B-Instruct_qwen25_credit_billamt1_mar_lora_finetuned_eval::2026-06-16T08:11:34.491209+00:00,creditcard,German Credit Card,BILL_AMT1,MAR_TARGET,MAR,target,PAY_0,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
+inferred::telco_mistralai_Mistral-7B-Instruct-v0.3_mistral_credit_billamt1_mnar_lora_finetuned_eval::2026-06-16T09:13:18.310744+00:00,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
+inferred::telco_meta-llama_Llama-3.1-8B-Instruct_llama31_credit_billamt1_mnar_lora_finetuned_eval::2026-06-16T08:46:38.482753+00:00,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
+inferred::telco_Qwen_Qwen2.5-7B-Instruct_qwen25_credit_billamt1_mnar_lora_finetuned_eval::2026-06-16T08:48:59.720606+00:00,creditcard,German Credit Card,BILL_AMT1,MNAR_TARGET,MNAR,target,,BILL_AMT1,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False
+inferred::telco_mistralai_Mistral-7B-Instruct-v0.3_mistral_credit_billamt1_mcar_lora_finetuned_eval::2026-06-16T08:49:03.121153+00:00,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,mistral,mistralai/Mistral-7B-Instruct-v0.3,True,False
+inferred::telco_meta-llama_Llama-3.1-8B-Instruct_llama31_credit_billamt1_mcar_lora_finetuned_eval::2026-06-16T08:34:30.613727+00:00,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,llama,meta-llama/Llama-3.1-8B-Instruct,True,False
+inferred::telco_Qwen_Qwen2.5-7B-Instruct_qwen25_credit_billamt1_mcar_lora_finetuned_eval::2026-06-16T08:29:23.903691+00:00,creditcard,German Credit Card,BILL_AMT1,MCAR_TARGET,MCAR,target,,,,10,42,llm_finetuned,llm_finetuned,LLM Finetuned,qwen,Qwen/Qwen2.5-7B-Instruct,True,False

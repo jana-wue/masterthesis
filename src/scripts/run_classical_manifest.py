@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import sys
 import time
+from typing import TypedDict
 
 import numpy as np
 import pandas as pd
@@ -14,12 +15,14 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.evaluation.metrics import nrmse, rmse
+from src.imputation.base import BaseImputer
 from src.imputation.machine_learning import MICEImputer, MissForestImputer
 from src.imputation.statistical import MeanModeImputer, MedianModeImputer
 from src.paths import DATA_PROCESSED, DATA_RAW, DATA_RESULTS
 
 
-def _build_dae_imputer(seed: int):
+def _build_dae_imputer(seed: int) -> BaseImputer:
+    """Build DAE imputer."""
     from src.imputation.deep_learning import DenoisingAutoencoder
 
     return DenoisingAutoencoder(
@@ -82,13 +85,41 @@ METHODS = {
     "meanmode": "Mean/Mode",
     "medianmode": "Median/Mode",
     "mice": "MICE",
-    "mice_post_mean": "MICE posterior mean (m=5)",
     "missforest": "MissForest",
     "dae": "DAE",
 }
 
 
-def _build_imputer(method_key, seed):
+class ClassicalResultRow(TypedDict):
+    """Represent one classical benchmark run result row."""
+
+    run_id: str
+    run_timestamp_utc: str
+    dataset_key: str
+    dataset_name: str | pd._libs.missing.NAType
+    target_column: str
+    scenario_family: str
+    missingness_type: str | pd._libs.missing.NAType
+    mcar_scope: str | pd._libs.missing.NAType
+    rate_pct: int
+    seed: int
+    method_family: str
+    method_key: str
+    method_name: str
+    model_key: pd._libs.missing.NAType
+    model_name: pd._libs.missing.NAType
+    status: str
+    error_message: str | pd._libs.missing.NAType
+    full_path: str
+    missing_path: str
+    n_masked_target: int | pd._libs.missing.NAType
+    mean_rmse: float | pd._libs.missing.NAType
+    mean_nrmse: float | pd._libs.missing.NAType
+    runtime_seconds: float
+
+
+def _build_imputer(method_key: str, seed: int) -> BaseImputer:
+    """Build imputer."""
     if method_key == "meanmode":
         return MeanModeImputer()
     if method_key == "medianmode":
@@ -99,12 +130,6 @@ def _build_imputer(method_key, seed):
             sample_posterior=False,
             n_imputations=1,
         )
-    if method_key == "mice_post_mean":
-        return MICEImputer(
-            random_state=seed,
-            sample_posterior=True,
-            n_imputations=5,
-        )
     if method_key == "missforest":
         return MissForestImputer(random_state=seed)
     if method_key == "dae":
@@ -113,6 +138,7 @@ def _build_imputer(method_key, seed):
 
 
 def _resolve_missing_path(dataset_key: str, scenario_family: str, rate_pct: int) -> Path:
+    """Resolve missing path."""
     if dataset_key not in DATASET_CONFIG:
         raise ValueError(f"Unknown dataset_key '{dataset_key}'.")
     cfg = DATASET_CONFIG[dataset_key]
@@ -124,7 +150,11 @@ def _resolve_missing_path(dataset_key: str, scenario_family: str, rate_pct: int)
     return DATA_PROCESSED / template.format(rate=int(rate_pct))
 
 
-def _prepare_feature_frames(dataset_key, missing_path):
+def _prepare_feature_frames(
+    dataset_key: str,
+    missing_path: Path,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Prepare feature frames."""
     cfg = DATASET_CONFIG[dataset_key]
 
     df_full = pd.read_csv(cfg["full_path"])
@@ -149,7 +179,13 @@ def _prepare_feature_frames(dataset_key, missing_path):
     return df_full, df_missing
 
 
-def _evaluate_target_only(df_full,df_missing, df_imputed, target_column):
+def _evaluate_target_only(
+    df_full: pd.DataFrame,
+    df_missing: pd.DataFrame,
+    df_imputed: pd.DataFrame,
+    target_column: str,
+) -> tuple[float, float, int]:
+    """Evaluate target only."""
     if target_column not in df_full.columns:
         raise ValueError(f"Target column '{target_column}' not found in full data.")
     if target_column not in df_missing.columns:
@@ -191,6 +227,7 @@ def _evaluate_target_only(df_full,df_missing, df_imputed, target_column):
 
 
 def _parse_csv_list(values: str | None) -> set[str] | None:
+    """Parse CSV list."""
     if values is None:
         return None
     items = [part.strip() for part in values.split(",") if part.strip()]
@@ -199,7 +236,8 @@ def _parse_csv_list(values: str | None) -> set[str] | None:
     return set(items)
 
 
-def _append_results(output_csv: Path, rows: list[dict]) -> None:
+def _append_results(output_csv: Path, rows: list[ClassicalResultRow]) -> None:
+    """Append results."""
     if not rows:
         return
 
@@ -223,6 +261,7 @@ def _append_results(output_csv: Path, rows: list[dict]) -> None:
 
 
 def _build_parser() -> argparse.ArgumentParser:
+    """Build the command-line argument parser."""
     parser = argparse.ArgumentParser(
         description="Run classical imputation benchmark rows from scenario manifest.",
     )
@@ -248,7 +287,7 @@ def _build_parser() -> argparse.ArgumentParser:
         "--method_keys",
         type=str,
         default=None,
-        help="Optional comma-separated filter, e.g. meanmode,mice,mice_post_mean",
+        help="Optional comma-separated filter, e.g. meanmode,mice,missforest",
     )
     parser.add_argument(
         "--scenario_families",
@@ -298,6 +337,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    """Run the script entry point."""
     parser = _build_parser()
     args = parser.parse_args()
 
@@ -362,7 +402,7 @@ def main() -> None:
         print(work[cols].head(30).to_string(index=False))
         return
 
-    result_rows: list[dict] = []
+    result_rows: list[ClassicalResultRow] = []
     total = len(work)
     started = time.perf_counter()
 

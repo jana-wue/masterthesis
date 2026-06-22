@@ -1,15 +1,40 @@
+from typing import Literal, TypedDict
 import numpy as np
 import pandas as pd
 
 
-_EVAL_CONTEXTS = []
+class EvalContext(TypedDict):
+    """Store the last evaluated dataframes and aggregate metrics."""
+
+    key: tuple[int, int, int]
+    df_true: pd.DataFrame
+    df_missing: pd.DataFrame
+    df_imputed: pd.DataFrame
+    mean_rmse: float | None
+    mean_nrmse: float | None
+    consumed: bool
 
 
-def _context_key(df_true, df_missing, df_imputed):
+_EVAL_CONTEXTS: list[EvalContext] = []
+
+
+def _context_key(
+    df_true: pd.DataFrame,
+    df_missing: pd.DataFrame,
+    df_imputed: pd.DataFrame,
+) -> tuple[int, int, int]:
+    """Handle context key."""
     return (id(df_true), id(df_missing), id(df_imputed))
 
 
-def _upsert_context(df_true, df_missing, df_imputed, mean_rmse=None, mean_nrmse=None):
+def _upsert_context(
+    df_true: pd.DataFrame,
+    df_missing: pd.DataFrame,
+    df_imputed: pd.DataFrame,
+    mean_rmse: float | None = None,
+    mean_nrmse: float | None = None,
+) -> None:
+    """Upsert context."""
     key = _context_key(df_true, df_missing, df_imputed)
 
     for ctx in reversed(_EVAL_CONTEXTS):
@@ -33,7 +58,13 @@ def _upsert_context(df_true, df_missing, df_imputed, mean_rmse=None, mean_nrmse=
     )
 
 
-def pop_eval_context_by_means(mean_rmse, mean_nrmse, rtol=1e-10, atol=1e-12):
+def pop_eval_context_by_means(
+    mean_rmse: float,
+    mean_nrmse: float,
+    rtol: float = 1e-10,
+    atol: float = 1e-12,
+) -> EvalContext | None:
+    """Pop evaluation context by means."""
     for ctx in reversed(_EVAL_CONTEXTS):
         if ctx.get("consumed", False):
             continue
@@ -52,7 +83,13 @@ def pop_eval_context_by_means(mean_rmse, mean_nrmse, rtol=1e-10, atol=1e-12):
     return None
 
 
-def rmse(df_true, df_missing, df_imputed, numeric_only=True):
+def rmse(
+    df_true: pd.DataFrame,
+    df_missing: pd.DataFrame,
+    df_imputed: pd.DataFrame,
+    numeric_only: bool = True,
+) -> pd.Series:
+    """Handle RMSE."""
     if numeric_only:
         cols = df_true.select_dtypes(include=["number"]).columns
     else:
@@ -81,7 +118,13 @@ def rmse(df_true, df_missing, df_imputed, numeric_only=True):
     return result
 
 
-def nrmse(df_true, df_missing, df_imputed, norm="std"):
+def nrmse(
+    df_true: pd.DataFrame,
+    df_missing: pd.DataFrame,
+    df_imputed: pd.DataFrame,
+    norm: Literal["std", "range"] = "std",
+) -> pd.Series:
+    """Handle NRMSE."""
     nrmse_values = {}
 
     for col in df_true.columns:

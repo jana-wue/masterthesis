@@ -13,9 +13,18 @@ os.environ.setdefault("MPLCONFIGDIR", str(MPL_CONFIG_DIR))
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 import numpy as np
 import pandas as pd
 import seaborn as sns
+
+plt.rcParams.update(
+    {
+        "font.family": "serif",
+        "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
+        "mathtext.fontset": "dejavuserif",
+    }
+)
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -53,6 +62,7 @@ DATASET_SHORT = {
 
 
 def _load_classical_results() -> pd.DataFrame:
+    """Load classical results."""
     df = pd.read_csv(INPUT_PATH)
     work = df[(df["method_family"] == "classical") & (df["status"] == "success")].copy()
     if work.empty:
@@ -61,6 +71,7 @@ def _load_classical_results() -> pd.DataFrame:
 
 
 def _build_task_summary(classical_df: pd.DataFrame) -> pd.DataFrame:
+    """Build task summary."""
     group_cols = ["dataset_name", "scenario_family", "rate_pct", "method_key"]
     summary = (
         classical_df.groupby(group_cols, as_index=False)["mean_nrmse"]
@@ -87,6 +98,7 @@ def _build_task_summary(classical_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _task_sort_key(task: tuple[str, str, int]) -> tuple[int, int, int]:
+    """Handle task sort key."""
     dataset_name, scenario_family, rate_pct = task
     return (
         DATASET_ORDER.index(dataset_name),
@@ -96,6 +108,7 @@ def _task_sort_key(task: tuple[str, str, int]) -> tuple[int, int, int]:
 
 
 def _build_rank_matrix(summary: pd.DataFrame) -> tuple[pd.DataFrame, list[tuple[str, str, int]]]:
+    """Build rank matrix."""
     tasks = sorted(
         {
             (row["dataset_name"], row["scenario_family"], int(row["rate_pct"]))
@@ -120,13 +133,15 @@ def _build_rank_matrix(summary: pd.DataFrame) -> tuple[pd.DataFrame, list[tuple[
 
 
 def _build_display_labels(tasks: list[tuple[str, str, int]]) -> list[str]:
+    """Build display labels."""
     return [
         f"{SCENARIO_LABELS[scenario_family]}\n{rate_pct}%"
         for _, scenario_family, rate_pct in tasks
     ]
 
 
-def _draw_dataset_group_labels(ax, tasks: list[tuple[str, str, int]]) -> None:
+def _draw_dataset_group_labels(ax: Axes, tasks: list[tuple[str, str, int]]) -> None:
+    """Draw dataset group labels."""
     dataset_positions: dict[str, list[int]] = {}
     for idx, (dataset_name, _, _) in enumerate(tasks):
         dataset_positions.setdefault(dataset_name, []).append(idx)
@@ -154,6 +169,7 @@ def _draw_dataset_group_labels(ax, tasks: list[tuple[str, str, int]]) -> None:
 
 
 def _plot_heatmap(rank_matrix: pd.DataFrame, tasks: list[tuple[str, str, int]]) -> None:
+    """Plot heatmap."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     fig_width = max(12, len(tasks) * 0.62)
@@ -175,20 +191,21 @@ def _plot_heatmap(rank_matrix: pd.DataFrame, tasks: list[tuple[str, str, int]]) 
         annot_kws={"fontsize": 10, "fontweight": "semibold"},
     )
 
-    fig.suptitle("Classical Method Rankings on Each Benchmark Task", fontsize=20, y=0.98)
+    fig.suptitle("Classical Method Rankings on Each Benchmark Task", fontsize=20, y=0.965)
     ax.set_xlabel("")
     ax.set_ylabel("")
     ax.set_xticklabels(_build_display_labels(tasks), rotation=55, ha="right", fontsize=9)
     ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=11)
     _draw_dataset_group_labels(ax, tasks)
 
-    plt.tight_layout(rect=(0, 0, 1, 0.92))
+    plt.tight_layout(rect=(0, 0, 1, 0.945))
     fig.savefig(OUTPUT_PNG, dpi=300, bbox_inches="tight")
     fig.savefig(OUTPUT_PDF, bbox_inches="tight")
     plt.close(fig)
 
 
 def main() -> None:
+    """Run the script entry point."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     MPL_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 

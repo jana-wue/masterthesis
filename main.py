@@ -1,12 +1,11 @@
-from src.scripts.run_dae import run_dae
-from src.scripts.run_missforest import run_missforest
-from src.scripts.run_medianmode import run_medianmode
-from src.scripts.run_meanmode import run_meanmode
-from src.scripts.run_mice import run_mice
+from pathlib import Path
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.scripts.run_classical_manifest import main as run_classical_manifest_main
 
 if __name__ == "__main__":
-    run_meanmode()
-    run_medianmode()
-    run_mice()
-    run_missforest()
-    run_dae()
+    run_classical_manifest_main()

@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterable, Optional
+from typing import Optional, Sequence
 
 import pandas as pd
 from pandas.api.types import is_numeric_dtype
 
 
-def format_value(value) -> str:
+def format_value(value: object) -> str:
     """
     Format dataframe cell value into string representation.
     """
@@ -20,7 +20,11 @@ def format_value(value) -> str:
     return str(value)
 
 
-def row_to_feature_text(row: pd.Series, target_column: str, feature_columns = None,) -> str:
+def row_to_feature_text(
+    row: pd.Series,
+    target_column: str,
+    feature_columns: Sequence[str] | None = None,
+) -> str:
     """
     Convert one dataframe row into 'feature: value' lines,
     excluding target column.
@@ -56,6 +60,7 @@ def summarize_target_distribution( df: pd.DataFrame, target_column: str,) -> dic
 
 
 def _format_stats_lines(target_stats: Optional[dict[str, float]]) -> str:
+    """Format stats lines."""
     if not target_stats:
         return "Target distribution summary: not there."
 
@@ -68,6 +73,7 @@ def _format_stats_lines(target_stats: Optional[dict[str, float]]) -> str:
 
 
 def _build_system_message() -> str:
+    """Build system message."""
     return (
         "You are an expert in missing-value imputation for tabular data. "
         "Your task is to estimate one numeric target value from observed feature values. "
@@ -76,8 +82,14 @@ def _build_system_message() -> str:
     )
 
 
-def _build_user_message(row: pd.Series, target_column: str, feature_columns = None, target_stats = None,
-    domain_hints = None) -> str:
+def _build_user_message(
+    row: pd.Series,
+    target_column: str,
+    feature_columns: Sequence[str] | None = None,
+    target_stats: dict[str, float] | None = None,
+    domain_hints: Sequence[str] | None = None,
+) -> str:
+    """Build user message."""
     feature_text = row_to_feature_text(
         row=row,
         target_column=target_column,
@@ -112,8 +124,13 @@ def _build_user_message(row: pd.Series, target_column: str, feature_columns = No
     return "\n".join(lines)
 
 
-def build_imputation_prompt(row: pd.Series, target_column: str, feature_columns = None, target_stats = None,
-    domain_hints = None) -> str:
+def build_imputation_prompt(
+    row: pd.Series,
+    target_column: str,
+    feature_columns: Sequence[str] | None = None,
+    target_stats: dict[str, float] | None = None,
+    domain_hints: Sequence[str] | None = None,
+) -> str:
     """
     Build plain-text prompt for one row.
     """
@@ -123,8 +140,13 @@ def build_imputation_prompt(row: pd.Series, target_column: str, feature_columns 
     )
 
 
-def build_training_example(row: pd.Series, target_column: str, feature_columns = None, target_stats = None,
-    domain_hints = None) -> dict:
+def build_training_example(
+    row: pd.Series,
+    target_column: str,
+    feature_columns: Sequence[str] | None = None,
+    target_stats: dict[str, float] | None = None,
+    domain_hints: Sequence[str] | None = None,
+) -> dict[str, list[dict[str, str]]]:
     """
     Build one training example in a chat-style format.
     """
@@ -154,10 +176,12 @@ def build_training_example(row: pd.Series, target_column: str, feature_columns =
 
 
 def _numeric_similarity(query_value: float, candidate_value: float, scale: float) -> float:
+    """Handle numeric similarity."""
     return 1.0 / (1.0 + abs(query_value - candidate_value) / scale)
 
 
 def _build_numeric_scales(reference_df: pd.DataFrame, columns: list[str]) -> dict[str, float]:
+    """Build numeric scales."""
     scales: dict[str, float] = {}
 
     for col in columns:
@@ -177,8 +201,14 @@ def _build_numeric_scales(reference_df: pd.DataFrame, columns: list[str]) -> dic
     return scales
 
 
-def select_similar_examples(query_row: pd.Series,reference_df: pd.DataFrame,target_column: str, feature_columns=None,
-    n_examples: int = 3, exclude_indices = None) -> list[pd.Series]:
+def select_similar_examples(
+    query_row: pd.Series,
+    reference_df: pd.DataFrame,
+    target_column: str,
+    feature_columns: Sequence[str] | None = None,
+    n_examples: int = 3,
+    exclude_indices: set[object] | None = None,
+) -> list[pd.Series]:
     """
     Select similar observed rows for few-shot.
     """
@@ -235,8 +265,14 @@ def select_similar_examples(query_row: pd.Series,reference_df: pd.DataFrame,targ
     return [candidate for _, candidate in scored_rows[:n_examples]]
 
 
-def build_inference_messages(row: pd.Series, target_column: str, feature_columns = None, target_stats = None,
-    domain_hints = None, few_shot_examples = None) -> list[dict]:
+def build_inference_messages(
+    row: pd.Series,
+    target_column: str,
+    feature_columns: Sequence[str] | None = None,
+    target_stats: dict[str, float] | None = None,
+    domain_hints: Sequence[str] | None = None,
+    few_shot_examples: Sequence[pd.Series] | None = None,
+) -> list[dict[str, str]]:
     """
     Build inference messages in chat-style format.
     Optionally with few-shot.
@@ -269,8 +305,13 @@ def build_inference_messages(row: pd.Series, target_column: str, feature_columns
     return messages
 
 
-def build_retry_messages(row: pd.Series, target_column: str, feature_columns = None, target_stats = None,
-    domain_hints = None) -> list[dict]:
+def build_retry_messages(
+    row: pd.Series,
+    target_column: str,
+    feature_columns: Sequence[str] | None = None,
+    target_stats: dict[str, float] | None = None,
+    domain_hints: Sequence[str] | None = None,
+) -> list[dict[str, str]]:
     """
     Stricter retry prompt if the first generation is empty or non-numeric.
     """
@@ -330,16 +371,19 @@ class LLMImputer:
     Prompt and training-example builder for LLM-based tabular imputation.
     """
 
-    def __init__(self, config: LLMImputerConfig):
+    def __init__(self, config: LLMImputerConfig) -> None:
+        """Initialize the object state."""
         self.config = config
 
     def fit_target_stats(self, df: pd.DataFrame) -> None:
+        """Handle fit target stats."""
         self.config.target_stats = summarize_target_distribution(
             df=df,
             target_column=self.config.target_column,
         )
 
     def build_prompt(self, row: pd.Series) -> str:
+        """Build prompt."""
         return build_imputation_prompt(
             row=row,
             target_column=self.config.target_column,
@@ -348,7 +392,8 @@ class LLMImputer:
             domain_hints=self.config.domain_hints,
         )
 
-    def build_training_example(self, row: pd.Series) -> dict:
+    def build_training_example(self, row: pd.Series) -> dict[str, list[dict[str, str]]]:
+        """Build training example."""
         return build_training_example(
             row=row,
             target_column=self.config.target_column,
@@ -357,15 +402,21 @@ class LLMImputer:
             domain_hints=self.config.domain_hints,
         )
 
-    def build_training_dataset(self, df: pd.DataFrame) -> list[dict]:
+    def build_training_dataset(self, df: pd.DataFrame) -> list[dict[str, list[dict[str, str]]]]:
         """
         Build training examples from rows where the target is there.
         """
         df_obs = df[df[self.config.target_column].notna()]
         return [self.build_training_example(row) for _, row in df_obs.iterrows()]
 
-    def select_few_shot_examples(self, row: pd.Series,reference_df: pd.DataFrame, n_examples=None,
-        exclude_indices = None) -> list[pd.Series]:
+    def select_few_shot_examples(
+        self,
+        row: pd.Series,
+        reference_df: pd.DataFrame,
+        n_examples: int | None = None,
+        exclude_indices: set[object] | None = None,
+    ) -> list[pd.Series]:
+        """Select few shot examples."""
         k = self.config.few_shot_k if n_examples is None else n_examples
         return select_similar_examples(
             query_row=row,
@@ -376,7 +427,12 @@ class LLMImputer:
             exclude_indices=exclude_indices,
         )
 
-    def build_inference_messages(self, row: pd.Series, few_shot_examples = None) -> list[dict]:
+    def build_inference_messages(
+        self,
+        row: pd.Series,
+        few_shot_examples: Sequence[pd.Series] | None = None,
+    ) -> list[dict[str, str]]:
+        """Build inference messages."""
         return build_inference_messages(
             row=row,
             target_column=self.config.target_column,
@@ -387,6 +443,7 @@ class LLMImputer:
         )
 
     def build_retry_messages(self, row: pd.Series) -> list[dict]:
+        """Build retry messages."""
         return build_retry_messages(
             row=row,
             target_column=self.config.target_column,

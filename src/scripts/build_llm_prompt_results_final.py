@@ -26,6 +26,7 @@ DEDUP_KEYS = [
 
 
 def _load_raw_prompt_runs() -> pd.DataFrame:
+    """Load raw prompt runs."""
     if not RAW_PROMPT_PATH.exists():
         raise FileNotFoundError(f"Prompt run file not found: {RAW_PROMPT_PATH}")
 
@@ -43,6 +44,7 @@ def _load_raw_prompt_runs() -> pd.DataFrame:
 
 
 def _clean_prompt_runs(df: pd.DataFrame) -> pd.DataFrame:
+    """Clean prompt runs."""
     work = df.copy()
     work["run_timestamp_utc"] = pd.to_datetime(work["run_timestamp_utc"], errors="coerce", utc=True)
 
@@ -81,6 +83,7 @@ def _clean_prompt_runs(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
+    """Run the script entry point."""
     raw = _load_raw_prompt_runs()
     cleaned = _clean_prompt_runs(raw)
 

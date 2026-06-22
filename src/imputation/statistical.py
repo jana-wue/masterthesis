@@ -11,7 +11,8 @@ class MeanModeImputer(BaseImputer):
     - categorial cols: mode
     """
 
-    def __init__(self, fallback_cat: str = "missing"):
+    def __init__(self, fallback_cat: str = "missing") -> None:
+        """Initialize the object state."""
         super().__init__("Mean/Mode")
         self.fallback_cat = fallback_cat
         self.numeric_cols_ = None
@@ -19,7 +20,7 @@ class MeanModeImputer(BaseImputer):
         self.means_ = {}
         self.modes_ = {}
 
-    def fit(self, X: pd.DataFrame):
+    def fit(self, X: pd.DataFrame) -> MeanModeImputer:
         """
         Saves value per col with which missing is going to be replaced.
         """
@@ -44,7 +45,7 @@ class MeanModeImputer(BaseImputer):
 
         return self
 
-    def transform(self, X):
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         """
         replace missing values with means/modes from fit().
         """
@@ -76,7 +77,8 @@ class MedianModeImputer(BaseImputer):
     - categorical cols: mode
     """
 
-    def __init__(self, fallback_cat: str = "missing"):
+    def __init__(self, fallback_cat: str = "missing") -> None:
+        """Initialize the object state."""
         super().__init__("Median/Mode")
         self.fallback_cat = fallback_cat
         self.numeric_cols_ = None
@@ -84,7 +86,7 @@ class MedianModeImputer(BaseImputer):
         self.medians_ = {}
         self.modes_ = {}
 
-    def fit(self, X):
+    def fit(self, X: pd.DataFrame) -> MedianModeImputer:
         """
         Saves value per col with which missing is going to be replaced.
         """
@@ -109,7 +111,7 @@ class MedianModeImputer(BaseImputer):
 
         return self
 
-    def transform(self, X):
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         """
         Replace missing values with medians/modes from fit().
         """

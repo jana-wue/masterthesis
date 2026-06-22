@@ -1,4 +1,6 @@
-from typing import Optional, Sequence, Tuple, Union
+from __future__ import annotations
+
+from typing import Optional, Sequence
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
@@ -17,7 +19,8 @@ class _MLPAutoencoder(nn.Module):
     Decoder: ... -> input_dim
     """
 
-    def __init__(self, input_dim: int, hidden_dims: Sequence[int] = (128, 64), dropout: float = 0.0):
+    def __init__(self, input_dim: int, hidden_dims: Sequence[int] = (128, 64), dropout: float = 0.0) -> None:
+        """Initialize the object state."""
         super().__init__()
 
         # Encoder
@@ -47,6 +50,7 @@ class _MLPAutoencoder(nn.Module):
         self.decoder = nn.Sequential(*dec_layers)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Run the forward pass."""
         z = self.encoder(x)
         out = self.decoder(z)
         return out
@@ -65,9 +69,21 @@ class DenoisingAutoencoder(BaseImputer):
     Assumes X is numeric. Categorical features must be encoded beforehand.
     """
 
-    def __init__(self, name = "DAE", hidden_dims = (128, 64), epochs = 200, batch_size = 256,
-        lr = 1e-3, corruption_rate = 0.2, dropout = 0.0, weight_decay = 0.0, device = None,
-        seed = 42, verbose = False):
+    def __init__(
+        self,
+        name: str = "DAE",
+        hidden_dims: Sequence[int] = (128, 64),
+        epochs: int = 200,
+        batch_size: int = 256,
+        lr: float = 1e-3,
+        corruption_rate: float = 0.2,
+        dropout: float = 0.0,
+        weight_decay: float = 0.0,
+        device: str | None = None,
+        seed: int = 42,
+        verbose: bool = False,
+    ) -> None:
+        """Initialize the object state."""
         super().__init__(name)
         self.hidden_dims = tuple(hidden_dims)
         self.epochs = int(epochs)
@@ -88,7 +104,10 @@ class DenoisingAutoencoder(BaseImputer):
         self.n_features_ = None
 
     @staticmethod
-    def _as_numpy(X):
+    def _as_numpy(
+        X: np.ndarray | pd.DataFrame,
+    ) -> tuple[np.ndarray, pd.Index | None, pd.Index | None]:
+        """Handle as numpy."""
         if isinstance(X, pd.DataFrame):
             non_numeric = [col for col in X.columns if not pd.api.types.is_numeric_dtype(X[col])]
             if non_numeric:
@@ -99,7 +118,13 @@ class DenoisingAutoencoder(BaseImputer):
             return X.values.astype(np.float32), X.columns, X.index
         return np.asarray(X, dtype=np.float32), None, None
 
-    def fit(self, X, y=None):
+    def fit(
+        self,
+        X: np.ndarray | pd.DataFrame,
+        y: object | None = None,
+    ) -> DenoisingAutoencoder:
+        """Fit the imputer to the input data."""
+        del y
         np.random.seed(self.seed)
         torch.manual_seed(self.seed)
         if torch.cuda.is_available():
@@ -205,7 +230,8 @@ class DenoisingAutoencoder(BaseImputer):
 
         return self
 
-    def transform(self, X: Union[np.ndarray, pd.DataFrame]) -> Union[np.ndarray, pd.DataFrame]:
+    def transform(self, X: np.ndarray | pd.DataFrame) -> np.ndarray | pd.DataFrame:
+        """Transform the input data with the fitted imputer."""
         if (
             self.model is None
             or self.scaler is None
@@ -249,5 +275,10 @@ class DenoisingAutoencoder(BaseImputer):
             return pd.DataFrame(X_imputed, columns=cols, index=idx)
         return X_imputed
 
-    def fit_transform(self, X, y=None):
+    def fit_transform(
+        self,
+        X: np.ndarray | pd.DataFrame,
+        y: object | None = None,
+    ) -> np.ndarray | pd.DataFrame:
+        """Fit the imputer and transform the input data."""
         return self.fit(X, y=y).transform(X)

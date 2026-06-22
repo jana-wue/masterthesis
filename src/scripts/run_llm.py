@@ -7,10 +7,16 @@ import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Mapping, Sequence, TypedDict
 
 import pandas as pd
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
@@ -20,11 +26,51 @@ from src.imputation.llm import LLMImputer, LLMImputerConfig
 from src.paths import DATA_RAW, DATA_RESULTS
 
 
-DEFAULT_MANIFEST_PATH = Path("scenario_manifest_llm_finetuning_10pct_final.csv")
+DEFAULT_MANIFEST_PATH = Path("scenario_manifest_hpc_llm_finetuned.csv")
 RUNS_SUMMARY_PATH = DATA_RESULTS / "benchmark_llm_prompt_runs.csv"
 
 
-MODEL_META = {
+class ModelMeta(TypedDict):
+    """Describe one prompt-model configuration."""
+
+    benchmark_model_key: str
+    hf_model_name: str
+    model_label: str
+
+
+class DatasetMeta(TypedDict):
+    """Describe one prompt benchmark dataset."""
+
+    dataset_token: str
+    benchmark_dataset_key: str
+    target_column: str
+    target_slug: str
+    dataset_name: str
+    raw_csv: Path
+    id_column: str | None
+    missing_paths: dict[str, Path]
+    missing_rate_labels: dict[str, str]
+    domain_hints: list[str]
+
+
+class ScenarioMeta(TypedDict):
+    """Describe one scenario family for prompt evaluation."""
+
+    scenario_token: str
+    scenario_family: str
+
+
+class PromptManifestRow(TypedDict):
+    """Represent one manifest row consumed by the prompt runner."""
+
+    dataset: str
+    target_column: str
+    missingness_type: str
+    model_key: str
+    hf_model_name: str
+
+
+MODEL_META: dict[str, ModelMeta] = {
     "mistral": {
         "benchmark_model_key": "mistral",
         "hf_model_name": "mistralai/Mistral-7B-Instruct-v0.3",
@@ -43,7 +89,7 @@ MODEL_META = {
 }
 
 
-DATASET_META = {
+DATASET_META: dict[str, DatasetMeta] = {
     "German Credit Card": {
         "dataset_token": "credit",
         "benchmark_dataset_key": "creditcard",
@@ -107,7 +153,7 @@ DATASET_META = {
 }
 
 
-SCENARIO_META = {
+SCENARIO_META: dict[str, ScenarioMeta] = {
     "MAR": {
         "scenario_token": "mar",
         "scenario_family": "MAR_TARGET",
@@ -156,18 +202,24 @@ SUMMARY_COLUMNS = [
 
 
 def model_name_to_file_token(model_name: str) -> str:
+    """Convert a model name into a file-safe token."""
     token = re.sub(r"[^A-Za-z0-9._-]+", "_", model_name).strip("_")
     return token or "unknown_model"
 
 
 def extract_first_number(text: str) -> str | None:
+    """Extract the first numeric token from text."""
     match = re.search(r"[-+]?\d*\.?\d+", text)
     if match:
         return match.group(0)
     return None
 
 
-def apply_chat_template(messages: list[dict], tokenizer) -> str:
+def apply_chat_template(
+    messages: list[dict[str, str]],
+    tokenizer: PreTrainedTokenizerBase,
+) -> str:
+    """Apply the chat template to the message list."""
     if hasattr(tokenizer, "apply_chat_template"):
         return tokenizer.apply_chat_template(
             messages,
@@ -177,7 +229,8 @@ def apply_chat_template(messages: list[dict], tokenizer) -> str:
     return "\n\n".join(message["content"] for message in messages)
 
 
-def _load_model(model_name: str):
+def _load_model(model_name: str) -> tuple[PreTrainedTokenizerBase, PreTrainedModel]:
+    """Load model."""
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     if tokenizer.pad_token is None and tokenizer.eos_token is not None:
         tokenizer.pad_token = tokenizer.eos_token
@@ -195,7 +248,12 @@ def _load_model(model_name: str):
     return tokenizer, model
 
 
-def _append_rows(csv_path: Path, required_columns: list[str], rows: list[dict]) -> None:
+def _append_rows(
+    csv_path: Path,
+    required_columns: list[str],
+    rows: Sequence[Mapping[str, object]],
+) -> None:
+    """Append rows."""
     csv_path.parent.mkdir(parents=True, exist_ok=True)
 
     if csv_path.exists():
@@ -213,6 +271,7 @@ def _append_rows(csv_path: Path, required_columns: list[str], rows: list[dict]) 
 
 
 def _prompt_method_meta(few_shot_k: int) -> tuple[str, str, str]:
+    """Handle prompt method meta."""
     if few_shot_k == 0:
         return "llm_prompt_zero", "LLM Prompt Zero-shot", "zero"
     return (
@@ -222,7 +281,13 @@ def _prompt_method_meta(few_shot_k: int) -> tuple[str, str, str]:
     )
 
 
-def _build_detail_eval_path(dataset_meta: dict, model_key: str, missingness_type: str, few_shot_k: int) -> Path:
+def _build_detail_eval_path(
+    dataset_meta: DatasetMeta,
+    model_key: str,
+    missingness_type: str,
+    few_shot_k: int,
+) -> Path:
+    """Build detail evaluation path."""
     _, _, prompt_token = _prompt_method_meta(few_shot_k)
     scenario_token = SCENARIO_META[missingness_type]["scenario_token"]
     filename = (
@@ -233,6 +298,7 @@ def _build_detail_eval_path(dataset_meta: dict, model_key: str, missingness_type
 
 
 def _fallback_numeric(row: pd.Series, target_column: str, target_median: float) -> tuple[float, str]:
+    """Handle fallback numeric."""
     if target_column == "TotalCharges":
         tenure = row.get("tenure")
         monthly = row.get("MonthlyCharges")
@@ -244,7 +310,13 @@ def _fallback_numeric(row: pd.Series, target_column: str, target_median: float) 
     return float(target_median), "fallback_median"
 
 
-def _generate_raw_answer(messages: list[dict], tokenizer, model, max_new_tokens: int) -> str:
+def _generate_raw_answer(
+    messages: list[dict[str, str]],
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
+    max_new_tokens: int,
+) -> str:
+    """Generate raw answer."""
     prompt_text = apply_chat_template(messages, tokenizer)
     model_device = model.device if hasattr(model, "device") else next(model.parameters()).device
     inputs = tokenizer(prompt_text, return_tensors="pt").to(model_device)
@@ -267,13 +339,14 @@ def _generate_raw_answer(messages: list[dict], tokenizer, model, max_new_tokens:
 def _predict_numeric(
     row: pd.Series,
     imputer: LLMImputer,
-    tokenizer,
-    model,
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
     few_shot_examples: list[pd.Series],
     target_column: str,
     target_median: float,
     max_new_tokens: int,
 ) -> tuple[float, str, str]:
+    """Predict numeric."""
     primary_messages = imputer.build_inference_messages(row, few_shot_examples=few_shot_examples)
     raw_primary = _generate_raw_answer(
         messages=primary_messages,
@@ -306,6 +379,7 @@ def _predict_numeric(
 
 
 def _compute_metrics(results_df: pd.DataFrame) -> tuple[float, float, float]:
+    """Compute metrics."""
     valid = results_df.dropna(subset=["prediction", "ground_truth"]).copy()
     if valid.empty:
         raise ValueError("No valid numeric prediction/ground_truth rows produced.")
@@ -324,7 +398,11 @@ def _compute_metrics(results_df: pd.DataFrame) -> tuple[float, float, float]:
     return mean_rmse, mean_nrmse, fallback_rate
 
 
-def _load_eval_frames(dataset_label: str, missingness_type: str) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
+def _load_eval_frames(
+    dataset_label: str,
+    missingness_type: str,
+) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, object]]:
+    """Load evaluation frames."""
     dataset_meta = DATASET_META[dataset_label]
     missing_path = dataset_meta["missing_paths"][missingness_type]
     df_full = pd.read_csv(dataset_meta["raw_csv"])
@@ -332,7 +410,25 @@ def _load_eval_frames(dataset_label: str, missingness_type: str) -> tuple[pd.Dat
     return df_full, df_missing, dataset_meta
 
 
-def _build_imputer(dataset_meta: dict, df_missing: pd.DataFrame, model_name: str, few_shot_k: int) -> LLMImputer:
+def _load_eval_frames(
+    dataset_label: str,
+    missingness_type: str,
+) -> tuple[pd.DataFrame, pd.DataFrame, DatasetMeta]:
+    """Load evaluation frames."""
+    dataset_meta = DATASET_META[dataset_label]
+    missing_path = dataset_meta["missing_paths"][missingness_type]
+    df_full = pd.read_csv(dataset_meta["raw_csv"])
+    df_missing = pd.read_csv(missing_path)
+    return df_full, df_missing, dataset_meta
+
+
+def _build_imputer(
+    dataset_meta: DatasetMeta,
+    df_missing: pd.DataFrame,
+    model_name: str,
+    few_shot_k: int,
+) -> LLMImputer:
+    """Build imputer."""
     target_column = dataset_meta["target_column"]
     feature_columns = [
         col for col in df_missing.columns if col not in {target_column, dataset_meta["id_column"]}
@@ -359,9 +455,10 @@ def _run_prompt_setting(
     few_shot_k: int,
     n_examples: int | None,
     max_new_tokens: int,
-    tokenizer,
-    model,
-) -> tuple[pd.DataFrame, dict]:
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
+) -> tuple[pd.DataFrame, dict[str, object]]:
+    """Run prompt setting."""
     df_full, df_missing, dataset_meta = _load_eval_frames(
         dataset_label=dataset_label,
         missingness_type=missingness_type,
@@ -505,6 +602,7 @@ def _load_manifest_rows(
     model_filters: set[str] | None,
     missingness_filters: set[str] | None,
 ) -> list[dict]:
+    """Load manifest rows."""
     manifest = pd.read_csv(manifest_path)
     required_columns = {
         "dataset",
@@ -537,7 +635,56 @@ def _load_manifest_rows(
     return work.to_dict(orient="records")
 
 
+def _load_manifest_rows(
+    manifest_path: Path,
+    dataset_filters: set[str] | None,
+    model_filters: set[str] | None,
+    missingness_filters: set[str] | None,
+) -> list[PromptManifestRow]:
+    """Load manifest rows."""
+    manifest = pd.read_csv(manifest_path)
+    required_columns = {
+        "dataset",
+        "target_column",
+        "missingness_type",
+        "model_key",
+        "hf_model_name",
+    }
+    missing_columns = required_columns - set(manifest.columns)
+    if missing_columns:
+        missing_list = ", ".join(sorted(missing_columns))
+        raise ValueError(f"Manifest is missing required columns: {missing_list}")
+
+    work = manifest.copy()
+    work = work.drop_duplicates(
+        subset=["dataset", "target_column", "missingness_type", "model_key", "hf_model_name"]
+    )
+
+    if dataset_filters:
+        work = work[work["dataset"].isin(dataset_filters)].copy()
+    if model_filters:
+        work = work[work["model_key"].isin(model_filters)].copy()
+    if missingness_filters:
+        work = work[work["missingness_type"].isin(missingness_filters)].copy()
+
+    if work.empty:
+        raise ValueError("No manifest rows left after filtering.")
+
+    work = work.sort_values(by=["model_key", "dataset", "missingness_type"]).reset_index(drop=True)
+    return [
+        {
+            "dataset": str(record["dataset"]),
+            "target_column": str(record["target_column"]),
+            "missingness_type": str(record["missingness_type"]),
+            "model_key": str(record["model_key"]),
+            "hf_model_name": str(record["hf_model_name"]),
+        }
+        for record in work.to_dict(orient="records")
+    ]
+
+
 def _existing_success_keys(summary_path: Path) -> set[tuple[str, str, str, int]]:
+    """Handle existing success keys."""
     if not summary_path.exists():
         return set()
 
@@ -574,6 +721,7 @@ def run_prompt_manifest(
     max_runs: int | None = None,
     skip_existing: bool = False,
 ) -> pd.DataFrame:
+    """Run prompt manifest."""
     dataset_filters = set(datasets or [])
     model_filters = set(model_keys or [])
     missingness_filters = set(missingness_types or [])
@@ -707,7 +855,11 @@ def run_prompt_manifest(
     return summary_df
 
 
-def evaluate_telco_prompt_approach(few_shot_settings=(0, 2), n_examples=None) -> pd.DataFrame:
+def evaluate_telco_prompt_approach(
+    few_shot_settings: tuple[int, ...] = (0, 2),
+    n_examples: int | None = None,
+) -> pd.DataFrame:
+    """Evaluate Telco prompt approach."""
     return run_prompt_manifest(
         manifest_path=DEFAULT_MANIFEST_PATH,
         few_shot_settings=tuple(int(k) for k in few_shot_settings),
@@ -718,7 +870,8 @@ def evaluate_telco_prompt_approach(few_shot_settings=(0, 2), n_examples=None) ->
     )
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
         description=(
             "Run zero-shot/few-shot LLM prompt baselines "

@@ -7,10 +7,11 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS_DIR = ROOT / "data" / "results"
+LLM_FINETUNED_DIR = RESULTS_DIR / "new_without_domain_hints"
 RMSE_PATH = RESULTS_DIR / "imputation_results.csv"
-NRMSE_PATH = RESULTS_DIR / "imputation_results_nrsme.csv"
+NRMSE_PATH = RESULTS_DIR / "imputation_results_nrmse.csv"
 FINAL_PATH = RESULTS_DIR / "llm_finetuning_results_final.csv"
-MANIFEST_PATH = ROOT / "scenario_manifest_llm_finetuning_10pct_final.csv"
+MANIFEST_PATH = ROOT / "scenario_manifest_hpc_llm_finetuned.csv"
 
 
 DATASET_META = {
@@ -92,14 +93,43 @@ SCENARIO_META = {
 
 
 def _parse_eval_filename(csv_path: Path) -> tuple[str, str, str]:
+    """Parse evaluation filename."""
     stem = csv_path.stem
-    parts = stem.split("_")
-    if len(parts) < 5 or parts[-2:] != ["finetuned", "eval"]:
+    if not stem.endswith("_finetuned_eval"):
         raise ValueError(f"Unexpected LLM finetuned eval filename: {csv_path.name}")
-    return parts[0], parts[1], parts[-3]
+
+    if "_credit_billamt1_" in stem:
+        dataset_token = "credit"
+    elif "_statlog_x2_" in stem:
+        dataset_token = "statlog"
+    elif "_telco_totalcharges" in stem:
+        dataset_token = "telco"
+    else:
+        raise ValueError(f"Could not infer dataset token from filename: {csv_path.name}")
+
+    if "_qwen25_" in stem:
+        model_token = "qwen25"
+    elif "_llama31_" in stem:
+        model_token = "llama31"
+    elif "_mistral_" in stem:
+        model_token = "mistral"
+    else:
+        raise ValueError(f"Could not infer model token from filename: {csv_path.name}")
+
+    if "_mnar_lora_finetuned_eval" in stem:
+        scenario_token = "mnar"
+    elif "_mcar_lora_finetuned_eval" in stem:
+        scenario_token = "mcar"
+    elif "_mar_lora_finetuned_eval" in stem or "_totalcharges_lora_finetuned_eval" in stem:
+        scenario_token = "mar"
+    else:
+        raise ValueError(f"Could not infer scenario token from filename: {csv_path.name}")
+
+    return dataset_token, model_token, scenario_token
 
 
 def _load_latest_valid_eval(csv_path: Path) -> pd.DataFrame:
+    """Load latest valid evaluation."""
     df = pd.read_csv(csv_path)
     if df.empty:
         raise ValueError(f"Detailed eval CSV is empty: {csv_path}")
@@ -124,6 +154,7 @@ def _load_latest_valid_eval(csv_path: Path) -> pd.DataFrame:
 
 
 def _compute_metrics(valid_eval: pd.DataFrame) -> tuple[float, float]:
+    """Compute metrics."""
     errors = valid_eval["ground_truth"] - valid_eval["prediction"]
     mean_rmse = float(math.sqrt(float((errors ** 2).mean())))
     std_true = float(valid_eval["ground_truth"].std(ddof=0))
@@ -132,6 +163,7 @@ def _compute_metrics(valid_eval: pd.DataFrame) -> tuple[float, float]:
 
 
 def _build_final_row(csv_path: Path) -> dict:
+    """Build final row."""
     dataset_token, model_token, scenario_token = _parse_eval_filename(csv_path)
     dataset_meta = DATASET_META[dataset_token]
     model_meta = MODEL_META[model_token]
@@ -154,13 +186,16 @@ def _build_final_row(csv_path: Path) -> dict:
 
 
 def build_final_rows() -> list[dict]:
+    """Build final rows."""
     rows = []
-    for csv_path in sorted(RESULTS_DIR.glob("*_finetuned_eval.csv")):
+    finetuned_dir = LLM_FINETUNED_DIR if LLM_FINETUNED_DIR.exists() else RESULTS_DIR
+    for csv_path in sorted(finetuned_dir.glob("*_finetuned_eval.csv")):
         rows.append(_build_final_row(csv_path))
     return rows
 
 
 def write_final_results(final_rows: list[dict]) -> None:
+    """Write final results."""
     fieldnames = [
         "dataset",
         "missingness_type",
@@ -180,6 +215,7 @@ def write_final_results(final_rows: list[dict]) -> None:
 
 
 def write_manifest(final_rows: list[dict]) -> None:
+    """Write manifest."""
     fieldnames = [
         "run_group_id",
         "dataset",
@@ -224,6 +260,7 @@ def write_manifest(final_rows: list[dict]) -> None:
 
 
 def _sync_global_rmse(final_rows: list[dict]) -> None:
+    """Handle sync global RMSE."""
     rmse_rows = []
     for row in final_rows:
         rmse_rows.append(
@@ -258,6 +295,7 @@ def _sync_global_rmse(final_rows: list[dict]) -> None:
 
 
 def _sync_global_nrmse(final_rows: list[dict]) -> None:
+    """Handle sync global NRMSE."""
     nrmse_rows = []
     for row in final_rows:
         nrmse_rows.append(
@@ -294,6 +332,7 @@ def _sync_global_nrmse(final_rows: list[dict]) -> None:
 
 
 def main() -> None:
+    """Run the script entry point."""
     final_rows = build_final_rows()
     write_final_results(final_rows)
     write_manifest(final_rows)

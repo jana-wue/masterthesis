@@ -9,7 +9,7 @@ from pathlib import Path
 import pandas as pd
 import torch
 from peft import AutoPeftModelForCausalLM
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, PreTrainedModel, PreTrainedTokenizerBase
 
 from src.imputation.llm import LLMImputer, LLMImputerConfig
 from src.paths import DATA_RAW, DATA_PROCESSED
@@ -19,7 +19,7 @@ ADAPTER_PATH = DATA_PROCESSED / "llm" / "mistral_telco_totalcharges_lora"
 OUTPUT_CSV = DATA_PROCESSED / "llm" / "eval_mistral_telco_totalcharges_lora.csv"
 
 
-def extract_first_number(text: str):
+def extract_first_number(text: str | None) -> float | None:
     """
     Returns float if a number can be extracted, else None.
     """
@@ -44,7 +44,11 @@ def extract_first_number(text: str):
     return None
 
 
-def apply_chat_template(messages, tokenizer) -> str:
+def apply_chat_template(
+    messages: list[dict[str, str]],
+    tokenizer: PreTrainedTokenizerBase,
+) -> str:
+    """Apply the chat template to the message list."""
     return tokenizer.apply_chat_template(
         messages,
         tokenize=False,
@@ -52,7 +56,13 @@ def apply_chat_template(messages, tokenizer) -> str:
     )
 
 
-def generate_raw_answer(prompt_text: str, tokenizer, model, max_new_tokens: int = 16) -> str:
+def generate_raw_answer(
+    prompt_text: str,
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
+    max_new_tokens: int = 16,
+) -> str:
+    """Generate raw answer."""
     inputs = tokenizer(prompt_text, return_tensors="pt").to(model.device)
     input_length = inputs["input_ids"].shape[1]
 
@@ -90,7 +100,13 @@ def fallback_totalcharges(row: pd.Series, totalcharges_median: float) -> tuple[f
     return float(totalcharges_median), "fallback_median"
 
 
-def predict_numeric(row, imputer, tokenizer, model, totalcharges_median: float):
+def predict_numeric(
+    row: pd.Series,
+    imputer: LLMImputer,
+    tokenizer: PreTrainedTokenizerBase,
+    model: PreTrainedModel,
+    totalcharges_median: float,
+) -> tuple[float, str, str]:
     """
     Multi-stage prediction:
     1) normal inference with chat template
@@ -122,6 +138,7 @@ def predict_numeric(row, imputer, tokenizer, model, totalcharges_median: float):
 
 
 def main() -> None:
+    """Run the script entry point."""
     target_column = "TotalCharges"
 
     df_full = pd.read_csv(DATA_RAW / "Telco-Customer-Churn_cleaned.csv")

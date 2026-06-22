@@ -8,17 +8,24 @@ from src.paths import DATA_PROCESSED, DATA_RAW
 
 
 def _pct_token(rate: float) -> str:
+    """Handle pct token."""
     return f"{int(round(rate * 100))}pct"
 
 
-def _save(df, relative_output_path):
+def _save(df: pd.DataFrame, relative_output_path: str) -> None:
+    """Save this helper."""
     output_path = DATA_PROCESSED / relative_output_path
     output_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_path, index=False)
     print(f"[saved] {output_path}")
 
 
-def mcar_global_excluding(df, missing_frac, exclude_cols, random_state):
+def mcar_global_excluding(
+    df: pd.DataFrame,
+    missing_frac: float,
+    exclude_cols: list[str],
+    random_state: int,
+) -> pd.DataFrame:
     """
     MCAR over all eligible columns except excluded ones (e.g. IDs or labels).
     """
@@ -39,7 +46,7 @@ def mcar_global_excluding(df, missing_frac, exclude_cols, random_state):
     return out
 
 
-def run_generate_missingness(rates, random_state):
+def run_generate_missingness(rates: list[float], random_state: int) -> None:
     """
     Generate missingness files for all datasets.
 
@@ -177,4 +184,4 @@ def run_generate_missingness(rates, random_state):
 
 
 if __name__ == "__main__":
-    run_generate_missingness()
+    run_generate_missingness(rates=[0.10, 0.15], random_state=42)

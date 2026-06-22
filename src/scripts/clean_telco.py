@@ -1,7 +1,14 @@
-from src.data.helper_dataprocessing import *
+from pathlib import Path
 
-def clean_telco(df, feature, missing_frac):
-    # Clean Telco: Make all what can be numeric numeric
+import pandas as pd
+
+from src.data.helper_dataprocessing import make_numeric_columns_numeric
+from src.paths import DATA_PROCESSED
+
+
+def clean_telco(df: pd.DataFrame, feature: str, missing_frac: float) -> None:
+    """Clean the exported Telco MNAR scenario file."""
+    _ = (df, feature, missing_frac)
     df_telco = pd.read_csv(DATA_PROCESSED / "MNAR/telco_customer_churn_mnar_tenure_p50.csv")
     print(df_telco.dtypes)
 

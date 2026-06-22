@@ -1,7 +1,11 @@
 import pandas as pd
+import numpy as np
+
 from src.paths import *
 
-def xls_to_csv(path_to_xls, path_to_save):
+
+def xls_to_csv(path_to_xls: str | Path, path_to_save: str | Path) -> None:
+    """Handle xls to CSV."""
     xls_file = path_to_xls
 
     df = pd.read_excel(xls_file, sheet_name=0)
@@ -11,7 +15,9 @@ def xls_to_csv(path_to_xls, path_to_save):
 
     print(f"CSV wurde erstellt: {csv_file}")
 
-def data_numeric_to_csv(data_file, filename_save):
+
+def data_numeric_to_csv(data_file: str | Path, filename_save: str | Path) -> None:
+    """Handle data numeric to CSV."""
     df = pd.read_csv(
     DATA_RAW / data_file,
     sep=r"\s+",
@@ -25,10 +31,6 @@ def data_numeric_to_csv(data_file, filename_save):
     df.columns.values[-1] = "class"
 
     df.to_csv(DATA_PROCESSED / filename_save, index=False)
-
-
-import pandas as pd
-import numpy as np
 
 def make_numeric_columns_numeric(df: pd.DataFrame, exclude: list[str] | None = None,
                                  threshold: float = 0.95) -> pd.DataFrame:
@@ -57,4 +59,3 @@ def make_numeric_columns_numeric(df: pd.DataFrame, exclude: list[str] | None = N
         if convertible_ratio >= threshold:
             df[col] = as_num
     return df
-

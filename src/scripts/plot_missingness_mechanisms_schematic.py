@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 import sys
+from typing import TypedDict
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = PROJECT_ROOT / "data" / "results" / "figures"
@@ -13,7 +14,16 @@ os.environ.setdefault("MPLCONFIGDIR", str(MPL_CONFIG_DIR))
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 from matplotlib.patches import FancyArrowPatch, Rectangle
+
+plt.rcParams.update(
+    {
+        "font.family": "serif",
+        "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
+        "mathtext.fontset": "dejavuserif",
+    }
+)
 
 
 OUTPUT_PNG = OUTPUT_DIR / "missingness_mechanisms_schematic.png"
@@ -41,8 +51,34 @@ COLORS = {
 }
 
 
-def _draw_cell(ax, x, y, w, h, text, *, facecolor, edgecolor="#ffffff", textcolor="#1f2933",
-               lw=1.0, fontsize=9, fontweight="normal", hatch=None):
+class TableMeta(TypedDict):
+    """Store table geometry metadata for annotation placement."""
+
+    x0: float
+    y0: float
+    cell_w: float
+    cell_h: float
+    n_rows: int
+    columns: list[str]
+
+
+def _draw_cell(
+    ax: Axes,
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    text: str,
+    *,
+    facecolor: str,
+    edgecolor: str = "#ffffff",
+    textcolor: str = "#1f2933",
+    lw: float = 1.0,
+    fontsize: float = 9,
+    fontweight: str = "normal",
+    hatch: str | None = None,
+) -> None:
+    """Draw cell."""
     ax.add_patch(
         Rectangle(
             (x, y),
@@ -67,26 +103,27 @@ def _draw_cell(ax, x, y, w, h, text, *, facecolor, edgecolor="#ffffff", textcolo
 
 
 def _draw_table(
-    ax,
-    x0,
-    y0,
-    columns,
-    rows,
+    ax: Axes,
+    x0: float,
+    y0: float,
+    columns: list[str],
+    rows: list[list[object]],
     *,
-    cell_w=1.15,
-    cell_h=0.42,
-    header_fontsize=9,
-    body_fontsize=9,
-    target_col=None,
-    highlight_cols=None,
-    outline_only_cols=None,
-    driver_col=None,
-    excluded_cols=None,
-    masked_cells=None,
-    marker_cells=None,
-    marker_text="!",
-    marker_color=None,
-):
+    cell_w: float = 1.15,
+    cell_h: float = 0.42,
+    header_fontsize: float = 9,
+    body_fontsize: float = 9,
+    target_col: str | None = None,
+    highlight_cols: list[str] | None = None,
+    outline_only_cols: list[str] | None = None,
+    driver_col: str | None = None,
+    excluded_cols: list[str] | None = None,
+    masked_cells: list[tuple[int, int]] | None = None,
+    marker_cells: list[tuple[int, int]] | None = None,
+    marker_text: str = "!",
+    marker_color: str | None = None,
+) -> TableMeta:
+    """Draw table."""
     excluded_cols = set(excluded_cols or [])
     highlight_cols = set(highlight_cols or [])
     outline_only_cols = set(outline_only_cols or [])
@@ -254,16 +291,19 @@ def _draw_table(
     }
 
 
-def _col_center(table_meta, col_name):
+def _col_center(table_meta: TableMeta, col_name: str) -> float:
+    """Handle col center."""
     idx = table_meta["columns"].index(col_name)
     return table_meta["x0"] + (idx + 0.5) * table_meta["cell_w"]
 
 
-def _table_mid_y(table_meta):
+def _table_mid_y(table_meta: TableMeta) -> float:
+    """Handle table mid y."""
     return table_meta["y0"] + table_meta["n_rows"] * table_meta["cell_h"] / 2
 
 
-def _draw_panel_border(ax, bounds):
+def _draw_panel_border(ax: Axes, bounds: tuple[float, float, float, float]) -> None:
+    """Draw panel border."""
     x, y, w, h = bounds
     ax.add_patch(
         Rectangle(
@@ -277,7 +317,8 @@ def _draw_panel_border(ax, bounds):
     )
 
 
-def _panel_title(ax, bounds, title):
+def _panel_title(ax: Axes, bounds: tuple[float, float, float, float], title: str) -> None:
+    """Handle panel title."""
     x, y, w, h = bounds
     ax.text(
         x + 0.18,
@@ -291,7 +332,8 @@ def _panel_title(ax, bounds, title):
     )
 
 
-def _panel_note(ax, bounds, text):
+def _panel_note(ax: Axes, bounds: tuple[float, float, float, float], text: str) -> None:
+    """Handle panel note."""
     x, y, w, h = bounds
     ax.text(
         x + 0.18,
@@ -305,7 +347,14 @@ def _panel_note(ax, bounds, text):
     )
 
 
-def _draw_arrow(ax, start, end, color, rad=0.0):
+def _draw_arrow(
+    ax: Axes,
+    start: tuple[float, float],
+    end: tuple[float, float],
+    color: str,
+    rad: float = 0.0,
+) -> None:
+    """Draw arrow."""
     arrow = FancyArrowPatch(
         start,
         end,
@@ -318,7 +367,8 @@ def _draw_arrow(ax, start, end, color, rad=0.0):
     ax.add_patch(arrow)
 
 
-def _plot():
+def _plot() -> None:
+    """Plot this helper."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     MPL_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     y_shift = 0.55
@@ -448,70 +498,72 @@ def _plot():
         "Zufällige Missingness über mehrere\nimputierbare Merkmale.",
     )
 
-    legend_y = 0.22
-    legend_items = [
-        ("Beobachtete Werte", COLORS["observed"], COLORS["observed_text"]),
-        ("Künstlich maskierte Werte", COLORS["masked"], COLORS["masked_text"]),
-        ("Treiber-Variable", COLORS["driver_fill"], COLORS["observed_text"]),
-        ("Ausgeschlossen", COLORS["excluded_fill"], COLORS["excluded_text"]),
+    legend_rows = [
+        [
+            ("Beobachtete Werte", COLORS["observed"], COLORS["observed_text"]),
+            ("Künstlich maskierte Werte", COLORS["masked"], COLORS["masked_text"]),
+            ("Treiber-Variable", COLORS["driver_fill"], COLORS["observed_text"]),
+        ],
+        [
+            ("Ausgeschlossen", COLORS["excluded_fill"], COLORS["excluded_text"]),
+            ("Imputierbare Merkmale (Umrandung)", "outline", COLORS["panel_note"]),
+            ("Missingness abhängig vom eigenen Wert", "marker", COLORS["panel_note"]),
+        ],
     ]
-    x = 1.0
-    for label, fill, textcolor in legend_items:
-        _draw_cell(ax, x, legend_y, 0.34, 0.18, "", facecolor=fill, textcolor=textcolor, edgecolor="#ffffff")
-        ax.text(x + 0.46, legend_y + 0.09, label, va="center", ha="left", fontsize=9.2, color=COLORS["panel_note"])
-        x += 2.72
+    legend_y_top = 0.46
+    row_gap = 0.28
+    cell_x_positions = [1.0, 5.0, 9.95]
+    legend_fontsize = 10.4
 
-    outline_x = x - 0.08
-    ax.add_patch(
-        Rectangle(
-            (outline_x, legend_y),
-            0.34,
-            0.18,
-            facecolor=COLORS["observed"],
-            edgecolor=COLORS["target_edge"],
-            linewidth=1.8,
-        )
-    )
-    ax.text(
-        outline_x + 0.46,
-        legend_y + 0.09,
-        "Imputierbare Merkmale (Umrandung)",
-        va="center",
-        ha="left",
-        fontsize=9.2,
-        color=COLORS["panel_note"],
-    )
+    for row_idx, row in enumerate(legend_rows):
+        y = legend_y_top - row_idx * row_gap
+        for col_idx, (label, fill, textcolor) in enumerate(row):
+            x = cell_x_positions[col_idx]
+            if fill == "outline":
+                ax.add_patch(
+                    Rectangle(
+                        (x, y),
+                        0.34,
+                        0.18,
+                        facecolor=COLORS["observed"],
+                        edgecolor=COLORS["target_edge"],
+                        linewidth=1.8,
+                    )
+                )
+            elif fill == "marker":
+                _draw_cell(
+                    ax,
+                    x,
+                    y,
+                    0.34,
+                    0.18,
+                    "!",
+                    facecolor=COLORS["masked"],
+                    edgecolor="#ffffff",
+                    textcolor=COLORS["self_arrow"],
+                    fontsize=10.8,
+                    fontweight="bold",
+                )
+            else:
+                _draw_cell(ax, x, y, 0.34, 0.18, "", facecolor=fill, textcolor=textcolor, edgecolor="#ffffff")
 
-    marker_x = outline_x + 3.85
-    _draw_cell(
-        ax,
-        marker_x,
-        legend_y,
-        0.34,
-        0.18,
-        "!",
-        facecolor=COLORS["masked"],
-        edgecolor="#ffffff",
-        textcolor=COLORS["self_arrow"],
-        fontsize=10,
-        fontweight="bold",
-    )
-    ax.text(
-        marker_x + 0.46,
-        legend_y + 0.09,
-        "Missingness abhängig vom eigenen Wert",
-        va="center",
-        ha="left",
-        fontsize=9.2,
-        color=COLORS["panel_note"],
-    )
+            ax.text(
+                x + 0.5,
+                y + 0.09,
+                label,
+                va="center",
+                ha="left",
+                fontsize=legend_fontsize,
+                color=COLORS["panel_note"],
+            )
 
     fig.savefig(OUTPUT_PNG, dpi=300, bbox_inches="tight")
     fig.savefig(OUTPUT_PDF, bbox_inches="tight")
     plt.close(fig)
 
 
-def main():
+def main() -> None:
+    """Run the script entry point."""
     _plot()
     print("=" * 80)
     print("MISSINGNESS MECHANISMS SCHEMATIC WRITTEN")
