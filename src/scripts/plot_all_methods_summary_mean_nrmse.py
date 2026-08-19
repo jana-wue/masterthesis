@@ -22,6 +22,10 @@ plt.rcParams.update(
         "font.family": "serif",
         "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
         "mathtext.fontset": "dejavuserif",
+        "text.color": "black",
+        "axes.labelcolor": "black",
+        "xtick.color": "black",
+        "ytick.color": "black",
     }
 )
 
@@ -63,18 +67,23 @@ ROW_LABELS = {
     "llm_prompt::qwen": "Qwen 2.5 Prompt",
     "llm_finetuned::qwen": "Qwen 2.5 Finetuned",
 }
+FAMILY_COLORS = {
+    "classical": "#4c78a8",
+    "llm_prompt": "#f28e2b",
+    "llm_finetuned": "#6a994e",
+}
 METHOD_COLORS = {
-    "meanmode": "#9bbfe0",
-    "medianmode": "#6f9fd8",
-    "mice": "#4c78a8",
-    "missforest": "#2f5c8f",
-    "dae": "#6bb6c9",
-    "llm_prompt::llama": "#f6bd60",
-    "llm_prompt::mistral": "#f28e2b",
-    "llm_prompt::qwen": "#e07a5f",
-    "llm_finetuned::llama": "#a7c957",
-    "llm_finetuned::mistral": "#6a994e",
-    "llm_finetuned::qwen": "#386641",
+    "meanmode": FAMILY_COLORS["classical"],
+    "medianmode": FAMILY_COLORS["classical"],
+    "mice": FAMILY_COLORS["classical"],
+    "missforest": FAMILY_COLORS["classical"],
+    "dae": FAMILY_COLORS["classical"],
+    "llm_prompt::llama": FAMILY_COLORS["llm_prompt"],
+    "llm_prompt::mistral": FAMILY_COLORS["llm_prompt"],
+    "llm_prompt::qwen": FAMILY_COLORS["llm_prompt"],
+    "llm_finetuned::llama": FAMILY_COLORS["llm_finetuned"],
+    "llm_finetuned::mistral": FAMILY_COLORS["llm_finetuned"],
+    "llm_finetuned::qwen": FAMILY_COLORS["llm_finetuned"],
 }
 
 
@@ -133,6 +142,10 @@ def _plot(summary: pd.DataFrame) -> None:
             "font.family": "serif",
             "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
             "mathtext.fontset": "dejavuserif",
+            "text.color": "black",
+            "axes.labelcolor": "black",
+            "xtick.color": "black",
+            "ytick.color": "black",
         },
     )
     fig, ax = plt.subplots(figsize=(9.2, 6.6))
@@ -163,9 +176,9 @@ def _plot(summary: pd.DataFrame) -> None:
             f"{row['mean_nrmse']:.3f}",
             va="center",
             ha="left",
-            fontsize=9.5,
+            fontsize=10,
             fontweight="semibold",
-            color="#2b3340",
+            color="black",
         )
 
     ax.set_yticks(y_positions)
@@ -178,11 +191,11 @@ def _plot(summary: pd.DataFrame) -> None:
     ax.set_axisbelow(True)
 
     legend_handles = [
-        Line2D([0], [0], marker="o", color="none", markerfacecolor="#4c78a8", markeredgecolor="white",
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=FAMILY_COLORS["classical"], markeredgecolor="white",
                markeredgewidth=1.0, markersize=9, label="Classical"),
-        Line2D([0], [0], marker="o", color="none", markerfacecolor="#f28e2b", markeredgecolor="white",
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=FAMILY_COLORS["llm_prompt"], markeredgecolor="white",
                markeredgewidth=1.0, markersize=9, label="Prompting"),
-        Line2D([0], [0], marker="o", color="none", markerfacecolor="#6a994e", markeredgecolor="white",
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=FAMILY_COLORS["llm_finetuned"], markeredgecolor="white",
                markeredgewidth=1.0, markersize=9, label="Finetuning"),
     ]
     fig.suptitle("All Methods: Summary Performance Overview", fontsize=18, y=0.965)
@@ -198,7 +211,7 @@ def _plot(summary: pd.DataFrame) -> None:
     )
 
     note = "Shared comparison space: Seed 42, 10%, MAR/MCAR/MNAR target-only"
-    fig.text(0.99, 0.02, note, ha="right", va="bottom", fontsize=9, color="#5d6773")
+    fig.text(0.99, 0.02, note, ha="right", va="bottom", fontsize=9, color="black")
 
     sns.despine(ax=ax, left=True)
     plt.tight_layout(rect=(0, 0.04, 1, 0.93))

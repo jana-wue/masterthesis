@@ -23,6 +23,10 @@ plt.rcParams.update(
         "font.family": "serif",
         "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
         "mathtext.fontset": "dejavuserif",
+        "text.color": "black",
+        "axes.labelcolor": "black",
+        "xtick.color": "black",
+        "ytick.color": "black",
     }
 )
 
@@ -144,7 +148,7 @@ def _draw_dataset_group_labels(ax: Axes, tasks: list[tuple[str, str]]) -> None:
             va="center",
             fontsize=10,
             fontweight="semibold",
-            color="#2f2f2f",
+            color="black",
             clip_on=False,
             transform=ax.get_xaxis_transform(),
         )
@@ -154,12 +158,6 @@ def _draw_dataset_group_labels(ax: Axes, tasks: list[tuple[str, str]]) -> None:
 
     for split_after in [2, 4]:
         ax.axhline(split_after, color="#b5b5b5", linestyle=(0, (4, 4)), linewidth=0.9, alpha=0.8)
-
-
-def _annotation_color(value: float, vmin: float, vmax: float) -> str:
-    """Handle annotation color."""
-    midpoint = vmin + 0.55 * (vmax - vmin)
-    return "#fffdf7" if value >= midpoint else "#1f2933"
 
 
 def _plot_heatmap(metric_matrix: pd.DataFrame, tasks: list[tuple[str, str]]) -> None:
@@ -172,7 +170,7 @@ def _plot_heatmap(metric_matrix: pd.DataFrame, tasks: list[tuple[str, str]]) -> 
     fig, ax = plt.subplots(figsize=(fig_width, fig_height))
 
     cmap = sns.blend_palette(
-        ["#0f4c5c", "#4d908e", "#f1f5d8", "#f2cc8f", "#d1495b"],
+        ["#f7fbff", "#deebf7", "#c6dbef", "#9ecae1", "#6baed6"],
         as_cmap=True,
     )
     vmin = float(np.nanmin(metric_matrix.to_numpy()))
@@ -200,9 +198,9 @@ def _plot_heatmap(metric_matrix: pd.DataFrame, tasks: list[tuple[str, str]]) -> 
                 f"{value:.3f}",
                 ha="center",
                 va="center",
-                fontsize=9.5,
+                fontsize=10,
                 fontweight="semibold",
-                color=_annotation_color(float(value), vmin, vmax),
+                color="black",
             )
 
     fig.suptitle("LLM-Based Methods: Mean NRMSE on Each Benchmark Task", fontsize=20, y=0.965)

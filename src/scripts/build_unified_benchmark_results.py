@@ -14,7 +14,8 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.paths import DATA_RESULTS
 
 
-CLASSICAL_FILES = [
+CLASSICAL_RUNS_FILE = DATA_RESULTS / "benchmark_local_classical_runs.csv"
+LEGACY_CLASSICAL_FILES = [
     DATA_RESULTS / "benchmark_local_classical_meanmode_final.csv",
     DATA_RESULTS / "benchmark_local_classical_medianmode_final.csv",
     DATA_RESULTS / "benchmark_local_classical_runs_mice_mean.csv",
@@ -140,23 +141,39 @@ class LlmResultRow(TypedDict):
 def _load_classical_rows() -> pd.DataFrame:
     """Load classical rows."""
     frames = []
+    source_paths = []
+    if CLASSICAL_RUNS_FILE.exists():
+        source_paths.append(CLASSICAL_RUNS_FILE)
+    source_paths.extend(LEGACY_CLASSICAL_FILES)
 
-    for csv_path in CLASSICAL_FILES:
+    for csv_path in source_paths:
         if not csv_path.exists():
             continue
 
         df = pd.read_csv(csv_path)
         df["fallback_rate"] = pd.NA
         df["source_file"] = str(csv_path)
-        df["source_type"] = "classical_run_csv"
-        df["provenance_note"] = pd.NA
+        if csv_path == CLASSICAL_RUNS_FILE:
+            df["source_type"] = "classical_manifest_runner_csv"
+            df["provenance_note"] = "Loaded from the canonical classical manifest runner output."
+        else:
+            df["source_type"] = "classical_run_csv"
+            df["provenance_note"] = "Loaded from a legacy classical result export."
         frames.append(df)
 
     if not frames:
         return pd.DataFrame(columns=OUTPUT_COLUMNS)
 
     combined = pd.concat(frames, ignore_index=True, sort=False)
-    combined = combined.drop_duplicates(subset=["run_id"], keep="last").copy()
+    if CLASSICAL_RUNS_FILE.exists():
+        combined["_source_priority"] = (combined["source_file"] == str(CLASSICAL_RUNS_FILE)).astype(int)
+        combined = combined.sort_values(by=["run_id", "_source_priority"]).drop_duplicates(
+            subset=["run_id"],
+            keep="last",
+        )
+        combined = combined.drop(columns="_source_priority")
+    else:
+        combined = combined.drop_duplicates(subset=["run_id"], keep="last").copy()
 
     for col in OUTPUT_COLUMNS:
         if col not in combined.columns:

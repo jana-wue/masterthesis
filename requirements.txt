@@ -1,20 +1,20 @@
 # Core data and classical ML
-numpy==2.4.2
-pandas==3.0.0
-scipy==1.17.0
-scikit-learn==1.8.0
-torch==2.10.0
-tqdm==4.67.3
+numpy==2.0.2
+pandas==2.3.3
+scipy==1.13.1
+scikit-learn==1.6.1
+torch==2.8.0
+tqdm==4.68.3
 
 # LLM pipeline
-transformers==5.8.0
-peft==0.19.1
-datasets==4.8.5
-accelerate==1.13.0
+transformers==4.57.6
+peft==0.17.1
+datasets==4.5.0
+accelerate==1.10.1
 safetensors==0.7.0
 
 # Plotting
-matplotlib==3.11.0
+matplotlib==3.9.4
 seaborn==0.13.2
 
 # Spreadsheet / raw input support

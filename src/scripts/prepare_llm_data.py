@@ -10,12 +10,24 @@ import pandas as pd
 
 from src.data.helper_dataprocessing import make_numeric_columns_numeric
 from src.imputation.llm import LLMImputer, LLMImputerConfig
-from src.scripts.run_llm_finetune import TrainingRecord
 from src.paths import DATA_PROCESSED
 
 
 DEFAULT_MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
 DEFAULT_MECHANISMS = ("MAR", "MCAR", "MNAR")
+
+
+class ChatMessage(TypedDict):
+    """Represent one chat-formatted training message."""
+
+    role: str
+    content: str
+
+
+class TrainingRecord(TypedDict):
+    """Represent one JSONL finetuning training example."""
+
+    messages: list[ChatMessage]
 
 
 class PrepareManifestRow(TypedDict):

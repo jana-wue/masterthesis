@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 from .base import BaseImputer

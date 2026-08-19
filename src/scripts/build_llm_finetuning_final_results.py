@@ -17,25 +17,31 @@ MANIFEST_PATH = ROOT / "scenario_manifest_hpc_llm_finetuned.csv"
 DATASET_META = {
     "credit": {
         "dataset": "German Credit Card",
+        "dataset_key": "creditcard",
         "target_column": "BILL_AMT1",
-        "detail_target_slug": "billamt1",
+        "mar_dependency_column": "PAY_0",
+        "mnar_driver_column": "BILL_AMT1",
     },
     "statlog": {
         "dataset": "German Statlog",
+        "dataset_key": "statlog",
         "target_column": "X2",
-        "detail_target_slug": "x2",
+        "mar_dependency_column": "X5",
+        "mnar_driver_column": "X2",
     },
     "telco": {
         "dataset": "Telco",
+        "dataset_key": "telco",
         "target_column": "TotalCharges",
-        "detail_target_slug": "totalcharges",
+        "mar_dependency_column": "tenure",
+        "mnar_driver_column": "TotalCharges",
     },
 }
 
 
 MODEL_META = {
     "llama31": {
-        "model_key": "llama31",
+        "model_key": "llama",
         "model_label": "Llama-3.1-8B-Instruct",
         "hf_model_name": "meta-llama/Llama-3.1-8B-Instruct",
     },
@@ -45,7 +51,7 @@ MODEL_META = {
         "hf_model_name": "mistralai/Mistral-7B-Instruct-v0.3",
     },
     "qwen25": {
-        "model_key": "qwen25",
+        "model_key": "qwen",
         "model_label": "Qwen2.5-7B-Instruct",
         "hf_model_name": "Qwen/Qwen2.5-7B-Instruct",
     },
@@ -55,38 +61,47 @@ MODEL_META = {
 SCENARIO_META = {
     ("credit", "mar"): {
         "missingness_type": "MAR",
+        "scenario_family": "MAR_TARGET",
         "missing_rate_label": "billamt1 -> pay0, 10%",
     },
     ("credit", "mcar"): {
         "missingness_type": "MCAR",
+        "scenario_family": "MCAR_TARGET",
         "missing_rate_label": "billamt1, 10%",
     },
     ("credit", "mnar"): {
         "missingness_type": "MNAR",
+        "scenario_family": "MNAR_TARGET",
         "missing_rate_label": "billamt1, 10%",
     },
     ("statlog", "mar"): {
         "missingness_type": "MAR",
+        "scenario_family": "MAR_TARGET",
         "missing_rate_label": "X2, 10%",
     },
     ("statlog", "mcar"): {
         "missingness_type": "MCAR",
+        "scenario_family": "MCAR_TARGET",
         "missing_rate_label": "X2, 10%",
     },
     ("statlog", "mnar"): {
         "missingness_type": "MNAR",
+        "scenario_family": "MNAR_TARGET",
         "missing_rate_label": "X2, 10%",
     },
     ("telco", "mar"): {
         "missingness_type": "MAR",
+        "scenario_family": "MAR_TARGET",
         "missing_rate_label": "missing totalCharges -> tenure, 10%",
     },
     ("telco", "mcar"): {
         "missingness_type": "MCAR",
+        "scenario_family": "MCAR_TARGET",
         "missing_rate_label": "missing TotalCharges, 10%",
     },
     ("telco", "mnar"): {
         "missingness_type": "MNAR",
+        "scenario_family": "MNAR_TARGET",
         "missing_rate_label": "missing TotalCharges, 10%",
     },
 }
@@ -128,7 +143,7 @@ def _parse_eval_filename(csv_path: Path) -> tuple[str, str, str]:
     return dataset_token, model_token, scenario_token
 
 
-def _load_latest_valid_eval(csv_path: Path) -> pd.DataFrame:
+def _load_latest_valid_eval(csv_path: Path) -> tuple[str, pd.DataFrame]:
     """Load latest valid evaluation."""
     df = pd.read_csv(csv_path)
     if df.empty:
@@ -150,7 +165,7 @@ def _load_latest_valid_eval(csv_path: Path) -> pd.DataFrame:
     valid = valid.dropna(subset=["prediction", "ground_truth"]).copy()
     if valid.empty:
         raise ValueError(f"No numeric prediction/ground_truth rows in {csv_path}")
-    return valid
+    return latest_timestamp, valid
 
 
 def _compute_metrics(valid_eval: pd.DataFrame) -> tuple[float, float]:
@@ -168,12 +183,16 @@ def _build_final_row(csv_path: Path) -> dict:
     dataset_meta = DATASET_META[dataset_token]
     model_meta = MODEL_META[model_token]
     scenario_meta = SCENARIO_META[(dataset_token, scenario_token)]
-    valid_eval = _load_latest_valid_eval(csv_path)
+    run_timestamp_utc, valid_eval = _load_latest_valid_eval(csv_path)
     mean_rmse, mean_nrmse = _compute_metrics(valid_eval)
 
     return {
+        "run_id": f"inferred::{csv_path.stem}::{run_timestamp_utc}",
+        "run_timestamp_utc": run_timestamp_utc,
+        "dataset_key": dataset_meta["dataset_key"],
         "dataset": dataset_meta["dataset"],
         "missingness_type": scenario_meta["missingness_type"],
+        "scenario_family": scenario_meta["scenario_family"],
         "missing_rate_label": scenario_meta["missing_rate_label"],
         "target_column": dataset_meta["target_column"],
         "model_key": model_meta["model_key"],
@@ -211,50 +230,70 @@ def write_final_results(final_rows: list[dict]) -> None:
     with FINAL_PATH.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(final_rows)
+        writer.writerows({field: row.get(field) for field in fieldnames} for row in final_rows)
 
 
 def write_manifest(final_rows: list[dict]) -> None:
     """Write manifest."""
     fieldnames = [
-        "run_group_id",
-        "dataset",
+        "run_id",
+        "dataset_key",
+        "dataset_name",
         "target_column",
+        "scenario_family",
         "missingness_type",
+        "mcar_scope",
+        "mar_dependency_column",
+        "mnar_driver_column",
+        "mcar_global_excluded_columns",
+        "rate_pct",
+        "seed",
+        "method_family",
+        "method_key",
+        "method_name",
         "model_key",
-        "model_label",
-        "hf_model_name",
-        "job_script",
-        "mech_env",
-        "detail_eval_file",
+        "model_name",
+        "include_in_primary_leaderboard",
+        "include_in_secondary_full_matrix",
     ]
-    job_script_map = {
-        ("Telco", "mistral"): "jobs/run_telco_mistral_safe.sbatch",
-        ("Telco", "qwen25"): "jobs/run_telco_qwen25_safe.sbatch",
-        ("Telco", "llama31"): "jobs/run_telco_llama31_safe.sbatch",
-        ("German Statlog", "mistral"): "jobs/run_statlog_x2_safe.sbatch",
-        ("German Statlog", "qwen25"): "jobs/run_statlog_qwen25_safe.sbatch",
-        ("German Statlog", "llama31"): "jobs/run_statlog_llama31_safe.sbatch",
-        ("German Credit Card", "mistral"): "jobs/run_credit_mistral_safe.sbatch",
-        ("German Credit Card", "qwen25"): "jobs/run_credit_qwen25_safe.sbatch",
-        ("German Credit Card", "llama31"): "jobs/run_credit_llama31_safe.sbatch",
-    }
     with MANIFEST_PATH.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
-        for idx, row in enumerate(final_rows, start=1):
+        for row in final_rows:
+            dataset_meta = next(
+                meta for meta in DATASET_META.values() if meta["dataset_key"] == row["dataset_key"]
+            )
+            mar_dependency_column = (
+                dataset_meta["mar_dependency_column"]
+                if row["scenario_family"] == "MAR_TARGET"
+                else None
+            )
+            mnar_driver_column = (
+                dataset_meta["mnar_driver_column"]
+                if row["scenario_family"] == "MNAR_TARGET"
+                else None
+            )
             writer.writerow(
                 {
-                    "run_group_id": f"LLM10PCT_{idx:03d}",
-                    "dataset": row["dataset"],
+                    "run_id": row["run_id"],
+                    "dataset_key": row["dataset_key"],
+                    "dataset_name": row["dataset"],
                     "target_column": row["target_column"],
+                    "scenario_family": row["scenario_family"],
                     "missingness_type": row["missingness_type"],
+                    "mcar_scope": "target",
+                    "mar_dependency_column": mar_dependency_column,
+                    "mnar_driver_column": mnar_driver_column,
+                    "mcar_global_excluded_columns": None,
+                    "rate_pct": 10,
+                    "seed": 42,
+                    "method_family": "llm_finetuned",
+                    "method_key": "llm_finetuned",
+                    "method_name": "LLM Finetuned",
                     "model_key": row["model_key"],
-                    "model_label": row["model_label"],
-                    "hf_model_name": row["hf_model_name"],
-                    "job_script": job_script_map[(row["dataset"], row["model_key"])],
-                    "mech_env": row["missingness_type"],
-                    "detail_eval_file": row["detail_eval_file"],
+                    "model_name": row["hf_model_name"],
+                    "include_in_primary_leaderboard": True,
+                    "include_in_secondary_full_matrix": False,
                 }
             )
 

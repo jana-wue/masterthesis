@@ -5,6 +5,8 @@ pipeline used stale scenario paths and full-matrix evaluation logic that does
 not match the final thesis benchmark. Use `main.py` or
 `src/scripts/run_classical_manifest.py` instead.
 """
+from __future__ import annotations
+
 from collections.abc import Mapping, Sequence
 
 from src.imputation.base import BaseImputer

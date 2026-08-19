@@ -49,11 +49,11 @@ Use these entry points for the final benchmark workflow:
 - `src/scripts/run_classical_manifest.py`
   - same classical benchmark runner with full CLI options
 - `src/scripts/build_llm_finetuning_final_results.py`
-  - rebuilds the final finetuned LLM result table from detailed eval files
+  - rebuilds the final finetuned LLM result table from detailed eval files and refreshes the final-scope finetuned manifest schema
 - `src/scripts/build_llm_prompt_results_final.py`
   - cleans prompt result rows and refreshes the unified benchmark table
 - `src/scripts/build_unified_benchmark_results.py`
-  - rebuilds the unified final benchmark CSV
+  - rebuilds the unified final benchmark CSV from the canonical classical runner output as primary source, supplemented by legacy classical final exports if needed, plus the finalized LLM result files
 
 Legacy scripts are intentionally disabled or redirected:
 - `src/scripts/imputation_pipeline.py` is a legacy shim and must not be used for the final thesis benchmark
@@ -76,7 +76,9 @@ Legacy scripts are intentionally disabled or redirected:
 
 ## Environment Setup
 
-The repository assumes one start from the project root.
+Run all commands from the project root.
+
+Tested with Python `3.9+`.
 
 ### Create and activate a virtual environment
 ```bash
@@ -213,7 +215,7 @@ These are the files that should be treated as the final thesis benchmark outputs
 ## Reproducibility Notes
 
 - The final manifest and the unified benchmark CSV are currently aligned.
-- `run_classical_manifest.py` covers the classical benchmark only.
+- `run_classical_manifest.py` covers the classical benchmark only, and `benchmark_local_classical_runs.csv` is the canonical classical source preferred by the unified builder.
 - LLM prompt and finetuned results are not produced by `main.py`; they are finalized through their dedicated builder scripts on a HPC.
+- `prepare_llm_data.py` is standalone and no longer depends on the full finetuning runner module for its JSONL schema.
 - The repository contains legacy files and archived artifacts in `data/results/` and `logs/`, but the final benchmark workflow should use only the entry points listed in this README.
-

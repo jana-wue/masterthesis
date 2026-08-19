@@ -86,7 +86,14 @@ def _plot(summary: pd.DataFrame) -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     MPL_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
-    sns.set_theme(style="whitegrid")
+    sns.set_theme(
+        style="whitegrid",
+        rc={
+            "font.family": "serif",
+            "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
+            "mathtext.fontset": "dejavuserif",
+        },
+    )
     fig, axes = plt.subplots(2, 2, figsize=(12.2, 7.4), sharey=True)
     axes_flat = axes.flatten()
 
